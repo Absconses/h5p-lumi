@@ -1,0 +1,23 @@
+{
+  "skill_name": "h5p-lumi",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Crée une frise chronologique H5P sur l'histoire de l'imprimerie et du livre, pour une classe de 5e. Au moins 5 événements et 2 périodes, avec des images libres de droits et leurs crédits.",
+      "expected_output": "content.json H5P.Timeline valide (>=5 date, >=2 era), images Wikimedia validées HTTP 200 avec caption+credit, contenu adapté niveau collège, dates au format YYYY,MM,DD.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Fais-moi un quiz H5P de 4 questions pour des 4e, sur Internet, le Web et les moteurs de recherche (différence Internet/Web, rôle d'un moteur, repérer une source fiable). Feedback qui explique les réponses.",
+      "expected_output": "content.json H5P.QuestionSet (questions H5P.MultiChoice) valide, >=1 réponse correcte par question, feedback formatif, distracteurs plausibles, vocabulaire niveau 4e.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "J'aimerais une activité Lumi de type cartes de révision sur le vocabulaire de la recherche documentaire (mot-clé, descripteur, opérateur booléen, source) pour des 6e.",
+      "expected_output": "Reconnaît un type hors fiche, applique la méthode de references/extending-new-types.md (déduire la structure depuis semantics.json), produit un content.json plausible et explique le besoin d'un gabarit pour l'empaquetage.",
+      "files": []
+    }
+  ]
+}

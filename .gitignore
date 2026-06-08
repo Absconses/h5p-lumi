@@ -1,0 +1,6 @@
+# Fichiers temporaires / système (on versionne tout le reste, gabarits compris)
+*.tmp
+*.log
+*.bak
+Thumbs.db
+.DS_Store
