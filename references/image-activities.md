@@ -65,6 +65,37 @@ Suite d'images qui changent progressivement (avant/après, calques) avec un curs
 { "title":"Évolution d'une page web", "items":[ { "image": { "library":"H5P.Image 1.1", "params": { "file": { "path":"images/etape1.jpg","mime":"image/jpeg" } } }, "labelText":"1990", "description":"<p>…</p>" } ] }
 ```
 
+## Image Juxtaposition — `H5P.ImageJuxtaposition` (1.5)
+Deux images superposées avec un **curseur** qui révèle l'une puis l'autre (avant/après, comparaison).
+`mainLibrary = ImageJuxtaposition` → **pas d'enveloppe Column** (gabarit autonome `gabarit-imagejuxtaposition.h5p`).
+```json
+{ "imageBefore": { "labelBefore":"Avant", "imageBefore": { "library":"H5P.Image 1.1", "subContentId":"<guid>", "params": { "alt":"…","contentName":"Image","file": { "path":"images/avant.png","mime":"image/png","width":1000,"height":640 } } } },
+  "imageAfter":  { "labelAfter":"Après",  "imageAfter":  { "library":"H5P.Image 1.1", "subContentId":"<guid>", "params": { "alt":"…","contentName":"Image","file": { "path":"images/apres.png","mime":"image/png","width":1000,"height":640 } } } },
+  "behavior": { "startingPosition":50, "sliderOrientation":"horizontal" } }
+```
+Les 2 images doivent avoir la **même taille** (le curseur les superpose). `behavior` = orthographe US.
+⚠️ Un export Lumi peut être **« contenu seul »** (sans la bibliothèque embarquée) : le paquet fonctionne dans un Lumi où la lib est déjà installée ; pour un fichier **autonome/partageable**, greffer `H5P.ImageJuxtaposition` (dépôt GitHub `h5p/h5p-image-juxtaposition`). Démo générée (images dessinées) : graphique trompeur (axe coupé) vs honnête (axe à 0).
+
+## Image Pairing — `H5P.ImagePair` (1.4)
+Jeu d'**association** : on glisse chaque image sur sa paire. `mainLibrary=ImagePair` → **pas d'enveloppe Column** (gabarit autonome `gabarit-imagepair.h5p`).
+```json
+{ "taskDescription":"<p>Associe chaque image à sa paire.</p>",
+  "cards":[ { "image": { "path":"images/a.png","mime":"image/png","copyright":{"license":"U"},"width":420,"height":300 }, "imageAlt":"…", "match": { "path":"images/b.png","mime":"image/png","copyright":{"license":"U"},"width":420,"height":300 }, "matchAlt":"…" } ],
+  "behaviour": { "allowRetry":true },
+  "l10n": { "checkAnswer":"Vérifier","tryAgain":"Recommencer","showSolution":"Voir la solution","score":"Tu as obtenu @score sur @total points" } }
+```
+⚠️ `image`/`match` = **objets-fichier DIRECTS** (pas de wrapper `H5P.Image`) ; `imageAlt`/`matchAlt` = textes alternatifs. Démo générée : pictogrammes de médias ↔ leurs noms.
+
+## Image Sequencing — `H5P.ImageSequencing` (1.1)
+Remettre des images dans le **bon ordre** (chronologie, étapes d'un processus…). `mainLibrary=ImageSequencing` → **pas d'enveloppe Column** (gabarit `gabarit-imagesequencing.h5p`).
+```json
+{ "taskDescription":"<p>Range les images dans l'ordre.</p>", "altTaskDescription":"Ordonne la liste correctement (flèches + espace).",
+  "sequenceImages":[ { "image": { "path":"images/1.png","mime":"image/png","copyright":{"license":"U"},"width":420,"height":360 }, "imageDescription":"Légende 1" } ],
+  "behaviour": { "enableSolution":true,"enableRetry":true,"enableResume":true },
+  "l10n": { "checkAnswer":"Vérifier","tryAgain":"Recommencer","showSolution":"Voir la solution","score":"Tu as obtenu @score sur @total points","totalMoves":"Déplacements","timeSpent":"Temps écoulé","resume":"Reprendre","audioNotSupported":"Audio non supporté","ariaPlay":"Lire l'audio","ariaMoveDescription":"@cardDesc déplacé de @posSrc à @posDes","ariaCardDesc":"élément à ordonner" } }
+```
+⚠️ `sequenceImages[]` = l'**ordre CORRECT** (H5P mélange à l'affichage) ; `image` = objet-fichier direct + `imageDescription` (légende/aria). Démo générée : médias par ordre d'apparition.
+
 ## Memory Game — `H5P.MemoryGame` (1.3)
 Jeu de paires. Chaque carte a une `image` ; `match` = sa paire (ou même image pour identique).
 ```json

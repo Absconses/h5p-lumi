@@ -57,6 +57,43 @@ Donc : **Book = des Columns rangées en chapitres.** ⚠️ Il faut un **gabarit
 à part (le gabarit Column ne contient pas `H5P.InteractiveBook`) : en exporter un « avec tout
 dedans » comme pour la Page.
 
+## Branching Scenario — `H5P.BranchingScenario` (1.8)
+
+Scénario **non linéaire** : un **graphe de nœuds** où chaque choix mène ailleurs (dilemmes,
+« histoire dont vous êtes le héros »). `mainLibrary=BranchingScenario` → **pas d'enveloppe Column** ;
+gabarit dédié `gabarit-branching.h5p` (embarque tout l'écosystème).
+
+- Racine : `{ "branchingScenario": { content[], endScreens[], scoringOptionGroup, startScreen, behaviour, l10n } }`.
+- `content[]` : l'**index = le contentId** (positionnel, il n'y a PAS de champ `contentId`). Deux familles :
+  - **Nœud contenu** (texte, image…) : `{ type:{library,params,subContentId,metadata}, nextContentId, proceedButtonText, forceContentFinished:"useBehavioural", feedback:{title,subtitle}, contentBehaviour:"useBehavioural", showContentTitle:false }`. `nextContentId` = index du nœud suivant ; **-1 = fin** (→ endScreen).
+  - **Question à embranchement** (`H5P.BranchingQuestion 1.0`) : `params.branchingQuestion.{ question, alternatives:[ { text, nextContentId, feedback:{title,subtitle} } ] }`. Chaque alternative mène vers un nœud (ou -1) ; le nœud lui-même n'a pas de `nextContentId`.
+- `endScreens:[{endScreenTitle,endScreenSubtitle,contentId:-1,endScreenScore:0}]` (≥1) · `startScreen:{startScreenTitle,startScreenSubtitle}` · `scoringOptionGroup:{scoringOption:"no-score", includeInteractionsScores}` · `behaviour:{enableBackwardsNavigation, forceContentFinished, randomizeBranchingQuestions}`.
+- **Astuces** : pour des fins différentes (bon/mauvais), terminer chaque branche par un nœud Texte distinct → `nextContentId:-1`. **Générer le graphe en JS** et **vérifier que chaque `nextContentId` pointe vers un nœud existant**. Démo : `info-ou-intox.h5p` (dilemme EMI « partager ou vérifier »).
+
+## Calendrier de l'Avent — `H5P.AdventCalendar` (0.3)
+
+Une grille de **portes** numérotées qui s'ouvrent sur du contenu (texte, image, vidéo, audio, lien).
+`mainLibrary=AdventCalendar` → **pas d'enveloppe Column** ; gabarit `gabarit-avent.h5p`.
+```json
+{ "modeDoorImage":"automatic",
+  "doors":[ { "type":"text", "autoplay":false, "text": { "library":"H5P.AdvancedText 1.1", "params": { "text":"<h3>Mot</h3><p>Définition…</p>" }, "subContentId":"<guid>", "metadata": { "contentType":"Text","license":"U","title":"Jour 1" } } } ],
+  "visuals": { "hideNumbers":false,"hideDoorKnobs":false,"hideDoorFrame":false,"snow":true },
+  "behaviour": { "modeDoorPlacement":"dynamic","doorPlacementRatio":"6x4","randomize":false,"designMode":true },
+  "l10n": { "nothingToSee":"…" }, "a11y": { "door":"Porte","locked":"…" } }
+```
+Chaque porte : le champ **`type`** (`"text"`/`"image"`/`"video"`/`"audio"`/`"link"`) choisit le contenu
+révélé ; le **numéro est automatique** (position). `doorPlacementRatio` = la grille (`"6x4"` = 24 portes).
+⚠️⚠️ **DEUX pièges vérifiés (sinon calendrier VIDE)** :
+1. En `modeDoorImage:"automatic"`, les **façades des portes sont découpées dans `visuals.backgroundImage`** →
+   il **FAUT une image de fond** (ratio 6×4, p.ex. 1200×800), embarquée via `-Media` et déclarée dans
+   `visuals.backgroundImage:{path,mime,width,height}`. Sans elle, rien ne s'affiche.
+2. Le code lit `door.image` pour **chaque** porte → inclure le wrapper **`image`** (+ `link`) dans chaque
+   porte, même en `type:"text"` (sinon plantage JS).
+⚠️ Un vrai calendrier **verrouille les portes par date** ; `designMode:true` les garde toutes ouvrables.
+⚠️ Type **capricieux / non confirmé** : nos essais (v1 + v2 avec fond et champ `image`) sont restés
+**vides** dans Lumi. Cause restante probable : les champs `audio`/`video` de chaque porte (eux aussi
+requis) manquaient. Documenté ici par sécurité, mais **à éviter** sauf besoin précis.
+
 ## Validation
 
 Valide la structure avec `-Type generic` (syntaxe). La justesse des `params` de chaque brique

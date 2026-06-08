@@ -58,6 +58,29 @@ Diaporama interactif : `presentation.slides[]`, chaque slide ayant des `elements
 Comme les diapos sont **positionnées au pixel**, la mise en page est bien plus simple **dans
 Lumi**. Le skill peut générer les contenus ; le placement se peaufine ensuite.
 
+## Cornell Notes — `H5P.Cornell` (0.3)  (outil de prise de notes)
+Grille de **prise de notes selon la méthode Cornell** : une **source** à lire + 3 zones que
+l'élève remplit (mots-clés, notes, résumé). `mainLibrary=H5P.Cornell` → **pas d'enveloppe Column**.
+```json
+{ "exerciseContent": { "library":"H5P.AdvancedText 1.1", "params": { "text":"<p>… la source à étudier …</p>" }, "subContentId":"<guid>", "metadata": { "contentType":"Text","license":"U","title":"Source" } },
+  "notesFields": { "recallTitle":"Mots-clés","recallPlaceholder":"…","notesTitle":"Mes notes","notesPlaceholder":"…","summaryTitle":"Mon résumé","summaryPlaceholder":"…" },
+  "headline":"Prise de notes — …", "instructions":"<p>Consigne…</p>",
+  "l10n": { "save":"Sauvegarder","copy":"Copier","…":"" }, "a11y": { "…":"" } }
+```
+`exerciseContent` = la source (texte/image/vidéo) sur laquelle on prend des notes : on génère le
+texte + les **amorces** des 3 zones, l'élève remplit. Démo : `notes-cornell-source.h5p`.
+
+## Structure Strip — `H5P.StructureStrip` (1.0)  (canevas d'écriture guidée)
+Des **bandes colorées** guident la rédaction : chaque section a une consigne et une **proportion**
+(la hauteur de la bande = longueur conseillée). L'élève écrit dans chaque bande. `mainLibrary=StructureStrip` → **pas d'enveloppe Column**.
+```json
+{ "taskDescription":"<p>Consigne globale…</p>",
+  "sections":[ { "weight":2, "colorBackground":"#d5f5e3", "colorText":"#1c1c1c", "title":"2. …", "description":"<p>Consigne de cette partie…</p>" } ],
+  "behaviour": { "enableRetry":true,"enableSolutionsButton":true,"slack":10,"feedbackMode":"onRequest" },
+  "media": { "disableImageZooming":false }, "l10n": { "checkAnswer":"…","sectionTooShort":"…","sectionTooLong":"…" }, "a11y": { "…":"" } }
+```
+`weight` = **proportion relative** (part d'une bande = weight ÷ somme des weights) ; `slack` = tolérance en % sur la longueur ; `feedbackMode` = `onRequest`/`continuously`. On génère titres + consignes + couleurs. Démo : `avis-de-lecture-strip.h5p`.
+
 ---
 
 ### Note d'empaquetage (médias embarqués)
