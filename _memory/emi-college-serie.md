@@ -22,6 +22,10 @@ Public : **6e (11-12 ans)**, professeur-documentaliste. La progression explore l
 5. **Réseaux sociaux, messageries & Dark Social** — espace de l'attention et de la rumeur
 6. **IA générative** — espace probabiliste
 
+**Structure d'une séquence = 2 séances :**
+- **Séance 1** — cours **dialogué + magistral** (oral, échange/discussion autour de l'espace). **Pas de H5P.**
+- **Séance 2 (1 h)** — **réinvestissement** de ce dont les élèves se souviennent de la séance 1, via des **modules H5P qui reprennent les 4 étapes (Genèse → Mécanique → Économie → Praxis) dans la même heure**. → privilégier **UN composite** (Livre interactif = 4 chapitres ; ou Game Map / Présentation) plutôt que 4 fichiers séparés. C'est du **réinvestissement, pas une découverte** : étapes 1-3 = exercices **courts** de récupération en mémoire (retrieval practice) avec feedback qui **ré-explique** ; étape 4 Praxis = **tâche longue** de production (~20-25 min). Budget type : lancement ~5-10 min · ét. 1-3 ~6-8 min chacune · Praxis ~20-25 min.
+
 **Matrice d'analyse — 4 étapes invariables, dans l'ordre strict :**
 1. **Genèse** — « Qui a inventé ça et pourquoi ? » (histoire, intention initiale)
 2. **Mécanique** — « Comment la machine/l'humain choisit ce que je vois ? » (algorithme, ligne éditoriale, classement)
