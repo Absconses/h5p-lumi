@@ -57,6 +57,16 @@ Donc : **Book = des Columns rangées en chapitres.** ⚠️ Il faut un **gabarit
 à part (le gabarit Column ne contient pas `H5P.InteractiveBook`) : en exporter un « avec tout
 dedans » comme pour la Page.
 
+⚠️⚠️ **Un sous-type qui plante = Livre BLANC.** Au chargement, le Book appelle `getCurrentState`
+sur **tous** les chapitres (même non affichés) pour suivre la progression. Si un sous-type
+lève une exception dans `getCurrentState`, **tout le Livre reste blanc** (console :
+`Cannot read properties of undefined (reading 'isAnswerGiven') … getCurrentState`).
+- **`H5P.SortParagraphs 0.11` est INCOMPATIBLE** avec Interactive Book (plante en `getCurrentState`
+  tant que le chapitre n'est pas rendu). **Pour ordonner dans un Livre, utilise `H5P.ImageSequencing`**
+  (compatible, testé) — au besoin avec des **cartes-images générées** (texte sur fond coloré) si
+  l'ordre porte sur du texte. Règle générale : avant d'intégrer un type « riche » peu courant dans un
+  Livre/une Page, **teste-le seul** d'abord (un sous-type fragile fait tout planter).
+
 ## Branching Scenario — `H5P.BranchingScenario` (1.8)
 
 Scénario **non linéaire** : un **graphe de nœuds** où chaque choix mène ailleurs (dilemmes,
