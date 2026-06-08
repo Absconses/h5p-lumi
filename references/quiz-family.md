@@ -97,10 +97,17 @@ Les mots à glisser sont en `*astérisques*` (leur emplacement devient un trou).
       "<p>Le Web sert à fabriquer des ordinateurs.</p>"
     ] }
   ],
-  "solvedLabel":"Progression :","scoreLabel":"Erreurs :","resultLabel":"Ton résultat"
+  "overallFeedback":[{"from":0,"to":100}],
+  "solvedLabel":"Progression :","scoreLabel":"Erreurs :","resultLabel":"Ton résultat :",
+  "labelCorrect":"Correct.","labelIncorrect":"Incorrect, réessaie.","alternativeIncorrectLabel":"Incorrect",
+  "labelCorrectAnswers":"Réponses correctes.","tipButtonLabel":"Montrer l'indice",
+  "scoreBarLabel":"Tu as :num points sur :total","progressText":"Affirmation :num sur :total"
 }
 ```
-Dans chaque `summary`, la **première** affirmation est la correcte.
+Dans chaque `summary`, la **première** affirmation est la correcte. ⚠️ **Tous** les champs ci-dessus
+(notamment `overallFeedback` + les 8 libellés) sont **OBLIGATOIRES** : s'il en manque un, le module
+plante (et, dans un Livre/Column, fait planter tout le composite). En cas de doute, **clone les params
+d'une Summary depuis un gabarit réel**.
 
 ## Les regrouper en un Quiz (`H5P.QuestionSet`)
 

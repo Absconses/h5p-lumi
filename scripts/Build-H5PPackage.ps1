@@ -47,7 +47,8 @@ param(
     [Parameter(Mandatory = $true)] [string] $OutputPath,
     [string] $Title,
     [switch] $KeepMedia,
-    [string[]] $Media
+    [string[]] $Media,
+    [string[]] $Audio
 )
 
 $ErrorActionPreference = 'Stop'
@@ -90,11 +91,67 @@ try {
         }
     }
 
+    # Injecter les fichiers audio fournis dans content/audios/ (Dictation, Audio, Audio Recorder…)
+    if ($Audio) {
+        $audDir = Join-Path $contentDir "audios"
+        New-Item -ItemType Directory -Force -Path $audDir | Out-Null
+        foreach ($af in $Audio) {
+            if (Test-Path $af) { Copy-Item $af $audDir -Force }
+            else { Write-Warning "Audio introuvable : $af" }
+        }
+    }
+
     # 3) Mise à jour du manifeste (titre + langue), en conservant mainLibrary & dépendances
     $manifest = Get-Content $manifestPath -Raw -Encoding UTF8 | ConvertFrom-Json
     $manifest.title = $Title
     if ($manifest.PSObject.Properties.Name -contains 'language') { $manifest.language = 'fr' }
     else { $manifest | Add-Member -NotePropertyName 'language' -NotePropertyValue 'fr' }
+
+    # === Composites : déclarer dans preloadedDependencies TOUTES les bibliothèques utilisées (+ closure) ===
+    # Corrige « Unable to find constructor for: H5P.X » : un sous-module présent (dossier) mais absent du
+    # manifeste n'est pas chargé → tout le contenu plante. Indispensable pour Column / InteractiveBook.
+    function Get-UsedLibraries($node, $set) {
+        if ($null -eq $node) { return }
+        if (($node -is [System.Collections.IEnumerable]) -and ($node -isnot [string])) { foreach ($x in $node) { Get-UsedLibraries $x $set }; return }
+        if ($node -is [System.Management.Automation.PSCustomObject]) {
+            foreach ($p in $node.PSObject.Properties) {
+                if ($p.Name -eq 'library' -and ($p.Value -is [string]) -and ($p.Value -match '^\S+\s+\d+\.\d+$')) { [void]$set.Add($p.Value) }
+                Get-UsedLibraries $p.Value $set
+            }
+        }
+    }
+    $usedSet = New-Object System.Collections.Generic.HashSet[string]
+    Get-UsedLibraries ($contentRaw | ConvertFrom-Json) $usedSet
+    $queue = New-Object System.Collections.Queue
+    foreach ($u in $usedSet) { [void]$queue.Enqueue($u) }
+    $closure = New-Object System.Collections.Generic.HashSet[string]
+    while ($queue.Count -gt 0) {
+        $cur = [string]$queue.Dequeue()
+        if (-not $closure.Add($cur)) { continue }
+        if ($cur -match '^(\S+)\s+(\d+)\.(\d+)$') {
+            $lj = Join-Path $work ("{0}-{1}.{2}/library.json" -f $Matches[1], $Matches[2], $Matches[3])
+            if (Test-Path $lj) {
+                $ljson = Get-Content $lj -Raw -Encoding UTF8 | ConvertFrom-Json
+                foreach ($d in @($ljson.preloadedDependencies)) { if ($d.machineName) { [void]$queue.Enqueue(("{0} {1}.{2}" -f $d.machineName, $d.majorVersion, $d.minorVersion)) } }
+            }
+        }
+    }
+    $existingDep = @{}
+    foreach ($d in @($manifest.preloadedDependencies)) { if ($d.machineName) { $existingDep[("{0} {1}.{2}" -f $d.machineName, $d.majorVersion, $d.minorVersion)] = $true } }
+    $depList = New-Object System.Collections.ArrayList
+    foreach ($d in @($manifest.preloadedDependencies)) { [void]$depList.Add($d) }
+    $addedDeps = 0
+    foreach ($c in $closure) {
+        if (-not $existingDep[$c] -and ($c -match '^(\S+)\s+(\d+)\.(\d+)$')) {
+            if (Test-Path (Join-Path $work ("{0}-{1}.{2}" -f $Matches[1], $Matches[2], $Matches[3]))) {
+                [void]$depList.Add([pscustomobject]@{ machineName = $Matches[1]; majorVersion = [int]$Matches[2]; minorVersion = [int]$Matches[3] })
+                $existingDep[$c] = $true; $addedDeps++
+            }
+        }
+    }
+    $manifest.preloadedDependencies = $depList.ToArray()
+    if ($addedDeps -gt 0) { Write-Output ("   + {0} bibliotheque(s) ajoutee(s) au manifeste (sous-modules utilises)." -f $addedDeps) }
+
     $manifestJson = $manifest | ConvertTo-Json -Depth 10 -Compress
     [System.IO.File]::WriteAllText($manifestPath, $manifestJson, (New-Object System.Text.UTF8Encoding($false)))
     $mainLib = $manifest.mainLibrary

@@ -64,8 +64,8 @@ Composite : chaque élément est une sous-question (`H5P.SimpleMultiChoice` ou `
         "subContentId":"<guid>", "metadata":{ "contentType":"Open Ended Question","license":"U","title":"Q2" } },
       "requiredField": false }
   ],
-  "successScreenOptions": { "enableSuccessScreen":true, "successMessage":"Merci pour ta réponse !" },
-  "uiElements": { "buttonLabels": { "submitButtonLabel":"Envoyer","continueButtonLabel":"Continuer","prevButtonLabel":"Précédent","nextButtonLabel":"Suivant" }, "requiredText":"obligatoire","requiredMessage":"Cette question est obligatoire." }
+  "successScreenOptions": { "enableSuccessScreen":true, "successScreenImage":{ "library":"H5P.Image 1.1", "params":{"decorative":false,"contentName":"Image","expandImage":"Expand Image","minimizeImage":"Minimize Image"}, "subContentId":"<guid>", "metadata":{"contentType":"Image","license":"U","title":"Image"} }, "successMessage":"Merci pour ta réponse !" },
+  "uiElements": { "buttonLabels": { "prevLabel":"Précédent","continueLabel":"Continuer","nextLabel":"Suivant","submitLabel":"Envoyer" }, "accessibility":{ "requiredTextExitLabel":"Fermer le message","progressBarText":"Question %current sur %max" }, "requiredText":"obligatoire","requiredMessage":"Tu dois répondre à cette question.","submitScreenTitle":"Tu as répondu à toutes les questions !","submitScreenSubtitle":"Clique pour valider." }
 }
 ```
 Gabarit : exporte un Questionnaire (il embarque SimpleMultiChoice + OpenEndedQuestion). Versions à recopier du gabarit.

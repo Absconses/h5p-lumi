@@ -81,6 +81,16 @@ Des **bandes colorées** guident la rédaction : chaque section a une consigne e
 ```
 `weight` = **proportion relative** (part d'une bande = weight ÷ somme des weights) ; `slack` = tolérance en % sur la longueur ; `feedbackMode` = `onRequest`/`continuously`. On génère titres + consignes + couleurs. Démo : `avis-de-lecture-strip.h5p`.
 
+## Dictée — `H5P.Dictation` (1.3)  (écouter → écrire)
+L'élève **écoute** une phrase et l'**écrit** ; correction automatique. `mainLibrary=Dictation` → **pas d'enveloppe Column**.
+```json
+{ "taskDescription":"<p>Écoute et écris chaque phrase.</p>",
+  "sentences":[ { "description":"indice", "text":"La phrase correcte.", "sample":[ { "path":"audios/p1.wav","mime":"audio/wav","copyright":{"license":"U"} } ], "sampleAlternative":[ { "path":"audios/p1-slow.wav","mime":"audio/wav","copyright":{"license":"U"} } ] } ],
+  "behaviour": { "scoring": { "ignorePunctuation":true }, "shuffleSentences":"never", "enableRetry":true, "enableSolutionsButton":true }, "l10n": { "checkAnswer":"Vérifier","…":"" }, "a11y": { "play":"Lecture","playSlowly":"Lecture lente","…":"" } }
+```
+`sample` = audio normal, `sampleAlternative` = bouton « lecture lente ». ⚠️ Les audios vont dans **`content/audios/`** → empaqueter avec **`-Audio`** (pas `-Media`).
+🎙️ **AUDIO GÉNÉRABLE PAR LE SKILL** : Windows a la voix française **Hortense** (`System.Speech`, cf. `make-dictee-audio.ps1`) → dictée **100 % auto** (texte + voix). Démo : `dictee-emi.h5p`.
+
 ---
 
 ### Note d'empaquetage (médias embarqués)
