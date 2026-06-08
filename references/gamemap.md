@@ -54,6 +54,21 @@ le gabarit choisi**. `gabarit-gamemap-rich.h5p` contient : AdvancedText, MultiCh
 TrueFalse, Blanks, MarkTheWords, DragText, SingleChoiceSet, QuestionSet, **Crossword** —
 **mais pas Summary**.
 
+## ⚠️ Un exercice qui plante fait planter TOUTE la carte
+
+Au démarrage, GameMap appelle `isInstanceTask` → `getMaxScore()` sur **chaque** étape pour
+savoir si elle est notée. Si l'instance d'un exercice **échoue à s'initialiser**, ce
+`getMaxScore()` lève une exception → `buildDOM` s'interrompt → **carte blanche**. Surveille
+en particulier :
+
+- **Mots croisés (`H5P.Crossword`)** : les `words` doivent **s'imbriquer** (partager des
+  lettres). Un mot isolé (ex. `WIKI` quand aucun autre mot n'a de W/K et que le I est seul)
+  empêche la grille de se former → `Cannot read properties of undefined (reading 'getMaxScore')`
+  → toute la carte plante. Mets **4+ mots qui partagent des lettres deux à deux**, en
+  **A-Z sans accents ni espaces**.
+- Règle générale : si l'écran est blanc avec une erreur `getMaxScore`/`isInstanceTask` dans la
+  console, c'est **un exercice imbriqué** qui casse, pas la carte elle-même.
+
 ## Structure du content.json (vérifiée)
 
 ```jsonc
