@@ -54,6 +54,7 @@ Lis la fiche de référence correspondante (structure exacte + exemple) :
 | Mots croisés · Mots mêlés | `H5P.Crossword`, `FindTheWords` | `references/word-games.md` |
 | Rédaction · Ordre · Questionnaire · Graphique · Mur d'infos · Trous avancés · Quiz de perso · Arithmétique | `H5P.Essay`, `SortParagraphs`, `Questionnaire`, `Chart`, `InfoWall`, `AdvancedBlanks`, `PersonalityQuiz`, `ArithmeticQuiz` | `references/tier2-text.md` |
 | **Séquence complète** : Page (empile des activités) · Interactive Book (chapitres) | `H5P.Column`, `H5P.InteractiveBook` | `references/composites.md` |
+| **Parcours / carte de jeu** : étapes reliées sur une carte, chacune avec un exercice | `H5P.GameMap` | `references/gamemap.md` |
 | **Sur image** : Image Hotspots · Find the Hotspot · Memory Game · Collage · Agamotto · Image Slider · Multimedia Choice · Drag and Drop · Guess the Answer | voir fiche | `references/image-activities.md` |
 | **Médias & outils** : Iframe Embedder · Audio Recorder · Documentation Tool · Interactive Video · Course Presentation | voir fiche | `references/media-and-tools.md` |
 | **Tout autre type** (Dictation, Branching Scenario, Virtual Tour 360…) | variable | `references/extending-new-types.md` |
@@ -144,6 +145,7 @@ sources **réelles et libres**.
 - `references/word-games.md` — Mots croisés, Mots mêlés.
 - `references/tier2-text.md` — Rédaction (Essay), Remettre dans l'ordre, Questionnaire, Graphique.
 - `references/composites.md` — Page (Column) & Interactive Book : assembler une séquence complète.
+- `references/gamemap.md` — Carte de jeu (Game Map) : parcours d'étapes ; pièges telemetry (x/y en premier) & fond empaqueté.
 - `references/image-activities.md` — activités sur image (Image Hotspots, Memory Game, Agamotto, Collage, Multimedia Choice…).
 - `references/media-and-tools.md` — Iframe, Audio Recorder, Documentation Tool, Interactive Video, Course Presentation.
 - `references/extending-new-types.md` — méthode universelle pour tout autre type.
