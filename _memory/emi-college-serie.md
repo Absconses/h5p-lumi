@@ -26,9 +26,9 @@ Public : **6e (11-12 ans)**, professeur-documentaliste. La progression explore l
 1. **Genèse** — « Qui a inventé ça et pourquoi ? » (histoire, intention initiale)
 2. **Mécanique** — « Comment la machine/l'humain choisit ce que je vois ? » (algorithme, ligne éditoriale, classement)
 3. **Économie** — « Comment ils gagnent de l'argent ? » (modèle économique, pub, données, service public)
-4. **Praxis** — « Comment je m'en sers sans me faire avoir ? » (mise en situation, éthique, bons réflexes)
+4. **Praxis** — « Comment je m'en sers sans me faire avoir ? » (mise en situation, éthique, bons réflexes). **C'est la tâche la plus longue** : le moment où l'élève « lâche les chevaux », guidé sur une production au long cours qui **consolide et accomplit l'apprentissage**. **Souvent une production écrite** → **Essay** (rédaction avec feedback par mots-clés) ou **Structure Strip** (bande de structure d'écriture qui guide la rédaction par parties). Les étapes 1-3 restent des exercices d'application plus courts.
 
-**Choix du type H5P selon l'OBJECTIF COGNITIF** (pas l'outil) : *rappeler* → cartes (Flashcards, Dialog Cards) ; *appliquer* → exercice (QCM, glisser-déposer, texte à trous, marquer les mots, vrai/faux) ; *comprendre un support* → activité intégrée au document (points chauds sur image, vidéo interactive) ; *naviguer une séquence* → Livre interactif ou Présentation de cours (ou Game Map).
+**Choix du type H5P selon l'OBJECTIF COGNITIF** (pas l'outil) : *rappeler* → cartes (Flashcards, Dialog Cards) ; *appliquer* → exercice (QCM, glisser-déposer, texte à trous, marquer les mots, vrai/faux) ; *comprendre un support* → activité intégrée au document (points chauds sur image, vidéo interactive) ; *naviguer une séquence* → Livre interactif ou Présentation de cours (ou Game Map) ; *produire au long cours (Praxis)* → **Essay** ou **Structure Strip**.
 
 **Dossier de travail :** `Desktop\Claude\Sessions\emi-college\` — **un sous-dossier par module**. Chaque module garde sa source régénérable dans `build/` : `data.json` (contenu pédagogique FR, UTF-8) + `generate-book.ps1` (générateur ASCII) + `content.json` (sortie) + `tpl-*.json` (squelettes de `params` clonés depuis un gabarit). Le `.h5p` final est à la racine du sous-dossier. Réf. partagée des params : `emi-college\_inspect\content_content.json` (le livre démo extrait du gabarit).
 
