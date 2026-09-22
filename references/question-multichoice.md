@@ -98,3 +98,23 @@ TrueFalse…). Forme générale :
 embarquée dans ton gabarit Lumi. Vérifie-la en regardant le nom du dossier de bibliothèque
 (`H5P.MultiChoice-1.9/`) à l'intérieur du `.h5p` exporté. Pour le `subContentId`, génère un GUID :
 `[guid]::NewGuid().ToString()` en PowerShell.
+
+### ⚠️ Piège vérifié : `introPage.backgroundImage` vide fait planter tout le composite
+
+Dans `questionset.js`, le test est `if (params.introPage.backgroundImage !== undefined)`.
+Un **objet vide `{}` passe ce test** (il n'est pas `undefined`), puis le code appelle
+`H5P.getPath(bgImg.path, contentId)` avec `path === undefined` →
+`Uncaught TypeError: Cannot read properties of undefined (reading 'match')`.
+Le QuestionSet ne s'affiche pas — et comme l'exception remonte par
+`Column.attach` → `InteractiveBook.initializeChapter`, **tout le chapitre reste blanc**.
+
+➡️ **N'écris jamais `backgroundImage: {}`** : omets purement et simplement la clé.
+Même règle pour `params.backgroundImage` (racine), `endGame.successVideo` et
+`endGame.failVideo` : ou bien un média réel avec un `path`, ou bien **rien du tout**.
+
+Règle générale pour les composites : un champ média déclaré mais vide est **pire**
+qu'un champ absent. Après génération, vérifie qu'aucun objet média ne sort sans `path` :
+
+```powershell
+node -e "const c=require('./content.json');const w=(n,p='')=>{if(Array.isArray(n))return n.forEach((x,i)=>w(x,p+'['+i+']'));if(n&&typeof n=='object')for(const[k,v]of Object.entries(n)){if(['backgroundImage','successVideo','failVideo','coverMedium'].includes(k)&&!(v&&(v.path||v.library||(Array.isArray(v)&&v.length))))console.log('PIEGE',p+'.'+k);w(v,p+'.'+k)}};w(c)"
+```

@@ -108,3 +108,36 @@ requis) manquaient. Documenté ici par sécurité, mais **à éviter** sauf beso
 
 Valide la structure avec `-Type generic` (syntaxe). La justesse des `params` de chaque brique
 vient de sa fiche dédiée.
+
+## ⚠️ Piège vérifié : pas de `position:absolute` dans le texte d'un Book
+
+`H5P.InteractiveBook` applique `overflow:hidden` à **`.h5p-interactive-book-content`**
+et **`.h5p-interactive-book-chapter`** (`dist/h5p-interactive-book.css`), et
+`.h5p-interactive-book-main` également.
+
+Conséquence : tout élément positionné en absolu dans un `H5P.AdvancedText`
+(infobulle au survol, note flottante, badge décalé) est **rogné sans le moindre
+message** dès qu'il dépasse le conteneur — typiquement pour un mot situé près de
+la marge droite. Le JSON est valide, la console est muette, et le défaut ne se
+voit qu'à l'usage.
+
+➡️ Pour une aide au survol (traduction, définition), préférer un **affichage en
+ligne** : l'élément passe de `display:none` à `display:inline` au `:hover`/`:focus`.
+La ligne se décale un peu, mais rien ne peut être coupé.
+
+```css
+.gl .glt{display:none}
+.gl:hover .glt,.gl:focus .glt{display:inline;background:#1d3557;color:#fff;
+padding:.05em .5em;margin-left:.3em;border-radius:3px;font-size:.85em}
+```
+
+Deux détails qui comptent :
+
+- **`tabindex="0"` sur le mot** : sur tablette il n'y a pas de survol, mais un
+  appui donne le focus — `:focus` prend alors le relais de `:hover`.
+- **Le HTML passe intact** : `H5P.AdvancedText.attach` fait
+  `$container.html(html)` sans aucun filtrage, donc `<span>` et même un bloc
+  `<style>` sont rendus tels quels. En revanche le **CKEditor** de Lümi n'autorise
+  que `strong, em, del, a, ul, ol, h2, h3, hr, pre, code`
+  (`H5P.AdvancedText-1.1/semantics.json`) : rouvrir puis réenregistrer ce bloc
+  **dans l'éditeur** peut aplatir le balisage. Générer, ne pas ré-éditer à la main.

@@ -67,3 +67,57 @@ Ouvre Lumi ▸ **Fichier ▸ Ouvrir** (ou glisse-dépose le `.h5p`). L'activité
   c'est normal quand la version du gabarit est un peu ancienne.
 - **content.json sans BOM** : le script l'écrit en UTF-8 sans BOM (ce qu'attend H5P). Ne le
   réenregistre pas en UTF-8 avec BOM avec un éditeur Windows.
+
+## ⚠️ Lumi assainit le HTML à l'import — Digiquiz non
+
+Vérifié dans `@lumieducation/h5p-server` (`build/src/SemanticsEnforcer.js`), la
+bibliothèque sur laquelle Lumi est construit. À l'import d'un `.h5p`, chaque champ
+texte en `widget:"html"` passe par `sanitize-html` avec ces règles :
+
+| | Ce qui passe | Ce qui est supprimé |
+|---|---|---|
+| **Balises** | `div`, `span`, `p`, `br` + celles de `semantics.tags` | `<style>`, `<script>`, `<sup>`, `<blockquote>`, `<details>`… |
+| **Attributs** | `style` seulement (+ `href`/`target`/`rel` sur `a`) | **`class`, `id`, `title`, `tabindex`, `data-*`** |
+| **Propriétés CSS** | `text-align`, `font-size`, `color`, `background-color` | tout le reste : `padding`, `margin`, `border`, `display`, `position`… |
+
+Trois conséquences à connaître avant de générer :
+
+1. **Aucune interaction CSS n'est possible dans un texte.** Pas de `:hover`, pas de
+   `class` : la balise `<style>` est explicitement retirée (`uniqueTags.delete('style')`)
+   et `class` n'est pas dans la liste blanche. Une infobulle au survol marchera sur
+   Digiquiz (qui sert le paquet tel quel) mais **jamais** sur Lumi.
+2. **`background` (raccourci) est supprimé, `background-color` est conservé.** Un bandeau
+   écrit `style="background:#1d3557;color:#fff"` devient du **texte blanc sur fond blanc**,
+   donc invisible. Toujours écrire `background-color`.
+3. **Le filtre s'applique à l'import, pas seulement à l'enregistrement.** Rien ne prévient :
+   le paquet s'importe sans erreur, et le contenu est déjà appauvri.
+
+### La règle : concevoir en dégradation élégante
+
+Ne jamais faire porter le SENS par le CSS. Le style utile va **en ligne**, dans les quatre
+propriétés qui survivent ; la feuille de style n'ajoute que du confort. Exemple d'une
+traduction au survol qui reste lisible même une fois le CSS supprimé :
+
+```html
+<span class="gl" tabindex="0">gloomy<span class="glt"
+  style="font-size:0.85em;color:#c1121f">&nbsp;(sombre, lugubre)</span></span>
+```
+```css
+.gl .glt{display:none}                       /* Digiquiz : masque jusqu'au survol */
+.gl:hover .glt,.gl:focus .glt{display:inline;background-color:#fff3cd}
+```
+- CSS présent  → « gloomy », la traduction apparaît au survol.
+- CSS supprimé → « gloomy (sombre, lugubre) », toujours lisible.
+
+Sans les parenthèses et l'espace insécable, la version dégradée donnerait
+« gloomysombre, lugubre » : illisible.
+
+### Tester le rendu Lumi sans ouvrir Lumi
+
+```bash
+npm install @lumieducation/h5p-server    # embarque sanitize-html
+# puis rejouer sanitize() avec allowedTags = ['div','span','p','br', ...semantics.tags]
+# et allowedAttributes = { '*':['style'], a:['href','hreflang','media','rel','target'] }
+```
+Comparer le texte avant/après : ce qu'affiche `sanitize()` est exactement ce que verront
+les élèves dans Lumi.

@@ -39,9 +39,12 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+# PowerShell 5.1 negocie TLS 1.0 par defaut : Wikimedia refuse.
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 $ua = @{ "User-Agent" = "ClaudeCode-H5P-Skill/1.0 (educational content; contact: teacher)" }
 # Extensions d'images réellement affichables dans H5P / un navigateur.
-$okExt = '\.(jpg|jpeg|png|gif|svg|webp)$'
+# Commons ajoute desormais '?utm_source=...' a iiprop=url : le test doit ignorer la query string.
+$okExt = '\.(jpg|jpeg|png|gif|svg|webp)(\?|$)'
 
 function Clean-Html([string]$s) {
     if (-not $s) { return "" }
@@ -54,7 +57,7 @@ foreach ($term in $Query) {
     $enc = [uri]::EscapeDataString($term)
     $api = "https://commons.wikimedia.org/w/api.php?action=query&generator=search" +
            "&gsrsearch=$enc&gsrnamespace=6&gsrlimit=$Limit" +
-           "&prop=imageinfo&iiprop=url|extmetadata&format=json"
+           "&prop=imageinfo&iiprop=url%7Cextmetadata&format=json"   # %7C : un '|' brut fait renvoyer imageinfo vide
     try {
         $r = Invoke-RestMethod -Uri $api -Headers $ua -TimeoutSec 25
     } catch {
