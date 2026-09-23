@@ -592,8 +592,10 @@ export const dragZones = (taskDescription, zones, items, title) => {
  * ORDONNER : remettre des étiquettes dans l'ordre (cases numérotées).
  *   itemsInOrder : textes dans l'ORDRE CORRECT (ils sont mélangés à l'affichage)
  *   slotLabels   : libellés des cases (défaut « 1 », « 2 »…)
+ *   ties         : positions interchangeables, ex. [[1, 2]] → les éléments
+ *                  n° 2 et n° 3 (base 0 : 1 et 2) sont justes dans les deux ordres
  */
-export const sequence = (taskDescription, itemsInOrder, title, { slotLabels, shuffleSeed = 7 } = {}) => {
+export const sequence = (taskDescription, itemsInOrder, title, { slotLabels, shuffleSeed = 7, ties = [] } = {}) => {
   const gap = 0.8, colW = (DQ_EM - 3 * gap) / 2;
   const itemW = colW - 0.8;
   const itemH = Math.max(...itemsInOrder.map(t => boxH(t, itemW)));
@@ -611,9 +613,10 @@ export const sequence = (taskDescription, itemsInOrder, title, { slotLabels, shu
   const elements = order.map((orig, pos) =>
     dqElement(itemsInOrder[orig], pct(gap + 0.4, DQ_EM), pct(gap + DQ_LABEL + pos * row, totalH), itemW, itemH, n));
   // l'élément d'indice `pos` porte le texte `order[pos]` → la case k attend l'élément dont order[pos] === k
+  const group = (k) => ties.find(t => t.includes(k)) || [k];
   const dropZones = itemsInOrder.map((_, k) =>
     dqZone(slotLabels ? slotLabels[k] : String(k + 1), pct(2 * gap + colW, DQ_EM), pct(gap + DQ_LABEL + k * row, totalH),
-      colW, slotH, [order.indexOf(k)], { single: true }));
+      colW, slotH, group(k).map(g => order.indexOf(g)), { single: true }));
   return sub('H5P.DragQuestion 1.14', dqParams(taskDescription, elements, dropZones, totalH), 'Drag and Drop', title);
 };
 
