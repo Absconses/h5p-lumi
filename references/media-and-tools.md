@@ -52,7 +52,8 @@ dans Lumi. ✅ Validé : `video-interactive-demo.h5p`.
 **Fabrique** : `interactiveVideo(urlYouTube, [{ at: secondes, action: mc(...) | tf(...) }], titre)`
 (pause automatique, affichage « poster », libellés en français).
 **Caler les questions** : récupérer les sous-titres auto (`yt-dlp --skip-download --write-auto-subs
---sub-langs fr-orig --sub-format vtt URL`), placer chaque pause juste après la fin d'une idée — ou
+--sub-langs fr-orig --sub-format vtt URL` ; si YouTube exige « Sign in… not a bot », ajouter
+`--ignore-no-formats-error --extractor-args "youtube:player_client=web_embedded"`), placer chaque pause juste après la fin d'une idée — ou
 juste AVANT une explication pour une question de prédiction.
 
 ⚠️ **Bug YouTube de `H5P.Video 1.6` (patch 65)** : `youtube.js` fait `player.g.style = …` ; `player.g`

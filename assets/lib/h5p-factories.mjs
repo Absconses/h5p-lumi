@@ -560,7 +560,11 @@ const dqParams = (taskDescription, elements, dropZones, heightEm) => ({
  * zones en grille en dessous (2 colonnes), chaque zone assez haute pour
  * contenir toutes ses bonnes réponses.
  */
-export const dragZones = (taskDescription, zones, items, title) => {
+export const dragZones = (taskDescription, zones, itemsIn, title, { shuffleSeed = 11 } = {}) => {
+  // Mélange déterministe de la réserve : sinon les étiquettes apparaissent
+  // groupées par catégorie, ce qui souffle la réponse.
+  let sd = shuffleSeed; const rnd = () => (sd = (sd * 9301 + 49297) % 233280) / 233280;
+  const items = itemsIn.map((it, i) => ({ it, k: rnd() + i * 0 })).sort((a, b) => a.k - b.k).map(x => x.it);
   const gap = 0.8, colW = (DQ_EM - 3 * gap) / 2;
   const itemW = colW - 0.8;
   const itemH = Math.max(...items.map(it => boxH(it.t, itemW)));
