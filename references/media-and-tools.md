@@ -72,7 +72,7 @@ texte + les **amorces** des 3 zones, l'élève remplit. Démo : `notes-cornell-s
 
 ## Structure Strip — `H5P.StructureStrip` (1.0)  (canevas d'écriture guidée)
 Des **bandes colorées** guident la rédaction : chaque section a une consigne et une **proportion**
-(la hauteur de la bande = longueur conseillée). L'élève écrit dans chaque bande. `mainLibrary=StructureStrip` → **pas d'enveloppe Column**.
+(= longueur conseillée ; voir la note ⚠️ plus bas). L'élève écrit dans chaque bande. `mainLibrary=StructureStrip` → **pas d'enveloppe Column**.
 ```json
 { "taskDescription":"<p>Consigne globale…</p>",
   "sections":[ { "weight":2, "colorBackground":"#d5f5e3", "colorText":"#1c1c1c", "title":"2. …", "description":"<p>Consigne de cette partie…</p>" } ],
@@ -80,6 +80,11 @@ Des **bandes colorées** guident la rédaction : chaque section a une consigne e
   "media": { "disableImageZooming":false }, "l10n": { "checkAnswer":"…","sectionTooShort":"…","sectionTooLong":"…" }, "a11y": { "…":"" } }
 ```
 `weight` = **proportion relative** (part d'une bande = weight ÷ somme des weights) ; `slack` = tolérance en % sur la longueur ; `feedbackMode` = `onRequest`/`continuously`. On génère titres + consignes + couleurs. Démo : `avis-de-lecture-strip.h5p`.
+
+⚠️ **Vérifié au rendu (Club Reporter M2, sept. 2026)** :
+- Les bandes ont **toutes la même hauteur** à l'écran : `weight` ne règle que la **longueur attendue**, pas la taille visible. Ne pas écrire « la hauteur de la bande indique la longueur » dans la consigne.
+- La longueur attendue se calcule **par rapport à la section de référence** (le plus gros `weight`) ; `behaviour.textLengthMin` / `textLengthMax` bornent le **total**. Réglage qui marche pour un article de collège : poids titre 1 · chapô 3 · attaque 2 · corps 8 · chute 1, total 700–1600 caractères, `slack` 30.
+- **Tester les poids avec un texte modèle** : une chute d'une phrase (≈ 55 caractères) avec un poids 2 était déjà jugée « trop courte ».
 
 ## Dictée — `H5P.Dictation` (1.3)  (écouter → écrire)
 L'élève **écoute** une phrase et l'**écrit** ; correction automatique. `mainLibrary=Dictation` → **pas d'enveloppe Column**.
