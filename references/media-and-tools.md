@@ -49,6 +49,18 @@ Structure : `interactiveVideo.{ video:{files…}, assets:{interactions:[…]}, s
 gabarit-maître, **envelopper dans une Column**. Le calage exact (secondes, position) se peaufine
 dans Lumi. ✅ Validé : `video-interactive-demo.h5p`.
 
+**Fabrique** : `interactiveVideo(urlYouTube, [{ at: secondes, action: mc(...) | tf(...) }], titre)`
+(pause automatique, affichage « poster », libellés en français).
+**Caler les questions** : récupérer les sous-titres auto (`yt-dlp --skip-download --write-auto-subs
+--sub-langs fr-orig --sub-format vtt URL` ; si YouTube exige « Sign in… not a bot », ajouter
+`--ignore-no-formats-error --extractor-args "youtube:player_client=web_embedded"`), placer chaque pause juste après la fin d'une idée — ou
+juste AVANT une explication pour une question de prédiction.
+
+⚠️ **Bug YouTube de `H5P.Video 1.6` (patch 65)** : `youtube.js` fait `player.g.style = …` ; `player.g`
+n'existe plus dans l'API YouTube actuelle → `TypeError` à chaque chargement (la vidéo marche, mais
+l'iframe n'est pas dimensionnée). **Corrigé dans `gabarit-interactivebook-reporter.h5p`** (utilise
+`player.getIframe()`). Tout autre gabarit contenant `H5P.Video-1.6` doit recevoir le même correctif.
+
 ## Course Presentation — `H5P.CoursePresentation` (1.26)  (diapos positionnées)
 Diaporama interactif : `presentation.slides[]`, chaque slide ayant des `elements[]` placés en
 `x/y/width/height` (texte, image, question…).
@@ -72,7 +84,7 @@ texte + les **amorces** des 3 zones, l'élève remplit. Démo : `notes-cornell-s
 
 ## Structure Strip — `H5P.StructureStrip` (1.0)  (canevas d'écriture guidée)
 Des **bandes colorées** guident la rédaction : chaque section a une consigne et une **proportion**
-(la hauteur de la bande = longueur conseillée). L'élève écrit dans chaque bande. `mainLibrary=StructureStrip` → **pas d'enveloppe Column**.
+(= longueur conseillée ; voir la note ⚠️ plus bas). L'élève écrit dans chaque bande. `mainLibrary=StructureStrip` → **pas d'enveloppe Column**.
 ```json
 { "taskDescription":"<p>Consigne globale…</p>",
   "sections":[ { "weight":2, "colorBackground":"#d5f5e3", "colorText":"#1c1c1c", "title":"2. …", "description":"<p>Consigne de cette partie…</p>" } ],
@@ -80,6 +92,11 @@ Des **bandes colorées** guident la rédaction : chaque section a une consigne e
   "media": { "disableImageZooming":false }, "l10n": { "checkAnswer":"…","sectionTooShort":"…","sectionTooLong":"…" }, "a11y": { "…":"" } }
 ```
 `weight` = **proportion relative** (part d'une bande = weight ÷ somme des weights) ; `slack` = tolérance en % sur la longueur ; `feedbackMode` = `onRequest`/`continuously`. On génère titres + consignes + couleurs. Démo : `avis-de-lecture-strip.h5p`.
+
+⚠️ **Vérifié au rendu (Club Reporter M2, sept. 2026)** :
+- Les bandes ont **toutes la même hauteur** à l'écran : `weight` ne règle que la **longueur attendue**, pas la taille visible. Ne pas écrire « la hauteur de la bande indique la longueur » dans la consigne.
+- La longueur attendue se calcule **par rapport à la section de référence** (le plus gros `weight`) ; `behaviour.textLengthMin` / `textLengthMax` bornent le **total**. Réglage qui marche pour un article de collège : poids titre 1 · chapô 3 · attaque 2 · corps 8 · chute 1, total 700–1600 caractères, `slack` 30.
+- **Tester les poids avec un texte modèle** : une chute d'une phrase (≈ 55 caractères) avec un poids 2 était déjà jugée « trop courte ».
 
 ## Dictée — `H5P.Dictation` (1.3)  (écouter → écrire)
 L'élève **écoute** une phrase et l'**écrit** ; correction automatique. `mainLibrary=Dictation` → **pas d'enveloppe Column**.

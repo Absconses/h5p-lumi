@@ -62,10 +62,29 @@ sur **tous** les chapitres (même non affichés) pour suivre la progression. Si 
 lève une exception dans `getCurrentState`, **tout le Livre reste blanc** (console :
 `Cannot read properties of undefined (reading 'isAnswerGiven') … getCurrentState`).
 - **`H5P.SortParagraphs 0.11` est INCOMPATIBLE** avec Interactive Book (plante en `getCurrentState`
-  tant que le chapitre n'est pas rendu). **Pour ordonner dans un Livre, utilise `H5P.ImageSequencing`**
-  (compatible, testé) — au besoin avec des **cartes-images générées** (texte sur fond coloré) si
-  l'ordre porte sur du texte. Règle générale : avant d'intégrer un type « riche » peu courant dans un
+  tant que le chapitre n'est pas rendu).
+- ⚠️ **`H5P.ImageSequencing` n'est PAS dans la liste des types acceptés par `H5P.Column 1.18`**
+  (vérifié dans `semantics.json` du gabarit reporter, sept. 2026) : ne pas l'imbriquer.
+- ✅ **Pour ordonner ou classer dans un Livre : `H5P.DragQuestion 1.14`**, généré par les fabriques
+  `sequence()` (cases numérotées) et `dragZones()` (catégories) de `assets/lib/h5p-factories.mjs`.
+  Mise en page calculée automatiquement, testée au rendu (aucun chevauchement, glisser-déposer
+  et score fonctionnels). Règle générale : avant d'intégrer un type « riche » peu courant dans un
   Livre/une Page, **teste-le seul** d'abord (un sous-type fragile fait tout planter).
+
+## Choisir le type selon l'intention pédagogique
+
+Ne pas empiler « texte + QCM » par réflexe. Chaque activité sert une intention :
+
+| Intention | Types | Fabriques (`h5p-factories.mjs`) |
+|---|---|---|
+| Comprendre (être accompagné) | vidéo interactive, texte glosé, cartes, accordéon | `interactiveVideo`, `text`, `dialogcards`, `accordion` |
+| Agir / s'entraîner | classer, ordonner, glisser/marquer des mots, QCM | `dragZones`, `sequence`, `dragText`, `markWords`, `mc`, `tf` |
+| Réfléchir (non noté) | question ouverte + réponse modèle | `reflection` (Essay, `ignoreScoring`) |
+| Produire | fiche exportable, bande d'écriture, Cornell | `docTool`, StructureStrip, Cornell |
+
+Varier l'entrée des chapitres ; au plus 2 séries de QCM par module ; un glisser-déposer ne
+dit que juste/faux → toujours le faire suivre d'un `accordion` « Pourquoi ? ».
+Exemple complet et grille détaillée : `h5p-parcours/jeune-reporter/PEDAGOGIE.md`.
 
 ## Branching Scenario — `H5P.BranchingScenario` (1.8)
 
