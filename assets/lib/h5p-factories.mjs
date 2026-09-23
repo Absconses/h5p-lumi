@@ -467,3 +467,243 @@ export const docTool = (taskDescription, pages, title = 'Fiche') =>
       closeLabel: 'Fermer',
     },
   }, 'Documentation Tool', title);
+
+/* ================================================================== *
+ *  CLASSER, ORDONNER, RÉFLÉCHIR, REGARDER
+ *  (ajout sept. 2026 — parcours Club Jeune Reporter)
+ *
+ *  Choisir le type selon l'INTENTION pédagogique, pas l'inverse :
+ *    comprendre  → interactiveVideo, texte, cartes, accordéon
+ *    agir        → dragZones (classer), sequence (ordonner), QCM…
+ *    réfléchir   → reflection (Essay non noté + réponse modèle)
+ *    produire    → docTool, StructureStrip, Cornell
+ * ================================================================== */
+
+/** Accordéon à un seul volet : cache une correction jusqu'à ce qu'on l'ouvre. */
+export const accordion = (panelTitle, html, title = 'Correction') =>
+  sub('H5P.Accordion 1.0', {
+    hTag: 'h3',
+    panels: [{ title: panelTitle, content: sub('H5P.AdvancedText 1.1', { text: html }, 'Text', title) }],
+  }, 'Accordion', title);
+
+/* --- Drag and Drop (H5P.DragQuestion 1.14) --------------------------- *
+ *  Unités : x / y en % du cadre ; width / height en em, où
+ *  1 em = (largeur affichée / size.width) × 16 px. On fixe size.width à
+ *  620 → le cadre fait 38,75 em de large, quelle que soit la largeur
+ *  réelle (tout est mis à l'échelle).
+ *  ⚠️ Pas de clé `background` : un média vide fait planter le chapitre.
+ * -------------------------------------------------------------------- */
+const DQ_W = 620;
+const DQ_EM = DQ_W / 16;                        // 38,75 em
+const lines = (t, wEm) => Math.max(1, Math.ceil(t.replace(/<[^>]+>/g, '').length / (wEm * 1.95)));
+const boxH = (t, wEm) => lines(t, wEm) * 1.35 + 0.9;
+const DQ_PAD = 1.2;     // bordure + marges internes ajoutées par H5P au rendu (mesuré)
+const DQ_LABEL = 1.9;   // le libellé d'une zone s'affiche AU-DESSUS d'elle (mesuré)
+
+const dqElement = (html, x, y, w, h, zoneCount) => ({
+  x, y, width: w, height: h,
+  dropZones: Array.from({ length: zoneCount }, (_, i) => String(i)),
+  type: sub('H5P.AdvancedText 1.1', { text: `<p>${html}</p>` }, 'Text', 'Étiquette'),
+  backgroundOpacity: 100,
+  multiple: false,
+});
+
+const dqZone = (label, x, y, w, h, correct, { single = false, fbOk = '', fbKo = '', tip = '' } = {}) => ({
+  label: `<div>${label}</div>`,
+  showLabel: true,
+  x, y, width: w, height: h,
+  correctElements: correct.map(String),
+  backgroundOpacity: 100,
+  tipsAndFeedback: { tip, feedbackOnCorrect: fbOk, feedbackOnIncorrect: fbKo },
+  single,
+  autoAlign: true,
+});
+
+const dqParams = (taskDescription, elements, dropZones, heightEm) => ({
+  scoreShow: 'Vérifier',
+  submit: 'Envoyer',
+  tryAgain: 'Recommencer',
+  scoreExplanation: 'Une étiquette bien placée rapporte 1 point, une étiquette mal placée en retire 1.',
+  question: {
+    settings: { size: { width: DQ_W, height: Math.round(heightEm * 16) } },
+    task: { elements, dropZones },
+  },
+  overallFeedback: [{ from: 0, to: 100, feedback: 'Tu as @score point(s) sur @total.' }],
+  behaviour: {
+    enableRetry: true, enableCheckButton: true, singlePoint: false,
+    applyPenalties: false, enableScoreExplanation: false,
+    dropZoneHighlighting: 'dragging', autoAlignSpacing: 2,
+    enableFullScreen: false, showScorePoints: true, showTitle: false,
+  },
+  localize: { fullscreen: 'Plein écran', exitFullscreen: 'Quitter le plein écran' },
+  grabbablePrefix: 'Étiquette {num} sur {total}.',
+  grabbableSuffix: 'Placée dans la zone {num}.',
+  dropzonePrefix: 'Zone {num} sur {total}.',
+  noDropzone: 'Aucune zone.',
+  tipLabel: 'Voir l’indice.',
+  tipAvailable: 'Indice disponible',
+  correctAnswer: 'Bonne réponse',
+  wrongAnswer: 'Mauvaise réponse',
+  feedbackHeader: 'Explication',
+  scoreBarLabel: 'Tu as :num point(s) sur :total',
+  scoreExplanationButtonLabel: 'Voir le détail du score',
+  a11yCheck: 'Vérifier les réponses.',
+  a11yRetry: 'Recommencer la tâche.',
+  taskDescription,
+});
+
+/**
+ * CLASSER : des étiquettes à déposer dans des catégories.
+ *   zones : [{ label, fbOk?, fbKo?, tip? }]
+ *   items : [{ t: 'texte', zone: indexDeLaZoneCorrecte }]
+ * Mise en page automatique : réserve d'étiquettes en haut (2 colonnes),
+ * zones en grille en dessous (2 colonnes), chaque zone assez haute pour
+ * contenir toutes ses bonnes réponses.
+ */
+export const dragZones = (taskDescription, zones, items, title) => {
+  const gap = 0.8, colW = (DQ_EM - 3 * gap) / 2;
+  const itemW = colW - 0.8;
+  const itemH = Math.max(...items.map(it => boxH(it.t, itemW)));
+  const step = itemH + DQ_PAD;                   // hauteur rendue réelle (bordure + marge)
+  // réserve : 2 colonnes
+  const poolRows = Math.ceil(items.length / 2);
+  const poolH = poolRows * (step + gap) + gap;
+  // zones : 2 colonnes ; le libellé s'affiche AU-DESSUS de la zone → on lui réserve DQ_LABEL
+  const perZone = zones.map((_, z) => items.filter(it => it.zone === z).length);
+  const zoneH = Math.max(1, ...perZone) * (step + 0.3) + 0.6;
+  const zoneRows = Math.ceil(zones.length / 2);
+  const totalH = poolH + zoneRows * (DQ_LABEL + zoneH + gap) + gap;
+  const pct = (em, tot) => +(em / tot * 100).toFixed(2);
+
+  const elements = items.map((it, i) => {
+    const c = i % 2, r = Math.floor(i / 2);
+    return dqElement(it.t, pct(gap + c * (colW + gap) + 0.4, DQ_EM), pct(gap + r * (step + gap), totalH), itemW, itemH, zones.length);
+  });
+  const dropZones = zones.map((z, k) => {
+    const c = k % 2, r = Math.floor(k / 2);
+    const correct = items.map((it, i) => (it.zone === k ? i : -1)).filter(i => i >= 0);
+    return dqZone(z.label, pct(gap + c * (colW + gap), DQ_EM), pct(poolH + DQ_LABEL + r * (DQ_LABEL + zoneH + gap), totalH),
+      colW, zoneH, correct, { fbOk: z.fbOk || '', fbKo: z.fbKo || '', tip: z.tip || '' });
+  });
+  return sub('H5P.DragQuestion 1.14', dqParams(taskDescription, elements, dropZones, totalH), 'Drag and Drop', title);
+};
+
+/**
+ * ORDONNER : remettre des étiquettes dans l'ordre (cases numérotées).
+ *   itemsInOrder : textes dans l'ORDRE CORRECT (ils sont mélangés à l'affichage)
+ *   slotLabels   : libellés des cases (défaut « 1 », « 2 »…)
+ */
+export const sequence = (taskDescription, itemsInOrder, title, { slotLabels, shuffleSeed = 7 } = {}) => {
+  const gap = 0.8, colW = (DQ_EM - 3 * gap) / 2;
+  const itemW = colW - 0.8;
+  const itemH = Math.max(...itemsInOrder.map(t => boxH(t, itemW)));
+  const step = itemH + DQ_PAD;
+  const slotH = step + 0.4;
+  const row = DQ_LABEL + slotH + gap;            // libellé au-dessus de chaque case
+  const n = itemsInOrder.length;
+  const totalH = gap + n * row;
+  const pct = (em, tot) => +(em / tot * 100).toFixed(2);
+  // mélange déterministe (pour que la réserve ne soit pas déjà dans l'ordre)
+  let s = shuffleSeed; const rnd = () => (s = (s * 9301 + 49297) % 233280) / 233280;
+  const order = itemsInOrder.map((_, i) => i).sort(() => rnd() - 0.5);
+  if (order.every((v, i) => v === i)) order.reverse();
+
+  const elements = order.map((orig, pos) =>
+    dqElement(itemsInOrder[orig], pct(gap + 0.4, DQ_EM), pct(gap + DQ_LABEL + pos * row, totalH), itemW, itemH, n));
+  // l'élément d'indice `pos` porte le texte `order[pos]` → la case k attend l'élément dont order[pos] === k
+  const dropZones = itemsInOrder.map((_, k) =>
+    dqZone(slotLabels ? slotLabels[k] : String(k + 1), pct(2 * gap + colW, DQ_EM), pct(gap + DQ_LABEL + k * row, totalH),
+      colW, slotH, [order.indexOf(k)], { single: true }));
+  return sub('H5P.DragQuestion 1.14', dqParams(taskDescription, elements, dropZones, totalH), 'Drag and Drop', title);
+};
+
+/* --- Réflexion (H5P.Essay 1.5, non notée) ---------------------------- *
+ *  L'élève écrit librement ; en cliquant sur « Vérifier », il voit une
+ *  réponse possible. Pas de score : c'est un moment de réflexion.
+ * -------------------------------------------------------------------- */
+export const reflection = (question, sample, title = 'Réflexion', { placeholder = 'Écris ta réponse ici…', minimumLength = 20 } = {}) =>
+  sub('H5P.Essay 1.5', {
+    taskDescription: question,
+    placeholderText: placeholder,
+    solution: { introduction: '<p>Une réponse possible (il y en a d’autres) :</p>', sample },
+    keywords: [{ keyword: '*', alternatives: [], options: { points: 1, occurrences: 1, caseSensitive: false, forgiveMistakes: true, feedbackIncluded: '', feedbackMissed: '' } }],
+    overallFeedback: [{ from: 0, to: 100, feedback: 'Merci ! Compare ta réponse avec celle proposée ci-dessous.' }],
+    behaviour: {
+      minimumLength, inputFieldSize: '3', enableRetry: true, ignoreScoring: true,
+      pointsHost: 1, linebreakReplacement: ' ',
+    },
+    checkAnswer: 'Voir une réponse possible',
+    submitAnswer: 'Envoyer',
+    tryAgain: 'Modifier ma réponse',
+    showSolution: 'Voir une réponse possible',
+    feedbackHeader: 'Retour',
+    solutionTitle: 'Une réponse possible',
+    remainingChars: 'Caractères restants : @chars',
+    notEnoughChars: 'Écris au moins @chars caractères.',
+    messageSave: 'enregistré',
+    ariaYourResult: 'Tu as @score point(s) sur @total',
+    ariaNavigatedToSolution: 'Réponse possible affichée.',
+    ariaCheck: 'Vérifier.',
+    ariaShowSolution: 'Voir une réponse possible.',
+    ariaRetry: 'Modifier ma réponse.',
+  }, 'Essay', title);
+
+/* --- Vidéo interactive (H5P.InteractiveVideo 1.27) -------------------- *
+ *  youtube : URL complète (https://www.youtube.com/watch?v=…)
+ *  interactions : [{ at: secondes, action: mc(...) | tf(...) | …, label? }]
+ *  Chaque question met la vidéo en pause (pause:true) et s'affiche en
+ *  « poster » au centre.
+ * -------------------------------------------------------------------- */
+export const interactiveVideo = (youtube, interactions, title, { startTitle = title } = {}) =>
+  sub('H5P.InteractiveVideo 1.27', {
+    interactiveVideo: {
+      video: {
+        startScreenOptions: { title: startTitle, hideStartTitle: false },
+        textTracks: { videoTrack: [] },
+        files: [{ path: youtube, mime: 'video/YouTube', copyright: { license: 'U' } }],
+      },
+      assets: {
+        interactions: interactions.map(it => ({
+          x: 10, y: 8, width: 32, height: 20,
+          duration: { from: it.at, to: it.at + 1 },
+          libraryTitle: it.action.metadata.contentType,
+          action: it.action,
+          pause: true,
+          displayType: 'poster',
+          buttonOnMobile: false,
+          adaptivity: {
+            correct: { allowOptOut: false, message: '' },
+            wrong: { allowOptOut: false, message: '' },
+            requireCompletion: false,
+          },
+          label: it.label || '',
+        })),
+        bookmarks: [],
+        endscreens: [],
+      },
+    },
+    override: {
+      autoplay: false, loop: false, showBookmarksmenuOnLoad: false, showRewind10: true,
+      preventSkipping: false, deactivateSound: false,
+    },
+    l10n: {
+      interaction: 'Question', play: 'Lecture', pause: 'Pause', mute: 'Couper le son', unmute: 'Remettre le son',
+      quality: 'Qualité', captions: 'Sous-titres', close: 'Fermer', fullscreen: 'Plein écran',
+      exitFullscreen: 'Quitter le plein écran', summary: 'Résumé', bookmarks: 'Signets', endscreen: 'Fin',
+      defaultAdaptivitySeekLabel: 'Continuer', continueWithVideo: 'Reprendre la vidéo',
+      playbackRate: 'Vitesse', rewind10: 'Reculer de 10 s', navDisabled: 'Navigation désactivée',
+      sndDisabled: 'Son désactivé', requiresCompletionWarning: 'Réponds à toutes les questions avant de continuer.',
+      back: 'Retour', hours: 'heures', minutes: 'minutes', seconds: 'secondes', currentTime: 'Temps :',
+      totalTime: 'Durée :', singleInteractionAnnouncement: 'Une question est apparue :',
+      multipleInteractionsAnnouncement: 'Plusieurs questions sont apparues.',
+      videoPausedAnnouncement: 'Vidéo en pause', content: 'Contenu', answered: '@answered réponse(s)',
+      endcardTitle: '@answered question(s) sur @total', endcardInformation: 'Tu as répondu à @answered question(s).',
+      endcardInformationOnSubmitButtonDisabled: 'Tu as répondu à @answered question(s).',
+      endcardInformationNoAnswers: 'Tu n’as répondu à aucune question.',
+      endcardInformationMustHaveAnswer: 'Réponds à au moins une question avant d’envoyer.',
+      endcardSubmitButton: 'Envoyer mes réponses', endcardSubmitMessage: 'Tes réponses ont été envoyées !',
+      endcardTableRowAnswered: 'Questions répondues', endcardTableRowScore: 'Score',
+      endcardAnsweredScore: 'répondu', endCardTableRowSummaryWithScore: 'Tu as @score sur @total',
+      endCardTableRowSummaryWithoutScore: 'Tu as répondu à @answered question(s)',
+    },
+  }, 'Interactive Video', title);

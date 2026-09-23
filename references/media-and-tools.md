@@ -49,6 +49,17 @@ Structure : `interactiveVideo.{ video:{files…}, assets:{interactions:[…]}, s
 gabarit-maître, **envelopper dans une Column**. Le calage exact (secondes, position) se peaufine
 dans Lumi. ✅ Validé : `video-interactive-demo.h5p`.
 
+**Fabrique** : `interactiveVideo(urlYouTube, [{ at: secondes, action: mc(...) | tf(...) }], titre)`
+(pause automatique, affichage « poster », libellés en français).
+**Caler les questions** : récupérer les sous-titres auto (`yt-dlp --skip-download --write-auto-subs
+--sub-langs fr-orig --sub-format vtt URL`), placer chaque pause juste après la fin d'une idée — ou
+juste AVANT une explication pour une question de prédiction.
+
+⚠️ **Bug YouTube de `H5P.Video 1.6` (patch 65)** : `youtube.js` fait `player.g.style = …` ; `player.g`
+n'existe plus dans l'API YouTube actuelle → `TypeError` à chaque chargement (la vidéo marche, mais
+l'iframe n'est pas dimensionnée). **Corrigé dans `gabarit-interactivebook-reporter.h5p`** (utilise
+`player.getIframe()`). Tout autre gabarit contenant `H5P.Video-1.6` doit recevoir le même correctif.
+
 ## Course Presentation — `H5P.CoursePresentation` (1.26)  (diapos positionnées)
 Diaporama interactif : `presentation.slides[]`, chaque slide ayant des `elements[]` placés en
 `x/y/width/height` (texte, image, question…).
