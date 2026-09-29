@@ -137,6 +137,7 @@ sources **réelles et libres**.
 - `scripts/Find-WikimediaImages.ps1` — recherche + validation d'images libres (Wikimedia).
 - `scripts/Test-H5PJson.ps1` — validation syntaxe + règles par type.
 - `scripts/Build-H5PPackage.ps1` — assemblage du `.h5p` à partir d'un gabarit (option `-Media` pour images/sons embarqués).
+- `scripts/build-h5p.mjs` — portage **Node** de Build-H5PPackage (Linux/macOS/cloud, sans PowerShell ; nécessite `zip`/`unzip`) : mêmes étapes, déclare la closure des bibliothèques, et **refuse** d'empaqueter si une bibliothèque ou un média référencé manque.
 - `scripts/Graft-H5PLibraries.ps1` — greffe une bibliothèque (+ ses dépendances) d'un gabarit riche (ex. `gabarit-column.h5p`) vers un gabarit pauvre. Sert à enrichir une **Game Map** (ou une Page/un Book) avec de nouveaux types d'exercices : `-Target … -Source … -Libraries "H5P.MultiChoice-1.16",… -OutputPath …`. Reconstruit `preloadedDependencies` proprement (aucune entrée vide).
 - `references/timeline.md` — structure + exemple de frise.
 - `references/question-multichoice.md` — QCM (MultiChoice) + squelette du Quiz (QuestionSet).
