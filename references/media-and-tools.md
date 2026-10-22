@@ -2,13 +2,14 @@
 
 Cinq types dont les bibliothèques sont déjà dans `gabarit-column.h5p`.
 
-## Iframe Embedder — `H5P.IFrameEmbed` (1.0)  ✅ pleinement générable
+## Iframe Embedder — `H5P.IFrameEmbed` (1.0)  ✅ générable, ⚠️ selon le site
 Intègre une page externe (un site, une carte, un exerciseur en ligne) dans un cadre.
 ```json
-{ "source": "https://www.example.org/widget", "width": "100%", "height": "600", "resizeSupported": true }
+{ "source": "https://fr.wikipedia.org/wiki/Aigle_royal", "width": "1000px", "minWidth": "300px", "height": "1500px", "resizeSupported": true }
 ```
-Le seul du lot qui n'a besoin d'aucun média : juste une **URL**. Idéal pour encapsuler un
-outil web dans une Page/un Book.
+⚠️ Beaucoup de sites **refusent** d'être encadrés (cadre gris), le cadre **ne défile pas**, et
+un fichier interne (HTML/PDF) ne fonctionne pas sur Lumi. **Lire `references/iframe-embed.md`**
+(tableau de compatibilité de 38 sites testés) avant d'intégrer un site.
 
 ## Audio Recorder — `H5P.AudioRecorder` (1.0)  (outil, pas de contenu)
 Permet à l'élève d'**enregistrer sa voix**. Il n'y a rien à « rédiger » :
@@ -45,7 +46,11 @@ Structure : `interactiveVideo.{ video:{files…}, assets:{interactions:[…]}, s
 { "x":25, "y":20, "width":50, "height":45, "duration":{ "from":15, "to":35 }, "pause":true, "displayType":"poster",
   "action": { "library":"H5P.MultiChoice 1.16", "params": { "/* … notre QCM … */":"" }, "subContentId":"<guid>", "metadata": { "contentType":"Multiple Choice" } } }
 ```
-`from` = seconde d'apparition ; `pause:true` met la vidéo en pause. ⚠️ Comme tous les types du
+`from` = seconde d'apparition ; `pause:true` met la vidéo en pause.
+⚠️ Dans un **Livre**, un `displayType:"poster"` recouvre **toute** la vidéo, quels que soient
+`x/y/width/height` : l'élève ne voit plus l'image sur laquelle porte la question. Pour une
+consigne d'**observation**, utiliser `displayType:"button"` + `pause:true` (vérifié dans un lecteur H5P) : la vidéo
+s'arrête, un bouton étiqueté (`label`) apparaît, l'image reste visible. ⚠️ Comme tous les types du
 gabarit-maître, **envelopper dans une Column**. Le calage exact (secondes, position) se peaufine
 dans Lumi. ✅ Validé : `video-interactive-demo.h5p`.
 

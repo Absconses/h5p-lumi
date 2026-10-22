@@ -56,7 +56,7 @@ Lis la fiche de référence correspondante (structure exacte + exemple) :
 | **Séquence complète** : Page (empile des activités) · Interactive Book (chapitres) | `H5P.Column`, `H5P.InteractiveBook` | `references/composites.md` |
 | **Parcours / carte de jeu** : étapes reliées sur une carte, chacune avec un exercice | `H5P.GameMap` | `references/gamemap.md` |
 | **Sur image** : Image Hotspots · Find the Hotspot · Memory Game · Collage · Agamotto · Image Slider · Multimedia Choice · Drag and Drop · Guess the Answer | voir fiche | `references/image-activities.md` |
-| **Médias & outils** : Iframe Embedder · Audio Recorder · Documentation Tool · Interactive Video · Course Presentation | voir fiche | `references/media-and-tools.md` |
+| **Médias & outils** : Iframe Embedder · Audio Recorder · Documentation Tool · Interactive Video · Course Presentation | voir fiche | `references/media-and-tools.md` (+ `references/iframe-embed.md` : sites compatibles) |
 | **Tout autre type** (Dictation, Branching Scenario, Virtual Tour 360…) | variable | `references/extending-new-types.md` |
 
 Le catalogue Lumi est vaste : **n'importe quel type** se traite via la méthode décrite dans
@@ -148,6 +148,7 @@ sources **réelles et libres**.
 - `references/gamemap.md` — Carte de jeu (Game Map) : parcours d'étapes ; pièges telemetry (x/y en premier) & fond empaqueté.
 - `references/image-activities.md` — activités sur image (Image Hotspots, Memory Game, Agamotto, Collage, Multimedia Choice…).
 - `references/media-and-tools.md` — Iframe, Audio Recorder, Documentation Tool, Interactive Video, Course Presentation.
+- `references/iframe-embed.md` — Iframe Embedder : tableau des sites qui s'affichent (ou non) dans un cadre, limites (pas de défilement, pas de fichier interne).
 - `references/extending-new-types.md` — méthode universelle pour tout autre type.
 - `references/lumi-packaging.md` — format `.h5p`, gabarits, import dans Lumi.
 - `assets/templates/` — y déposer les gabarits `.h5p` exportés de Lumi.

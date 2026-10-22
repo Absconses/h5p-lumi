@@ -467,3 +467,21 @@ export const docTool = (taskDescription, pages, title = 'Fiche') =>
       closeLabel: 'Fermer',
     },
   }, 'Documentation Tool', title);
+
+/* ------------------------------------------------------------------ *
+ *  Iframe Embedder — une page web affichee DANS le module
+ *
+ *  ⚠️ Beaucoup de sites refusent d'etre encadres (cadre gris) : ne
+ *     prendre que des sites du tableau de references/iframe-embed.md.
+ *  ⚠️ Le cadre ne defile pas (scrolling="no") : la hauteur suit la
+ *     largeur selon `ratio` (hauteur / largeur). 1.5 pour un article.
+ *  ⚠️ Pas de fichier interne (HTML refuse a l'import Lumi, PDF perdu).
+ * ------------------------------------------------------------------ */
+export const iframe = (source, title = 'Site', { ratio = 1.5 } = {}) =>
+  sub('H5P.IFrameEmbed 1.0', {
+    width: '1000px',
+    minWidth: '300px',
+    height: `${Math.round(1000 * ratio)}px`,
+    source,
+    resizeSupported: true,
+  }, 'Iframe Embedder', title);
