@@ -148,10 +148,10 @@ sources **réelles et libres**.
 - `references/composites.md` — Page (Column) & Interactive Book : assembler une séquence complète.
 - `references/gamemap.md` — Carte de jeu (Game Map) : parcours d'étapes ; pièges telemetry (x/y en premier) & fond empaqueté.
 - `references/image-activities.md` — activités sur image (Image Hotspots, Memory Game, Agamotto, Collage, Multimedia Choice…).
-- `references/impress-presentation.md` — Présentation 3D (Impressive Presentation) : caméras + panneaux, axe de visée, `route` ; bibliothèque hors Hub à fournir.
+- `references/impress-presentation.md` — Présentation 3D (Impressive Presentation) : caméras + panneaux, zoom par la profondeur, `route` ; bibliothèque hors Hub, fournie par `gabarit-impresspresentation.h5p`.
 - `references/media-and-tools.md` — Iframe, Audio Recorder, Documentation Tool, Interactive Video, Course Presentation.
 - `references/extending-new-types.md` — méthode universelle pour tout autre type.
 - `references/lumi-packaging.md` — format `.h5p`, gabarits, import dans Lumi.
-- `assets/lib/impress-factories.mjs` — fabriques Node pour Impressive Presentation (`station`, `layouts`, `overview`, `validate`).
+- `assets/lib/impress-factories.mjs` — fabriques Node pour Impressive Presentation (`station`, `textView`, `depth`, `layouts`, `overview`, `validate`).
 - `assets/examples/impresspresentation-exemple.content.json` — content.json de l'exemple officiel (référence de structure).
 - `assets/templates/` — y déposer les gabarits `.h5p` exportés de Lumi.

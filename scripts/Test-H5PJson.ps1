@@ -93,14 +93,20 @@ switch ($Type) {
             if ($vg.perspectiveRatio -isnot [double] -and $vg.perspectiveRatio -isnot [int] -and $vg.perspectiveRatio -isnot [long] -and $vg.perspectiveRatio -isnot [decimal]) { $problems.Add("'perspectiveRatio' doit être un nombre.") }
             $views = @($vg.views)
             if ($views.Count -lt 1) { $problems.Add("'views' est vide.") } else { $ok.Add("$($views.Count) vues") }
-            $ids = @{}; $nbPath = 0; $i = 0
+            $ids = @{}; $nbPath = 0; $i = 0; $prevId = -1
+            $allowed = 'H5P.AdvancedText 1.1','H5P.MarkTheWords 1.5','H5P.SingleChoiceSet 1.3','H5P.Blanks 1.4'
             foreach ($v in $views) {
                 $i++
                 $n = "Vue $i ($($v.ordering.userDefinedName))"
                 $id = $v.ordering.uniqueId
                 if ($null -eq $id -or "$id" -notmatch '^\d+$') { $problems.Add("$n : 'ordering.uniqueId' entier manquant.") }
                 elseif ($ids.ContainsKey("$id")) { $problems.Add("$n : uniqueId $id en double.") }
-                else { $ids["$id"] = $true }
+                else {
+                    $ids["$id"] = $true
+                    # la bibliothèque renumérote toute vue dont l'id n'est pas > au précédent -> route cassée
+                    if ([int]$id -le $prevId) { $problems.Add("$n : uniqueId $id doit être strictement croissant dans l'ordre des vues (précédent : $prevId).") }
+                    $prevId = [int]$id
+                }
                 if ($v.ordering.includeInPath -eq $true) { $nbPath++ }
                 foreach ($k in 'x','y','z','rotateX','rotateY','rotateZ') {
                     if ($v.positioning.PSObject.Properties.Name -notcontains $k) { $problems.Add("$n : positioning.$k manquant.") }
@@ -110,6 +116,7 @@ switch ($Type) {
                 if ("$($b.backgroundColor)" -match '^#') { $problems.Add("$n : backgroundColor doit être sans '#'.") }
                 if ($b.PSObject.Properties.Name -contains 'backgroundImage' -and -not $b.backgroundImage.path) { $problems.Add("$n : backgroundImage vide (omettre la clé).") }
                 if ($v.action -and -not ($v.action.library -and $v.action.params)) { $problems.Add("$n : 'action' sans library/params.") }
+                elseif ($v.action -and $allowed -notcontains $v.action.library) { $problems.Add("$n : '$($v.action.library)' non autorisé dans une vue ($($allowed -join ', ')).") }
             }
             if ($nbPath -lt 1) { $problems.Add("Aucune vue dans le parcours (includeInPath).") } else { $ok.Add("$nbPath étape(s) dans le parcours") }
             foreach ($r in @($vg.route)) {
