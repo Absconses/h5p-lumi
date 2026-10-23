@@ -217,3 +217,11 @@ Gabarit : `assets/templates/gabarit-impresspresentation.h5p` ; images dans `cont
 versions : reprends ses `preloadedDependencies` (et ajoute `H5P.SingleChoiceSet 1.3` etc. si tu
 les utilises — `Build-H5PPackage.ps1` calcule la fermeture). Pour Digiquiz / La Digitale,
 n'embarque que la fermeture des dépendances d'exécution (sans `H5PEditor.*`).
+
+⚠️ **Digiquiz ne peut pas lire ce type.** Digiquiz ne garde que `h5p.json` et `content/` du
+`.h5p` et charge les bibliothèques depuis **son propre dossier** (`libraries/` du dépôt
+codeberg.org/ladigitale/digiquiz), qui ne contient ni `H5P.ImpressPresentation`, ni
+`H5P.JoubelUI-1.2`, ni `FontAwesome-4.3` → « Ce contenu H5P n'a pas pu être chargé »
+(`Unexpected token '<'` : un `library.json` renvoie une page 404). Pour diffuser en ligne :
+export HTML de Lumi (fichier unique), ou une plateforme où l'on installe la bibliothèque
+(Moodle, h5p.com…).
