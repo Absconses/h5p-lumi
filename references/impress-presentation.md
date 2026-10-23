@@ -135,6 +135,13 @@ Notes :
   en `position:absolute; left:50%`). Pour une colonne de texte de 300 unités, la vue doit faire
   600 de large : `textView()` double la largeur pour toi. Trop de texte déborde en haut **et** en
   bas (centrage vertical) : ~14 lignes maximum dans une carte de 360 de haut.
+- **Tout ce qui se clique** (quiz, liens) doit être posé **devant** la caméra (`d > 0`) : la
+  vue-caméra, transparente, est un rectangle de 640 × 360 qui intercepte les clics sur tout
+  ce qui est derrière elle (vérifié au rendu : quiz inutilisable à `d < 0`). Le texte simple
+  peut rester derrière (cartes « dézoomées »).
+- Un **SingleChoiceSet** prend, lui, **toute** la largeur de sa vue (pas la moitié). Au
+  premier clic dans la présentation, un calque de focus absorbe le clic : l'élève doit parfois
+  cliquer deux fois sur sa première réponse.
 - Le texte est **noir** par défaut : pose-le sur des **cartes claires**. Du texte blanc
   demanderait des `<span style="color:#FFFFFF">` partout (c'est ce que fait l'exemple). Évite
   `background`, jamais conservé par l'éditeur.

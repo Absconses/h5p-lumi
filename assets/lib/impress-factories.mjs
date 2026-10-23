@@ -38,6 +38,9 @@
  *      MOITIE de sa largeur : pour une colonne de texte de largeur L, la vue
  *      doit faire 2L (textView le fait). Il deborde en haut ET en bas si
  *      le texte est trop long : 330 unites de haut ~ 14 lignes.
+ *      Exception : un SingleChoiceSet prend toute la largeur de sa vue.
+ *   7. Ce qui se CLIQUE (quiz, liens) doit etre DEVANT la camera (d > 0) :
+ *      la vue-camera transparente intercepte les clics sur ce qui est derriere.
  * ===================================================================== */
 
 import crypto from 'crypto';
