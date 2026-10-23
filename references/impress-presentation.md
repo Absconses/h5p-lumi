@@ -186,9 +186,27 @@ fs.writeFileSync('content.json', JSON.stringify(content));
 - `panel(cam, { d, dx, dy, … })` pour poser un élément libre (étiquette, flèche, deuxième
   image) devant une caméra ; `view()` pour tout le reste.
 
+## Mise en scène immersive (vérifiée au rendu)
+
+Exemple complet : `sources/voyage-infox/build.mjs` (module « Le voyage d'une infox »).
+
+- **Salle où l'on tourne sur soi** : pour un centre `C` et un cap `θ` (`rotateY`), place la
+  caméra **à 750 du centre, du côté de son mur** (`x = C.x − 750·sin θ`, `z = C.z − 750·cos θ`)
+  et sa carte devant elle. Deux caméras au **même point** avec des caps différents ne marchent
+  pas : le mur voisin traverse le champ en biais.
+- **Rien derrière l'« œil »** : un plan situé à plus de 640 unités **devant** le plan de la
+  caméra (côté spectateur) est dessiné à l'envers, en géant, et masque tout. Donc **pas
+  d'anneau complet** autour de la caméra : un arc de −60° à +90° suffit pour l'effet « bulle ».
+- **Spirale** : avancer en `z` négatif en ajoutant 25–30° de `rotateZ` par étape (cartes
+  sans image, `panel()` ne fait pas tourner `dx` avec `rotateZ`).
+- **Carte du voyage** : `overview()` des vues opaques en 2e étape, grosses pastilles numérotées
+  (`font-size:40em` dans une vue de 1500×1500) + une légende en haut du cadre.
+- **Pas de « ciel » géant** : des vues de 30 000 px de côté figent le rendu. Le fond reste blanc.
+- Une étape qui se clique (quiz, crédits avec liens) doit être **seule à son emplacement**.
+
 ## Règles pédagogiques et de mise en scène
 
-- **5 à 12 étapes**. Au-delà, l'élève se perd : découpe en plusieurs présentations.
+- **5 à 12 étapes** (jusqu'à ~16 pour un « voyage » très court par étape, avec une carte). Au-delà, découpe.
 - **Un message par étape** : un titre + 2 ou 3 phrases, ou une image légendée. Police assez
   grande (le texte est zoomé, pas re-mis en page).
 - Le mouvement doit **avoir du sens** : rotation/zoom pour marquer un changement de partie,
