@@ -243,3 +243,12 @@ codeberg.org/ladigitale/digiquiz), qui ne contient ni `H5P.ImpressPresentation`,
 (`Unexpected token '<'` : un `library.json` renvoie une page 404). Pour diffuser en ligne :
 export HTML de Lumi (fichier unique), ou une plateforme où l'on installe la bibliothèque
 (Moodle, h5p.com…).
+
+## Style « cinéma » (photos plein cadre)
+
+- Fonds générés par `assets/lib/cinema-bg.py` (Pillow, polices Bebas Neue + Inter à placer dans `fonts/`) :
+  photo recadrée 1600×900, dégradé nuit du côté du texte, titre et surtitre incrustés.
+- Fond = panneau opaque à D = -96 de 640K×360K ; texte blanc (`<span style="color:#ffffff">`) à D + 8.
+- Titre incrusté sur **une seule ligne** si le texte éditable suit (sinon il chevauche le texte).
+- Vidéo YouTube : iframe youtube-nocookie dans un AdvancedText à d = 8 (devant la caméra), seule à sa place.
+- Exemple complet : `voyage-infox-cinema` (sources dans les fichiers du projet, h5p/sources/).
