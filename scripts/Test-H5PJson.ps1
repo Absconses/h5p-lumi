@@ -15,7 +15,7 @@
 .PARAMETER Type
     Type de contenu. Valeurs : timeline, multichoice, questionset, truefalse,
     singlechoiceset, blanks, markthewords, dragtext, summary, accordion, dialogcards,
-    flashcards, crossword, findthewords, generic (défaut).
+    flashcards, crossword, findthewords, impress, generic (défaut).
 
 .PARAMETER MinEvents / MinEras
     (timeline uniquement) quotas minimaux.
@@ -31,7 +31,7 @@ param(
     [ValidateSet('timeline','multichoice','questionset','truefalse','singlechoiceset',
                  'blanks','markthewords','dragtext','summary','accordion','dialogcards',
                  'flashcards','crossword','findthewords','essay','sortparagraphs',
-                 'questionnaire','chart','generic')]
+                 'questionnaire','chart','impress','generic')]
     [string] $Type = 'generic',
     [int] $MinEvents = 5,
     [int] $MinEras = 2
@@ -84,6 +84,38 @@ switch ($Type) {
                 if ($e.endDate -and $e.endDate -notmatch $dateRegex) { $problems.Add("Période $j : endDate au mauvais format.") }
             }
             if ($tl.asset.media -and $tl.asset.media -notmatch '^https?://') { $problems.Add("Couverture : media n'est pas une URL http(s).") }
+        }
+    }
+    'impress' {
+        $vg = $o.viewsGroup
+        if (-not $vg) { $problems.Add("Clé racine 'viewsGroup' absente.") }
+        else {
+            if ($vg.perspectiveRatio -isnot [double] -and $vg.perspectiveRatio -isnot [int] -and $vg.perspectiveRatio -isnot [long] -and $vg.perspectiveRatio -isnot [decimal]) { $problems.Add("'perspectiveRatio' doit être un nombre.") }
+            $views = @($vg.views)
+            if ($views.Count -lt 1) { $problems.Add("'views' est vide.") } else { $ok.Add("$($views.Count) vues") }
+            $ids = @{}; $nbPath = 0; $i = 0
+            foreach ($v in $views) {
+                $i++
+                $n = "Vue $i ($($v.ordering.userDefinedName))"
+                $id = $v.ordering.uniqueId
+                if ($null -eq $id -or "$id" -notmatch '^\d+$') { $problems.Add("$n : 'ordering.uniqueId' entier manquant.") }
+                elseif ($ids.ContainsKey("$id")) { $problems.Add("$n : uniqueId $id en double.") }
+                else { $ids["$id"] = $true }
+                if ($v.ordering.includeInPath -eq $true) { $nbPath++ }
+                foreach ($k in 'x','y','z','rotateX','rotateY','rotateZ') {
+                    if ($v.positioning.PSObject.Properties.Name -notcontains $k) { $problems.Add("$n : positioning.$k manquant.") }
+                }
+                $b = $v.backgroundGroup
+                if (-not ($b.backgroundWidth -gt 0 -and $b.backgroundHeight -gt 0)) { $problems.Add("$n : backgroundWidth/Height > 0 requis.") }
+                if ("$($b.backgroundColor)" -match '^#') { $problems.Add("$n : backgroundColor doit être sans '#'.") }
+                if ($b.PSObject.Properties.Name -contains 'backgroundImage' -and -not $b.backgroundImage.path) { $problems.Add("$n : backgroundImage vide (omettre la clé).") }
+                if ($v.action -and -not ($v.action.library -and $v.action.params)) { $problems.Add("$n : 'action' sans library/params.") }
+            }
+            if ($nbPath -lt 1) { $problems.Add("Aucune vue dans le parcours (includeInPath).") } else { $ok.Add("$nbPath étape(s) dans le parcours") }
+            foreach ($r in @($vg.route)) {
+                if ("$r" -notmatch '^#h5p-impress-id-(\d+)$') { $problems.Add("route : '$r' au mauvais format.") }
+                elseif (-not $ids.ContainsKey($Matches[1])) { $problems.Add("route : '$r' ne correspond à aucune vue.") }
+            }
         }
     }
     'multichoice' {
