@@ -70,7 +70,8 @@ Vécu 2026-10-24, vérifié en ouvrant le lien public `/run/…` avec Playwright
   Simulé : avec la barre (Télécharger, droits d'auteur), la 1.1.9 marche.
 - **Ce qui marche : l'export HTML.** Exporter en HTML depuis Lumi, puis corriger le fichier
   avec `python3 assets/lib/geoquiz-fix-html.py export.html corrige.html <geojson-data>` :
-  hauteur réparée, contours des pays utilisés embarqués (un fichier HTML ne peut pas lire
+  hauteur réparée, icônes des marqueurs (chemin relatif cassé hors serveur), contours des
+  pays utilisés embarqués (un fichier HTML ne peut pas lire
   `geojson-data/`), test pays local. Testé : carte de 731 px, quiz Europe à 10/10.
   Fond : prendre `Esri.WorldImagery` (CARTO est barré dans la 1.1.9).
 

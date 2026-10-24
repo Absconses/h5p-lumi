@@ -21,5 +21,11 @@ rep('s.getJSON(n.getLibraryFilePath("")+"geojson-data/"+t+".geo.json")',
 # 3. test point-dans-polygone local au lieu de Nominatim
 rep('o.getNominatimCountry(i).then(function(t){e("isMarkerInsideArea worked!")})',
     '(function(){var p=i.getLatLng(),x=((p.lng+180)%360+360)%360-180,y=p.lat,f=!1,R=function(r){for(var c=!1,a=0,b=r.length-1;a<r.length;b=a++){var A=r[a],B=r[b];(A[1]>y)!=(B[1]>y)&&x<(B[0]-A[0])*(y-A[1])/(B[1]-A[1])+A[0]&&(c=!c)}return c},P=function(g){if(!R(g[0]))return!1;for(var k=1;k<g.length;k++)if(R(g[k]))return!1;return!0};o.mapLayers.correctAnswerArea&&o.mapLayers.correctAnswerArea.eachLayer(function(l){var g=l.feature&&l.feature.geometry;if(!g||f)return;if("Polygon"===g.type)f=P(g.coordinates);else for(var m=0;m<g.coordinates.length&&!f;m++)f=P(g.coordinates[m])});o.userAnswerCountry=f?o.correctAnswerCountry:"Unknow";e("isMarkerInsideArea worked!")})()')
+# 4. icones des marqueurs : chercher les images embarquees (data:) au lieu d'un chemin relatif
+a = s.index('defineMarkers=function(){'); b = s.index('}', s.index('blue', a))
+seg = s[a:b]
+seg2 = re.sub(r'(iconUrl|shadowUrl):t\+"([^"]+)"', r'\1:this.getLibraryFilePath("css/images/\2")', seg)
+assert seg2.count('getLibraryFilePath("css/images/') >= 10, seg2[:200]
+s = s[:a] + seg2 + s[b:]
 open(out, 'w', encoding='utf-8').write(s)
 print('OK', out, 'pays embarques :', codes)
