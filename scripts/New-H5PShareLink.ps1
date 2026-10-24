@@ -8,7 +8,7 @@ param(
     [Parameter(Mandatory)] [string]$Path,
     [string]$Repo = 'Absconses/h5p-lumi',
     [string]$Branch = 'main',
-    [string]$Player = 'https://h5p-offline-player.vercel.app/',
+    [string]$Player = 'https://h5p-offline-player.vercel.app/embed',
     [switch]$Test
 )
 

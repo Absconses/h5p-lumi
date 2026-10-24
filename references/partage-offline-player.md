@@ -22,10 +22,12 @@ Le dire à l'utilisateur dès qu'il s'agit d'une activité évaluée.
 ## Forme du lien
 
 ```
-https://h5p-offline-player.vercel.app/?src=<URL publique du .h5p>
+https://h5p-offline-player.vercel.app/embed?src=<URL publique du .h5p>
 ```
 
-- Le lien pointe vers la **page principale**, pas vers `/app/` (qui ne lit que des fichiers locaux).
+- Utiliser **`/embed`** : la page n'affiche que l'activité (pas de menu, pas de texte en anglais).
+  La page principale `/?src=` marche aussi mais montre toute la présentation du lecteur autour,
+  ce qui parasite l'élève. `/app/` est l'app hors ligne pour fichiers locaux.
 - L'hébergeur du `.h5p` doit autoriser les accès d'un autre site (en-tête
   `Access-Control-Allow-Origin`). **GitHub** convient (`raw.githubusercontent.com` et GitHub Pages
   renvoient `*`). L'ENT, Google Drive, Nextcloud : probablement non, à tester avant de promettre.
@@ -56,7 +58,7 @@ un QR code). Les noms de fichiers : minuscules, tirets, sans accents ni espaces.
   catalogue officiel (Question Set, Vrai/Faux, Glisser-déposer, Texte à trous…) jouent tels quels
   avec les bibliothèques du lecteur. Un type **hors catalogue** ou **patché** (GeoQuiz,
   Impressive Presentation…) affiche d'abord un bandeau ; l'élève doit cliquer **« Open with its
-  own scripts »** (bouton en anglais, le prévenir dans la consigne).
+  own scripts »** (bouton en anglais, le prévenir dans la consigne ; même chose sur `/embed`).
 - Bibliothèques manquantes téléchargées depuis jsDelivr ; le site de démo charge Vercel Analytics.
   Aucune donnée élève n'est envoyée ; la progression reste dans le navigateur.
 - Le site appartient à un particulier : il peut disparaître. Le `.h5p` reste lisible dans Lumi.
