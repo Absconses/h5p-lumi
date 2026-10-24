@@ -4,7 +4,7 @@ description: >-
   Génère du contenu pédagogique H5P prêt à importer dans Lumi : frises
   chronologiques (Timeline), quiz/QCM (MultiChoice, Question Set), cartes de
   révision, images interactives, visites virtuelles 360, contenus en onglets
-  (Tabs) et tout autre type du
+  (Tabs), grilles à cocher (Grid Checker) et tout autre type du
   catalogue H5P. À partir
   d'un brief (sujet, public, objectif), ce skill recherche de VRAIES images
   libres de droits (Wikimedia Commons), rédige un contenu adapté au public
@@ -61,6 +61,7 @@ Lis la fiche de référence correspondante (structure exacte + exemple) :
 | **Présentation 3D « Prezi »** : vues placées dans l'espace, zoom/rotation de l'une à l'autre (Impressive Presentation, ALPHA) | `H5P.ImpressPresentation` | `references/impress-presentation.md` |
 | **Médias & outils** : Iframe Embedder · Audio Recorder · Documentation Tool · Interactive Video · Course Presentation | voir fiche | `references/media-and-tools.md` |
 | **Onglets** : une page par onglet (texte, médias, exercices notés), consultables dans n'importe quel ordre | `H5P.Tabs` | `references/tabs.md` |
+| **Grille à cocher** : tableau lignes × colonnes, cases corrigées en couleur (non noté, hors Book) | `H5P.GridChecker` | `references/grid-checker.md` |
 | **Visite virtuelle 360** : photos 360° reliées, points d'intérêt (texte, image, quiz) | `H5P.ThreeImage` | `references/virtual-tour.md` |
 | **Quiz sur carte** : « Où se trouve… ? », clic sur une carte (villes notées à la distance, pays) | `H5P.GeoQuiz` | `references/geoquiz.md` |
 | **Tout autre type** (Dictation, Branching Scenario…) | variable | `references/extending-new-types.md` |
@@ -156,6 +157,7 @@ sources **réelles et libres**.
 - `references/impress-presentation.md` — Présentation 3D (Impressive Presentation) : caméras + panneaux, zoom par la profondeur, `route` ; bibliothèque hors Hub, fournie par `gabarit-impresspresentation.h5p`.
 - `references/media-and-tools.md` — Iframe, Audio Recorder, Documentation Tool, Interactive Video, Course Presentation.
 - `references/tabs.md` — Onglets (Tabs 1.1) : chaque onglet = Column **1.16** dont le titre fait le libellé ; gabarit `gabarit-tabs.h5p`, fabriques `assets/lib/tabs.mjs`, exemple `assets/examples/enquete-source/`. Absent de Digiquiz et du Hub officiel.
+- `references/grid-checker.md` — Grille à cocher (GridChecker 1.0) : radio, cases ou texte par ligne ; **aucun score ni xAPI** (rien dans Lumi Nuage), **pas dans un Book** ; gabarit `gabarit-gridchecker.h5p`, fabrique `assets/lib/grid-checker.mjs`, exemple `assets/examples/licences-cc/`, cas d'usage prof doc. Absent de Digiquiz et du Hub officiel.
 - `references/geoquiz.md` — Geography Quiz (quiz sur carte) : lib d'origine cassée dans Lumi (carte à 0 px), utiliser `gabarit-geoquiz.h5p` patché ; fabriques `assets/lib/geoquiz.mjs`.
 - `references/extending-new-types.md` — méthode universelle pour tout autre type.
 - `references/lumi-packaging.md` — format `.h5p`, gabarits, import dans Lumi.
