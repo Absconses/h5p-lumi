@@ -11,8 +11,9 @@ l'élève **clique sur la carte**. Deux sortes de questions :
 Pas d'image, pas de média : le contenu tient dans le `content.json`.
 
 - Gabarit : `assets/templates/gabarit-geoquiz.h5p`, avec la **bibliothèque patchée par le
-  skill**, **renommée `H5P.GeoQuizFix`** (1.1.10), CoordinateSelector 1.0.4 et les éditeurs
-  (modifiable dans Lumi).
+  skill**, **renommée `H5P.GeoQuizFix`** (1.1.12), CoordinateSelector 1.0.4 et les éditeurs
+  (modifiable dans Lumi). Ouvrir le `.h5p` dans l'**éditeur de bureau Lumi** (hors ligne) :
+  il marche tel quel, et son export HTML aussi (voir plus bas).
 - Fabriques : `assets/lib/geoquiz.mjs` (`lieu`, `pays`, `quiz`, `FONDS`, `validate`, libellés FR).
 - Démo : « L'Union européenne sur la carte » (6 villes, 4 pays), dans
   `assets/examples/geoquiz-europe/` (`build.mjs`, `pack.py`).
@@ -20,8 +21,8 @@ Pas d'image, pas de média : le contenu tient dans le `content.json`.
   n'ont pas GeoQuiz (et seulement H5P.Question 1.5, pas 1.3 ; vérifié 2026-10-24). Pour
   partager : Lumi > Exporter en HTML.
 - Bibliothèque communautaire (fabforge), **absente du Hub H5P** (`api.h5p.org` renvoie 404).
-  Si on perd le gabarit, repartir d'un `.h5p` GeoQuiz exporté de Lumi et réappliquer
-  `assets/lib/geoquiz-patch.diff` (`patch -p1` dans le dossier dézippé).
+  Si on perd le gabarit, repartir d'un `.h5p` GeoQuiz 1.1.9 exporté de Lumi : voir
+  « Pour réappliquer à la main » plus bas.
 
 ## Pourquoi un patch : la version d'origine (1.1.9) est cassée dans Lumi
 
@@ -53,9 +54,23 @@ déjà installée** : même carte de 18 px, fond CARTO barré. Une bibliothèque
 (`H5P.GeoQuizFix`) ne peut entrer en conflit avec aucune version installée : une plateforme qui
 accepte les bibliothèques du paquet prend forcément la bonne. Conséquence : les anciens contenus `H5P.GeoQuiz` ne
 sont pas réparés ; les reconstruire avec le gabarit (même `content.json`, rien à changer).
-Pour réappliquer à la main : `patch -p1` avec `geoquiz-patch.diff`, puis renommer le dossier
-en `H5P.GeoQuizFix-1.1`, `machineName` dans `library.json`, `mainLibrary` et la dépendance
-dans `h5p.json`, et `H5P.GeoQuiz` → `H5P.GeoQuizFix` (3 fois) dans `js/GeoQuiz.js`.
+Pour réappliquer à la main, dans le dossier dézippé : `patch -p1 < geoquiz-patch.diff`
+(lib et éditeur CoordinateSelector ; le diff contient déjà le nouveau `machineName`), renommer le
+dossier `H5P.GeoQuiz-1.1` en `H5P.GeoQuizFix-1.1`, mettre `H5P.GeoQuizFix` dans `mainLibrary` et
+les dépendances de `h5p.json`, puis `python3 assets/lib/geoquiz-embed.py H5P.GeoQuizFix-1.1`.
+
+**Export HTML depuis l'éditeur de bureau** (vécu 2026-10-24, patch 1.1.12). L'export « HTML tout-en-un »
+embarque les JS et CSS listés dans `library.json`, mais **pas les autres fichiers de la lib** :
+le code les cherche via `getLibraryFilePath('') + '…'`, chemin qui ne mène nulle part dans
+un fichier HTML. Sans correctif : fond muet vide, questions « pays » impossibles, marqueurs
+cassés. D'où deux fichiers générés par `geoquiz-embed.py` et chargés avant `GeoQuiz.js` :
+`js/geojson-data.js` (`H5P.GeoQuizFixGeo`, les ≈ 180 contours, 260 Ko) et `js/marker-icons.js`
+(`H5P.GeoQuizFixIcons`, icônes en `data:`). Le code les prend en priorité et ne lit les
+fichiers qu'à défaut. Testé en bloquant toute requête vers `geojson-data/` et `css/images/` :
+fond muet affiché, quiz Europe à 10/10, zéro requête. Tout nouveau fichier lu par la lib doit
+suivre la même règle (embarqué dans un JS de `preloadedJs`).
+Mise à jour : monter `patchVersion` ; à l'ouverture du `.h5p`, l'éditeur de bureau remplace
+la version installée.
 
 ## Lumi en ligne (app.lumi.education) : ce qui marche et ce qui ne marche pas
 
@@ -68,7 +83,9 @@ Vécu 2026-10-24, vérifié en ouvrant le lien public `/run/…` avec Playwright
   contournement par le contenu.
 - Ses pages `run` ont tous les `displayOptions` à false : pas de barre d'actions, d'où le bug.
   Simulé : avec la barre (Télécharger, droits d'auteur), la 1.1.9 marche.
-- **Ce qui marche : l'export HTML.** Exporter en HTML depuis Lumi, puis corriger le fichier
+- **Ce qui marche : l'export HTML.** Le plus simple : ouvrir le `.h5p` du gabarit dans
+  l'éditeur de bureau et exporter de là (rien à corriger). Pour un export de Lumi en ligne
+  (lib 1.1.9) : exporter en HTML depuis Lumi, puis corriger le fichier
   avec `python3 assets/lib/geoquiz-fix-html.py export.html corrige.html <geojson-data>` :
   hauteur réparée, icônes des marqueurs (chemin relatif cassé hors serveur), contours des
   pays utilisés embarqués (un fichier HTML ne peut pas lire
