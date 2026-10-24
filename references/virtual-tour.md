@@ -90,6 +90,12 @@ de l'image.
    préférer un Summary « bilan » dans une dernière scène.
 6. Mettre une scène **hub** (ex. le CDI) avec une porte vers chaque salle, et une porte
    « Retour » dans chaque salle : la navigation reste simple pour des collégiens.
+   Une salle sans photo 360 peut être une scène **statique** (photo normale) : c'est
+   ce que fait « Les métiers de la télé » (plateau 360 + régie, rédaction, montage,
+   terrain en photos).
+7. **Étiquettes courtes** (2–3 mots) : au-delà, elles passent sur deux lignes. Ne pas
+   placer de point à droite au-delà de ~85 % en scène statique, l'étiquette sort du
+   cadre (mettre les portes « Retour » en haut à gauche).
 
 ## Trouver des photos 360 libres
 
@@ -99,7 +105,9 @@ de l'image.
   souvent 429 : espacer les appels (≥ 8 s) et télécharger par
   `Special:FilePath/<Fichier>?width=3840`.
 - **Pixabay** : peu de vrais 360 (chercher `equirectangular`, `360 panorama`, filtrer le
-  ratio 2:1). Utile pour les images des scènes statiques.
+  ratio 2:1). Utile pour les images des scènes statiques. L'API renvoie
+  `isAiGenerated` : écarter ces images pour un module d'EMI (on y enseigne justement à
+  se méfier des images fabriquées).
 
 ## Empaqueter
 
