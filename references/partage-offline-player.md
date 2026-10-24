@@ -16,6 +16,18 @@ se lance dans son navigateur (PC, tablette, téléphone).
 | Type refusé par Nuage / Digiquiz (GeoQuiz, Impressive Presentation, Tabs…) | **lien offline player** |
 | Tablettes sans wifi | app hors ligne du même site (`/app/`, à « installer » depuis le navigateur) |
 
+### Comparaison réelle (testée le 2026-10-24 sur 4 modules de Pierre)
+
+| Module (type) | Lumi Nuage | Digiquiz | Offline player |
+|---|---|---|---|
+| Wikipédia (Question Set, catalogue) | ✅ + résultats | ✅ | ✅ affichage plus propre (glisser-déposer non tronqué) |
+| Qu'est-ce qu'Internet (Impressive Presentation) | ❌ refusé | ❌ « n'a pas pu être chargé » | ✅ après clic « Open with its own scripts » |
+| Métiers de la télé (Virtual Tour 360) | (constaté OK par Pierre) | ✅ | ✅ quasi identique, pleine largeur |
+| Enquête aigle (Interactive Book) | ✅ + résultats | ✅ | ✅ mais titre de couverture en double et apostrophe affichée `&#039;` |
+
+Conclusion de Pierre : **Nuage d'abord** (résultats) ; Digiquiz pour diffuser sans compte ;
+offline player seulement pour les types que les deux autres refusent (ou tablettes sans wifi).
+
 Le lecteur **ne stocke aucun résultat** : le score s'affiche à l'élève, le prof ne le reçoit pas.
 Le dire à l'utilisateur dès qu'il s'agit d'une activité évaluée.
 
