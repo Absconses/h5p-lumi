@@ -3,7 +3,8 @@ name: h5p-lumi
 description: >-
   Génère du contenu pédagogique H5P prêt à importer dans Lumi : frises
   chronologiques (Timeline), quiz/QCM (MultiChoice, Question Set), cartes de
-  révision, images interactives et tout autre type du catalogue H5P. À partir
+  révision, images interactives, visites virtuelles 360 et tout autre type du
+  catalogue H5P. À partir
   d'un brief (sujet, public, objectif), ce skill recherche de VRAIES images
   libres de droits (Wikimedia Commons), rédige un contenu adapté au public
   (programmes Eduscol par défaut), produit un JSON conforme au type de contenu,
@@ -58,7 +59,8 @@ Lis la fiche de référence correspondante (structure exacte + exemple) :
 | **Sur image** : Image Hotspots · Find the Hotspot · Memory Game · Collage · Agamotto · Image Slider · Multimedia Choice · Drag and Drop · Guess the Answer | voir fiche | `references/image-activities.md` |
 | **Présentation 3D « Prezi »** : vues placées dans l'espace, zoom/rotation de l'une à l'autre (Impressive Presentation, ALPHA) | `H5P.ImpressPresentation` | `references/impress-presentation.md` |
 | **Médias & outils** : Iframe Embedder · Audio Recorder · Documentation Tool · Interactive Video · Course Presentation | voir fiche | `references/media-and-tools.md` |
-| **Tout autre type** (Dictation, Branching Scenario, Virtual Tour 360…) | variable | `references/extending-new-types.md` |
+| **Visite virtuelle 360** : photos 360° reliées, points d'intérêt (texte, image, quiz) | `H5P.ThreeImage` | `references/virtual-tour.md` |
+| **Tout autre type** (Dictation, Branching Scenario…) | variable | `references/extending-new-types.md` |
 
 Le catalogue Lumi est vaste : **n'importe quel type** se traite via la méthode décrite dans
 `references/extending-new-types.md` (lecture du `semantics.json` contenu dans le gabarit).
