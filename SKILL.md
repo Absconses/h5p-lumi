@@ -56,6 +56,7 @@ Lis la fiche de référence correspondante (structure exacte + exemple) :
 | **Séquence complète** : Page (empile des activités) · Interactive Book (chapitres) | `H5P.Column`, `H5P.InteractiveBook` | `references/composites.md` |
 | **Parcours / carte de jeu** : étapes reliées sur une carte, chacune avec un exercice | `H5P.GameMap` | `references/gamemap.md` |
 | **Sur image** : Image Hotspots · Find the Hotspot · Memory Game · Collage · Agamotto · Image Slider · Multimedia Choice · Drag and Drop · Guess the Answer | voir fiche | `references/image-activities.md` |
+| **Présentation 3D « Prezi »** : vues placées dans l'espace, zoom/rotation de l'une à l'autre (Impressive Presentation, ALPHA) | `H5P.ImpressPresentation` | `references/impress-presentation.md` |
 | **Médias & outils** : Iframe Embedder · Audio Recorder · Documentation Tool · Interactive Video · Course Presentation | voir fiche | `references/media-and-tools.md` |
 | **Tout autre type** (Dictation, Branching Scenario, Virtual Tour 360…) | variable | `references/extending-new-types.md` |
 
@@ -103,7 +104,7 @@ sources **réelles et libres**.
    ```powershell
    .\scripts\Test-H5PJson.ps1 -Path .\content.json -Type timeline -MinEvents 5 -MinEras 2
    ```
-   (`-Type` : `timeline`, `multichoice`, `questionset`, `truefalse`, `singlechoiceset`, `blanks`, `markthewords`, `dragtext`, `summary`, `accordion`, `dialogcards`, `flashcards`, `crossword`, `findthewords`, `essay`, `sortparagraphs`, `questionnaire`, `chart`, ou `generic`.) Corrige jusqu'à obtenir « VALIDE ».
+   (`-Type` : `timeline`, `multichoice`, `questionset`, `truefalse`, `singlechoiceset`, `blanks`, `markthewords`, `dragtext`, `summary`, `accordion`, `dialogcards`, `flashcards`, `crossword`, `findthewords`, `essay`, `sortparagraphs`, `questionnaire`, `chart`, `impress`, ou `generic`.) Corrige jusqu'à obtenir « VALIDE ».
 3. **Empaquette** le `.h5p` (si demandé) — voir `references/lumi-packaging.md` :
    ```powershell
    .\scripts\Build-H5PPackage.ps1 -Template .\assets\templates\gabarit-timeline.h5p `
@@ -147,7 +148,10 @@ sources **réelles et libres**.
 - `references/composites.md` — Page (Column) & Interactive Book : assembler une séquence complète.
 - `references/gamemap.md` — Carte de jeu (Game Map) : parcours d'étapes ; pièges telemetry (x/y en premier) & fond empaqueté.
 - `references/image-activities.md` — activités sur image (Image Hotspots, Memory Game, Agamotto, Collage, Multimedia Choice…).
+- `references/impress-presentation.md` — Présentation 3D (Impressive Presentation) : caméras + panneaux, zoom par la profondeur, `route` ; bibliothèque hors Hub, fournie par `gabarit-impresspresentation.h5p`.
 - `references/media-and-tools.md` — Iframe, Audio Recorder, Documentation Tool, Interactive Video, Course Presentation.
 - `references/extending-new-types.md` — méthode universelle pour tout autre type.
 - `references/lumi-packaging.md` — format `.h5p`, gabarits, import dans Lumi.
+- `assets/lib/impress-factories.mjs` — fabriques Node pour Impressive Presentation (`station`, `textView`, `depth`, `layouts`, `overview`, `validate`).
+- `assets/examples/impresspresentation-exemple.content.json` — content.json de l'exemple officiel (référence de structure).
 - `assets/templates/` — y déposer les gabarits `.h5p` exportés de Lumi.
