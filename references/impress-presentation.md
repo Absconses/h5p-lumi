@@ -263,3 +263,7 @@ export HTML de Lumi (fichier unique), ou une plateforme où l'on installe la bib
 - Exemple : `qu-est-ce-qu-internet` (coupe espace → fond de l'océan, photos Pixabay), sources dans les fichiers du projet.
 - Décor illustré de la vue d'ensemble : UNE image derrière tout (`assets/lib/impress-map-backdrop.py`, exemple),
   à la profondeur ZB, de taille 640·(P+Z)/P × 360·(P+Z)/P où Z = z(caméra d'ensemble) − ZB. Pas de gel au rendu.
+
+## Partage par lien (h5p-offline-player)
+
+Pour un lien `/embed`, ajouter la feuille `embed-960.css` (script `New-H5PShareLink.ps1 -Narrow`), sinon la présentation est trop zoomée. L'élève doit aussi cliquer « Open with its own scripts » (type hors catalogue). Voir `references/partage-offline-player.md`.

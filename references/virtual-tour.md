@@ -120,3 +120,7 @@ Cloud (sans PowerShell) : `assets/examples/visite-coulisses-info/` contient `bui
 dépendances, `--slim` pour Digiquiz). Rendu de test : `h5p-standalone@3` +
 playwright avec `--use-gl=swiftshader` (WebGL logiciel) ; les points d'intérêt sont des
 `.nav-button[aria-label="<labelText>"]` cliquables.
+
+## Partage par lien (h5p-offline-player)
+
+Pour un lien `/embed`, ajouter la feuille `embed-960.css` (script `New-H5PShareLink.ps1 -Narrow`), sinon la visite est trop zoomée. Voir `references/partage-offline-player.md`.
