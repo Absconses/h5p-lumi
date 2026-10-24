@@ -23,10 +23,11 @@ se lance dans son navigateur (PC, tablette, téléphone).
 | Wikipédia (Question Set, catalogue) | ✅ + résultats | ✅ | ✅ affichage plus propre (glisser-déposer non tronqué) |
 | Qu'est-ce qu'Internet (Impressive Presentation) | ❌ refusé | ❌ « n'a pas pu être chargé » | ✅ après clic « Open with its own scripts » |
 | Métiers de la télé (Virtual Tour 360) | (constaté OK par Pierre) | ✅ | ✅ quasi identique, pleine largeur |
-| Enquête aigle (Interactive Book) | ✅ + résultats | ✅ | ✅ mais titre de couverture en double et apostrophe affichée `&#039;` |
+| Enquête aigle (Interactive Book) | ✅ + résultats | ✅ | ✅ **plus fluide et moins contraint selon Pierre** ; apostrophe du titre affichée `&#039;` (corrigé, voir plus bas) |
 
-Conclusion de Pierre : **Nuage d'abord** (résultats) ; Digiquiz pour diffuser sans compte ;
-offline player seulement pour les types que les deux autres refusent (ou tablettes sans wifi).
+Ressenti de Pierre : à l'usage, l'offline player est **plus fluide et moins contraint**, y compris
+pour un livre interactif. Nuage reste le seul à rendre les résultats : le choisir quand le suivi
+compte, l'offline player sinon ; Digiquiz en solution de repli sans compte.
 
 Le lecteur **ne stocke aucun résultat** : le score s'affiche à l'élève, le prof ne le reçoit pas.
 Le dire à l'utilisateur dès qu'il s'agit d'une activité évaluée.
@@ -74,5 +75,11 @@ un QR code). Les noms de fichiers : minuscules, tirets, sans accents ni espaces.
 - Bibliothèques manquantes téléchargées depuis jsDelivr ; le site de démo charge Vercel Analytics.
   Aucune donnée élève n'est envoyée ; la progression reste dans le navigateur.
 - Le site appartient à un particulier : il peut disparaître. Le `.h5p` reste lisible dans Lumi.
+- **Apostrophe du titre** : le lecteur affiche `l&#039;aigle` si le titre de `h5p.json` contient
+  une apostrophe droite `'`. Pour un `.h5p` destiné à ce lecteur, mettre l'apostrophe
+  typographique `’` dans `h5p.json` > `title` (rezipper sans toucher au reste). Corrigé ainsi sur
+  `partage/enquete-aigle-svt.h5p`.
+- **Cache** : après avoir remplacé un fichier, ajouter `?v=2` (puis 3…) à l'URL brute dans le lien,
+  sinon GitHub (≈5 min) ou le navigateur de l'élève peuvent servir l'ancienne version.
 - Affichage souvent plus propre que Lumi (étiquettes de glisser-déposer non tronquées, plein
   écran).
