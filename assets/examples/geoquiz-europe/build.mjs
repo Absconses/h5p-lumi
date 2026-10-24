@@ -1,5 +1,5 @@
 // Demo : « L'Union européenne sur la carte » (cycle 3-4, géographie).
-// Usage : node build.mjs <sortie content.json> [<gabarit-geoquiz.h5p dezippe>/H5P.GeoQuiz-1.1/geojson-data]
+// Usage : node build.mjs <sortie content.json> [<gabarit-geoquiz.h5p dezippe>/H5P.GeoQuizFix-1.1/geojson-data]
 import fs from 'fs';
 import * as gq from '../../lib/geoquiz.mjs';
 

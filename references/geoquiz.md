@@ -1,4 +1,4 @@
-# Geography Quiz (`H5P.GeoQuiz 1.1`)
+# Geography Quiz (`H5P.GeoQuiz 1.1`, livré renommé `H5P.GeoQuizFix 1.1`)
 
 Un **quiz sur carte** : une question s'affiche en haut (« Où se trouve Sofia ? »),
 l'élève **clique sur la carte**. Deux sortes de questions :
@@ -11,7 +11,8 @@ l'élève **clique sur la carte**. Deux sortes de questions :
 Pas d'image, pas de média : le contenu tient dans le `content.json`.
 
 - Gabarit : `assets/templates/gabarit-geoquiz.h5p`, avec la **bibliothèque patchée par le
-  skill** (GeoQuiz 1.1.10, CoordinateSelector 1.0.4) et les éditeurs (modifiable dans Lumi).
+  skill**, **renommée `H5P.GeoQuizFix`** (1.1.10), CoordinateSelector 1.0.4 et les éditeurs
+  (modifiable dans Lumi).
 - Fabriques : `assets/lib/geoquiz.mjs` (`lieu`, `pays`, `quiz`, `FONDS`, `validate`, libellés FR).
 - Démo : « L'Union européenne sur la carte » (6 villes, 4 pays), dans
   `assets/examples/geoquiz-europe/` (`build.mjs`, `pack.py`).
@@ -46,8 +47,15 @@ le gabarit :
 
 Bonus : `isCorrect` (xAPI) comparait `icons.greenIcon` (inexistant), corrigé en `icons.green`.
 
-Les numéros de patch montent (1.1.9 → 1.1.10, 1.0.3 → 1.0.4) : à l'import, **Lumi remplace
-la bibliothèque installée**, ce qui répare aussi les anciens GeoQuiz déjà dans Lumi.
+**Pourquoi le renommage** (vécu 2026-10-24) : un premier patch gardait le nom `H5P.GeoQuiz` en
+montant juste la version (1.1.10). **Lumi en ligne (app.lumi.education/run) a gardé sa 1.1.9
+déjà installée** : même carte de 18 px, fond CARTO barré. Une bibliothèque au nom NEUF
+(`H5P.GeoQuizFix`) ne peut entrer en conflit avec aucune version installée : une plateforme qui
+accepte les bibliothèques du paquet prend forcément la bonne. Conséquence : les anciens contenus `H5P.GeoQuiz` ne
+sont pas réparés ; les reconstruire avec le gabarit (même `content.json`, rien à changer).
+Pour réappliquer à la main : `patch -p1` avec `geoquiz-patch.diff`, puis renommer le dossier
+en `H5P.GeoQuizFix-1.1`, `machineName` dans `library.json`, `mainLibrary` et la dépendance
+dans `h5p.json`, et `H5P.GeoQuiz` → `H5P.GeoQuizFix` (3 fois) dans `js/GeoQuiz.js`.
 
 ## Structure du `content.json`
 
