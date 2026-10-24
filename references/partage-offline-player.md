@@ -75,12 +75,17 @@ un QR code). Les noms de fichiers : minuscules, tirets, sans accents ni espaces.
 - Bibliothèques manquantes téléchargées depuis jsDelivr ; le site de démo charge Vercel Analytics.
   Aucune donnée élève n'est envoyée ; la progression reste dans le navigateur.
 - Le site appartient à un particulier : il peut disparaître. Le `.h5p` reste lisible dans Lumi.
-- **Impressive Presentation trop zoomée** : sur `/embed`, la scène prend toute la largeur de la
-  fenêtre et déborde en hauteur (l'app `/app/` la limite, elle). Ajouter au lien
-  `&custom-css=` + l'URL **jsDelivr** de `partage/impress-embed.css`
-  (`https://cdn.jsdelivr.net/gh/Absconses/h5p-lumi@main/partage/impress-embed.css`, encodée) :
-  elle limite la scène à 960 px. L'URL `raw.githubusercontent.com` ne marche pas pour un CSS
-  (servie en `text/plain` + `nosniff`, le navigateur la refuse). Le script le fait avec `-Impress`.
+- **Scène trop zoomée (Impressive Presentation, Virtual Tour 360)** : sur `/embed`, ces types
+  calent leur hauteur sur la largeur ; en pleine fenêtre, la scène déborde de l'écran (l'app
+  `/app/` la limite, elle). **Toujours** ajouter au lien `&custom-css=` + l'URL **jsDelivr** de
+  `partage/embed-960.css` (`https://cdn.jsdelivr.net/gh/Absconses/h5p-lumi@main/partage/embed-960.css`,
+  encodée) : elle limite la scène à 960 px, centrée. Le script le fait avec `-Narrow`.
+  - L'URL `raw.githubusercontent.com` ne marche pas pour un CSS (servie en `text/plain` +
+    `nosniff`, le navigateur la refuse).
+  - jsDelivr met quelques minutes à voir un nouveau commit : si la scène reste en pleine largeur
+    juste après un push, retester plus tard, ou épingler un commit (`@<sha>` au lieu de `@main`).
+  - Ne pas l'ajouter aux livres, quiz, etc. : leur hauteur suit le contenu, la pleine largeur
+    leur va bien (Pierre préfère).
 - **Apostrophe du titre** : le lecteur affiche `l&#039;aigle` si le titre de `h5p.json` contient
   une apostrophe droite `'`. Pour un `.h5p` destiné à ce lecteur, mettre l'apostrophe
   typographique `’` dans `h5p.json` > `title` (rezipper sans toucher au reste). Corrigé ainsi sur

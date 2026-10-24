@@ -3,7 +3,7 @@
   Fabrique le lien h5p-offline-player d'un .h5p heberge dans un depot GitHub public.
 .EXAMPLE
   .\scripts\New-H5PShareLink.ps1 -Path partage\mon-module.h5p -Test
-  .\scripts\New-H5PShareLink.ps1 -Path partage\ma-presentation.h5p -Impress
+  .\scripts\New-H5PShareLink.ps1 -Path partage\ma-presentation.h5p -Narrow   # Impress / Virtual Tour
 #>
 param(
     [Parameter(Mandatory)] [string]$Path,
@@ -11,17 +11,18 @@ param(
     [string]$Branch = 'main',
     [string]$Player = 'https://h5p-offline-player.vercel.app/embed',
     [switch]$Test,
-    # Impressive Presentation : limite la scene a 960 px (sinon trop zoomee en pleine largeur)
-    [switch]$Impress
+    # Types dont la hauteur suit la largeur (Impressive Presentation, Virtual Tour 360) :
+    # limite la scene a 960 px, sinon elle est trop zoomee en pleine largeur
+    [Alias('Impress')] [switch]$Narrow
 )
 
 $rel = ($Path -replace '\\', '/') -replace '^\./', ''
 $segments = $rel.Split('/') | ForEach-Object { [Uri]::EscapeDataString($_) }
 $raw = "https://raw.githubusercontent.com/$Repo/$Branch/" + ($segments -join '/')
 $link = $Player + '?src=' + [Uri]::EscapeDataString($raw)
-if ($Impress) {
+if ($Narrow) {
     # jsDelivr sert le CSS en text/css ; l'URL raw (text/plain + nosniff) est refusee par le navigateur
-    $css = "https://cdn.jsdelivr.net/gh/$Repo@$Branch/partage/impress-embed.css"
+    $css = "https://cdn.jsdelivr.net/gh/$Repo@$Branch/partage/embed-960.css"
     $link += '&custom-css=' + [Uri]::EscapeDataString($css)
 }
 
