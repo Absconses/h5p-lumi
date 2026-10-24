@@ -75,6 +75,12 @@ un QR code). Les noms de fichiers : minuscules, tirets, sans accents ni espaces.
 - Bibliothèques manquantes téléchargées depuis jsDelivr ; le site de démo charge Vercel Analytics.
   Aucune donnée élève n'est envoyée ; la progression reste dans le navigateur.
 - Le site appartient à un particulier : il peut disparaître. Le `.h5p` reste lisible dans Lumi.
+- **Impressive Presentation trop zoomée** : sur `/embed`, la scène prend toute la largeur de la
+  fenêtre et déborde en hauteur (l'app `/app/` la limite, elle). Ajouter au lien
+  `&custom-css=` + l'URL **jsDelivr** de `partage/impress-embed.css`
+  (`https://cdn.jsdelivr.net/gh/Absconses/h5p-lumi@main/partage/impress-embed.css`, encodée) :
+  elle limite la scène à 960 px. L'URL `raw.githubusercontent.com` ne marche pas pour un CSS
+  (servie en `text/plain` + `nosniff`, le navigateur la refuse). Le script le fait avec `-Impress`.
 - **Apostrophe du titre** : le lecteur affiche `l&#039;aigle` si le titre de `h5p.json` contient
   une apostrophe droite `'`. Pour un `.h5p` destiné à ce lecteur, mettre l'apostrophe
   typographique `’` dans `h5p.json` > `title` (rezipper sans toucher au reste). Corrigé ainsi sur
