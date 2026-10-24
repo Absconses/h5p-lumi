@@ -143,6 +143,7 @@ sources **réelles et libres**.
 - `scripts/Find-WikimediaImages.ps1` — recherche + validation d'images libres (Wikimedia).
 - `scripts/Test-H5PJson.ps1` — validation syntaxe + règles par type.
 - `scripts/Build-H5PPackage.ps1` — assemblage du `.h5p` à partir d'un gabarit (option `-Media` pour images/sons embarqués).
+- `scripts/New-H5PShareLink.ps1` — lien cliquable vers **h5p-offline-player** pour un `.h5p` rangé dans `partage/` (dépôt public) : `-Path partage\x.h5p [-Test]`. Voir `references/partage-offline-player.md`.
 - `scripts/Graft-H5PLibraries.ps1` — greffe une bibliothèque (+ ses dépendances) d'un gabarit riche (ex. `gabarit-column.h5p`) vers un gabarit pauvre. Sert à enrichir une **Game Map** (ou une Page/un Book) avec de nouveaux types d'exercices : `-Target … -Source … -Libraries "H5P.MultiChoice-1.16",… -OutputPath …`. Reconstruit `preloadedDependencies` proprement (aucune entrée vide).
 - `references/timeline.md` — structure + exemple de frise.
 - `references/question-multichoice.md` — QCM (MultiChoice) + squelette du Quiz (QuestionSet).
@@ -157,6 +158,7 @@ sources **réelles et libres**.
 - `references/media-and-tools.md` — Iframe, Audio Recorder, Documentation Tool, Interactive Video, Course Presentation.
 - `references/tabs.md` — Onglets (Tabs 1.1) : chaque onglet = Column **1.16** dont le titre fait le libellé ; gabarit `gabarit-tabs.h5p`, fabriques `assets/lib/tabs.mjs`, exemple `assets/examples/enquete-source/`. Absent de Digiquiz et du Hub officiel.
 - `references/geoquiz.md` — Geography Quiz (quiz sur carte) : lib d'origine cassée dans Lumi (carte à 0 px), utiliser `gabarit-geoquiz.h5p` patché ; fabriques `assets/lib/geoquiz.mjs`.
+- `references/partage-offline-player.md` — diffuser un `.h5p` par un simple lien (h5p-offline-player + GitHub) : quand le proposer plutôt que Nuage, limites (aucun résultat prof, 25/100 Mo, bouton « Open with its own scripts » pour les types hors catalogue).
 - `references/extending-new-types.md` — méthode universelle pour tout autre type.
 - `references/lumi-packaging.md` — format `.h5p`, gabarits, import dans Lumi.
 - `assets/lib/impress-factories.mjs` — fabriques Node pour Impressive Presentation (`station`, `textView`, `depth`, `layouts`, `overview`, `validate`).
