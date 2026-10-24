@@ -25,9 +25,9 @@ se lance dans son navigateur (PC, tablette, téléphone).
 | Métiers de la télé (Virtual Tour 360) | (constaté OK par Pierre) | ✅ | ✅ quasi identique, pleine largeur |
 | Enquête aigle (Interactive Book) | ✅ + résultats | ✅ | ✅ **plus fluide et moins contraint selon Pierre** ; apostrophe du titre affichée `&#039;` (corrigé, voir plus bas) |
 
-Ressenti de Pierre : à l'usage, l'offline player est **plus fluide et moins contraint**, y compris
-pour un livre interactif. Nuage reste le seul à rendre les résultats : le choisir quand le suivi
-compte, l'offline player sinon ; Digiquiz en solution de repli sans compte.
+Choix de Pierre (2026-10-24) : l'offline player et Lumi Nuage marchent tous deux très bien,
+Digiquiz beaucoup moins. **Par défaut, livrer un lien offline player** (le plus simple à donner) ;
+**Lumi Nuage quand il faut suivre la progression des élèves** ; Digiquiz en dernier recours.
 
 Le lecteur **ne stocke aucun résultat** : le score s'affiche à l'élève, le prof ne le reçoit pas.
 Le dire à l'utilisateur dès qu'il s'agit d'une activité évaluée.
