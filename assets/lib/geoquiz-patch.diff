@@ -1,0 +1,267 @@
+diff -ruN -x geojson-data gq/H5P.GeoQuiz-1.1/js/GeoQuiz.js gqfix/H5P.GeoQuiz-1.1/js/GeoQuiz.js
+--- a/H5P.GeoQuiz-1.1/js/GeoQuiz.js	2026-10-24 10:23:58.000000000 +0000
++++ b/H5P.GeoQuiz-1.1/js/GeoQuiz.js	2026-10-24 10:39:17.205084949 +0000
+@@ -430,7 +430,7 @@
+       }
+       // Store user answer as a leaflet marker with icon
+       var answerIcon = self.geoquiz.whichMarker(points);
+-      if (answerIcon === self.geoquiz.icons.greenIcon) {
++      if (answerIcon === self.geoquiz.icons.green) {
+         isCorrect = true;
+       }
+ 
+@@ -475,15 +475,69 @@
+     var self = this;
+     self.mapLayers.correctAnswerArea = undefined;
+     return new Promise(function(resolve, reject) {
++      // Patch h5p-lumi : test point-dans-polygone local au lieu de Nominatim.
++      // Nominatim renvoie des noms qui ne collent pas au geojson ("United States"
++      // vs "United States of America", "Czechia"...) -> bonne reponse comptee 0.
+       self.loadArea(area).then(function(loadAreaResponse) {
+-        self.getNominatimCountry(marker).then(function (getNominatimCountryResponse) {
+-          resolve("isMarkerInsideArea worked!");
+-        });
++        var inside = self.isLatLngInLayer(marker.getLatLng(), self.mapLayers.correctAnswerArea);
++        self.userAnswerCountry = inside ? self.correctAnswerCountry : 'Unknow';
++        resolve("isMarkerInsideArea worked!");
+       });
+     });
+   }
+ 
+   /**
++   * Patch h5p-lumi : vrai si latlng est dans un des polygones du groupe.
++   *
++   * @param {L.LatLng} latlng
++   * @param {L.FeatureGroup} group
++   */
++  GeoQuiz.prototype.isLatLngInLayer = function (latlng, group) {
++    if (!group) {
++      return false;
++    }
++    var x = latlng.lng, y = latlng.lat;
++    // Ramene la longitude dans [-180, 180] (la carte se repete horizontalement)
++    x = ((x + 180) % 360 + 360) % 360 - 180;
++    var inRing = function (ring) {
++      var inside = false;
++      for (var i = 0, j = ring.length - 1; i < ring.length; j = i++) {
++        var xi = ring[i][0], yi = ring[i][1], xj = ring[j][0], yj = ring[j][1];
++        if (((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi)) {
++          inside = !inside;
++        }
++      }
++      return inside;
++    };
++    var inPolygon = function (rings) {
++      if (!inRing(rings[0])) {
++        return false;
++      }
++      for (var k = 1; k < rings.length; k++) {
++        if (inRing(rings[k])) {
++          return false;
++        }
++      }
++      return true;
++    };
++    var found = false;
++    group.eachLayer(function (l) {
++      var g = l.feature && l.feature.geometry;
++      if (!g || found) {
++        return;
++      }
++      if (g.type === 'Polygon') {
++        found = inPolygon(g.coordinates);
++      } else if (g.type === 'MultiPolygon') {
++        for (var m = 0; m < g.coordinates.length && !found; m++) {
++          found = inPolygon(g.coordinates[m]);
++        }
++      }
++    });
++    return found;
++  };
++
++  /**
+    * Load geoJSON encoded country multipolygon
+    *
+    * @param {String} area name to load
+@@ -560,13 +614,18 @@
+    * Sets container height as ratio of 16:9 to container width.
+    */
+   GeoQuiz.prototype.setContainerHeight = function() {
+-    var containerWidth = $('.h5p-geoquiz').width();
+-    var offset = parseInt($('.h5p-actions').height());
+-    var containerHeight = parseInt(Math.round(containerWidth / 16 * 9)) - offset;
++    // Patch h5p-lumi : sans barre d'actions H5P (Lumi, h5p-standalone),
++    // $('.h5p-actions').height() vaut undefined -> NaN -> la carte restait a 0 px.
++    var containerWidth = this.$wrapper ? this.$wrapper.width() : $('.h5p-geoquiz').width();
++    var offset = parseInt($('.h5p-actions').height(), 10) || 0;
++    var containerHeight = Math.max(300, Math.round(containerWidth / 16 * 9) - offset);
+     $('#h5p-geoquiz-map').height(containerHeight);
+     $('#h5p-geoquiz-intro-container').height(containerHeight);
+     $('#h5p-geoquiz-feedback-container').height(containerHeight);
+     $('#h5p-geoquiz-answer-container').height(containerHeight);
++    if (this.map) {
++      this.map.invalidateSize();
++    }
+     return containerHeight;
+   };  
+ 
+@@ -601,40 +660,29 @@
+       var latlng = self.coordSplit(self.options.mapCenter);
+       self.map.setView(latlng, self.options.mapZoom);
+       self.map.on('click', self.addMarker, {geoquiz: self});
++      self.trigger('resize');
+ 
+       switch (self.options.mapType) {
+         case 'CartoDB.VoyagerNoLabels':
+-          var VoyagerNoLabels = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
+-            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+-            subdomains: 'abcd',
+-            maxZoom: 19
+-          });
+-          self.map.addLayer(VoyagerNoLabels);
+-          break;
+         case 'Hydda.Base':
+-          var Hydda_Base = L.tileLayer('https://{s}.tile.openstreetmap.se/hydda/base/{z}/{x}/{y}.png', {
+-            maxZoom: 18,
+-            attribution: 'Tiles courtesy of <a href="http://openstreetmap.se/" target="_blank">OpenStreetMap Sweden</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+-          });
+-          self.map.addLayer(Hydda_Base);
++          // Patch h5p-lumi : CARTO exige une cle depuis 2026 (tuiles « API KEY
++          // REQUIRED ») et Hydda est ferme -> fond de carte MUET dessine avec les
++          // contours de pays fournis par la lib (sans noms, sans internet).
++          self.addBlankMap();
+           break;
+         case 'Stamen.Watercolor':
+-          var Stamen_Watercolor = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}', {
+-            attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+-            subdomains: 'abcd',
+-            minZoom: 1,
+-            maxZoom: 16,
+-            ext: 'png'
++          // Patch h5p-lumi : les tuiles Stamen (fastly) ne sont plus servies -> relief physique Esri.
++          var Stamen_Watercolor = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer/tile/{z}/{y}/{x}', {
++            attribution: 'Tiles &copy; Esri &mdash; Source: US National Park Service',
++            maxZoom: 8
+           });
+           self.map.addLayer(Stamen_Watercolor);
+           break;
+         case 'Stamen.TerrainBackground':
+-          var Stamen_TerrainBackground = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain-background/{z}/{x}/{y}{r}.{ext}', {
+-            attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+-            subdomains: 'abcd',
+-            minZoom: 0,
+-            maxZoom: 18,
+-            ext: 'png'
++          // Patch h5p-lumi : les tuiles Stamen (fastly) ne sont plus servies -> relief ombre Esri.
++          var Stamen_TerrainBackground = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Shaded_Relief/MapServer/tile/{z}/{y}/{x}', {
++            attribution: 'Tiles &copy; Esri &mdash; Source: Esri',
++            maxZoom: 13
+           });
+           self.map.addLayer(Stamen_TerrainBackground);
+           break;
+@@ -651,6 +699,22 @@
+   };
+ 
+   /**
++   * Patch h5p-lumi : fond de carte muet (mer unie + pays aux frontieres grises).
++   */
++  GeoQuiz.prototype.addBlankMap = function () {
++    var self = this;
++    var codes = ["AFG", "AGO", "ALB", "ARE", "ARG", "ARM", "ATA", "ATF", "AUS", "AUT", "AZE", "BDI", "BEL", "BEN", "BFA", "BGD", "BGR", "BHS", "BIH", "BLR", "BLZ", "BMU", "BOL", "BRA", "BRN", "BTN", "BWA", "CAF", "CAN", "CHE", "CHL", "CHN", "CIV", "CMR", "COD", "COG", "COL", "CRI", "CS-KM", "CUB", "CYP", "CZE", "DEU", "DJI", "DNK", "DOM", "DZA", "ECU", "EGY", "ERI", "ESH", "ESP", "EST", "ETH", "FIN", "FJI", "FLK", "FRA", "GAB", "GBR", "GEO", "GHA", "GIN", "GMB", "GNB", "GNQ", "GRC", "GRL", "GTM", "GUF", "GUY", "HND", "HRV", "HTI", "HUN", "IDN", "IND", "IRL", "IRN", "IRQ", "ISL", "ISR", "ITA", "JAM", "JOR", "JPN", "KAZ", "KEN", "KGZ", "KHM", "KOR", "KWT", "LAO", "LBN", "LBR", "LBY", "LKA", "LSO", "LTU", "LUX", "LVA", "MAR", "MDA", "MDG", "MEX", "MKD", "MLI", "MLT", "MMR", "MNE", "MNG", "MOZ", "MRT", "MWI", "MYS", "NAM", "NCL", "NER", "NGA", "NIC", "NLD", "NOR", "NPL", "NZL", "OMN", "PAK", "PAN", "PER", "PHL", "PNG", "POL", "PRI", "PRK", "PRT", "PRY", "PSE", "QAT", "ROU", "RUS", "RWA", "SAU", "SDN", "SEN", "SLB", "SLE", "SLV", "SOM", "SRB", "SSD", "SUR", "SVK", "SVN", "SWE", "SWZ", "SYR", "TCD", "TGO", "THA", "TJK", "TKM", "TLS", "TTO", "TUN", "TUR", "TWN", "TZA", "UGA", "UKR", "URY", "USA", "UZB", "VEN", "VNM", "VUT", "YEM", "ZAF", "ZMB", "ZWE"];
++    $('#h5p-geoquiz-map').css('background-color', '#c6dbe9');
++    self.map.attributionControl.addAttribution('Fond muet : Natural Earth');
++    var style = { color: '#8a8a8a', weight: 1, fillColor: '#f4f1e8', fillOpacity: 1 };
++    codes.forEach(function (code) {
++      $.getJSON(self.getLibraryFilePath('') + 'geojson-data/' + code + '.geo.json').done(function (json) {
++        L.geoJson(json, { style: style, interactive: false }).addTo(self.map).bringToBack();
++      });
++    });
++  };
++
++  /**
+    * Get marker icon by points reached
+    */
+   GeoQuiz.prototype.whichMarker = function (points) {
+diff -ruN -x geojson-data gq/H5P.GeoQuiz-1.1/library.json gqfix/H5P.GeoQuiz-1.1/library.json
+--- a/H5P.GeoQuiz-1.1/library.json	2026-10-24 10:23:58.000000000 +0000
++++ b/H5P.GeoQuiz-1.1/library.json	2026-10-24 10:28:56.423078049 +0000
+@@ -1 +1 @@
+-{"title":"Geography Quiz","description":"Create a Quiz on wich the users click on a leaflet map to answer the questions.","majorVersion":1,"minorVersion":1,"patchVersion":9,"runnable":1,"fullscreen":0,"embedTypes":["iframe"],"machineName":"H5P.GeoQuiz","license":"MIT","author":"fabforge, Fabian Dennler","coreApi":{"majorVersion":1,"minorVersion":1},"preloadedCss":[{"path":"css/leaflet.css"},{"path":"css/GeoQuiz.css"}],"preloadedJs":[{"path":"js/leaflet.js"},{"path":"js/GeoQuiz.js"}],"preloadedDependencies":[{"machineName":"H5P.JoubelUI","majorVersion":1,"minorVersion":3},{"machineName":"H5P.Question","majorVersion":1,"minorVersion":3}],"editorDependencies":[{"machineName":"H5PEditor.ShowWhen","majorVersion":1,"minorVersion":0},{"machineName":"H5PEditor.VerticalTabs","majorVersion":1,"minorVersion":3},{"machineName":"H5PEditor.CoordinateSelector","majorVersion":1,"minorVersion":0}]}
+\ No newline at end of file
++{"title": "Geography Quiz", "description": "Create a Quiz on wich the users click on a leaflet map to answer the questions.", "majorVersion": 1, "minorVersion": 1, "patchVersion": 10, "runnable": 1, "fullscreen": 0, "embedTypes": ["iframe"], "machineName": "H5P.GeoQuiz", "license": "MIT", "author": "fabforge, Fabian Dennler", "coreApi": {"majorVersion": 1, "minorVersion": 1}, "preloadedCss": [{"path": "css/leaflet.css"}, {"path": "css/GeoQuiz.css"}], "preloadedJs": [{"path": "js/leaflet.js"}, {"path": "js/GeoQuiz.js"}], "preloadedDependencies": [{"machineName": "H5P.JoubelUI", "majorVersion": 1, "minorVersion": 3}, {"machineName": "H5P.Question", "majorVersion": 1, "minorVersion": 3}], "editorDependencies": [{"machineName": "H5PEditor.ShowWhen", "majorVersion": 1, "minorVersion": 0}, {"machineName": "H5PEditor.VerticalTabs", "majorVersion": 1, "minorVersion": 3}, {"machineName": "H5PEditor.CoordinateSelector", "majorVersion": 1, "minorVersion": 0}]}
+\ No newline at end of file
+diff -ruN gq/H5PEditor.CoordinateSelector-1.0/library.json gqfix/H5PEditor.CoordinateSelector-1.0/library.json
+--- a/H5PEditor.CoordinateSelector-1.0/library.json	2026-10-24 10:23:58.000000000 +0000
++++ b/H5PEditor.CoordinateSelector-1.0/library.json	2026-10-24 10:30:51.079594066 +0000
+@@ -1 +1 @@
+-{"title":"H5PEditor.CoordinateSelector","majorVersion":1,"minorVersion":0,"patchVersion":3,"runnable":0,"machineName":"H5PEditor.CoordinateSelector","coreApi":{"majorVersion":1,"minorVersion":12},"author":"fabforge, Fabian Dennler","preloadedJs":[{"path":"scripts/leaflet.js"},{"path":"scripts/coordinate-selector.js"},{"path":"scripts/map-selector.js"}],"preloadedCss":[{"path":"styles/leaflet.css"},{"path":"styles/coordinate-selector.css"}]}
+\ No newline at end of file
++{"title": "H5PEditor.CoordinateSelector", "majorVersion": 1, "minorVersion": 0, "patchVersion": 4, "runnable": 0, "machineName": "H5PEditor.CoordinateSelector", "coreApi": {"majorVersion": 1, "minorVersion": 12}, "author": "fabforge, Fabian Dennler", "preloadedJs": [{"path": "scripts/leaflet.js"}, {"path": "scripts/coordinate-selector.js"}, {"path": "scripts/map-selector.js"}], "preloadedCss": [{"path": "styles/leaflet.css"}, {"path": "styles/coordinate-selector.css"}]}
+\ No newline at end of file
+diff -ruN gq/H5PEditor.CoordinateSelector-1.0/scripts/map-selector.js gqfix/H5PEditor.CoordinateSelector-1.0/scripts/map-selector.js
+--- a/H5PEditor.CoordinateSelector-1.0/scripts/map-selector.js	2026-10-24 10:23:58.000000000 +0000
++++ b/H5PEditor.CoordinateSelector-1.0/scripts/map-selector.js	2026-10-24 10:36:35.274015293 +0000
+@@ -44,10 +44,10 @@
+      * @type {Array}
+      */
+     this.mapTypes = {
+-        'CartoDB.VoyagerNoLabels': 'CartoDB - VoyagerNoLabels',
+-        'Stamen.Watercolor': 'Stamen - Watercolor',
+-        'Hydda.Base': 'Hydda - Base',
+-        'Stamen.TerrainBackground': 'Stamen - TerrainBackground',
++        'CartoDB.VoyagerNoLabels': 'Plan gris clair sans noms (Esri, ex-CARTO)',
++        'Stamen.Watercolor': 'Relief physique (Esri, ex-Stamen Watercolor)',
++        'Hydda.Base': 'Plan gris clair sans noms (Esri, ex-Hydda)',
++        'Stamen.TerrainBackground': 'Relief ombre (Esri, ex-Stamen Terrain)',
+         'Esri.WorldImagery': 'Esri - WorldImagery',
+     }
+     
+@@ -134,20 +134,20 @@
+     var self = this;
+     switch (self.defaultValue) {
+       case 'CartoDB.VoyagerNoLabels':
+-        self.mapLayer = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
+-          attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
++        self.mapLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
++          attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
+           subdomains: 'abcd',
+-          maxZoom: 19
++          maxZoom: 16
+         });
+         break;
+       case 'Hydda.Base':
+-        self.mapLayer = L.tileLayer('https://{s}.tile.openstreetmap.se/hydda/base/{z}/{x}/{y}.png', {
++        self.mapLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+           maxZoom: 18,
+           attribution: 'Tiles courtesy of <a href="http://openstreetmap.se/" target="_blank">OpenStreetMap Sweden</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+         });
+         break;
+       case 'Stamen.Watercolor':
+-        self.mapLayer = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}', {
++        self.mapLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer/tile/{z}/{y}/{x}', {
+           attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+           subdomains: 'abcd',
+           minZoom: 1,
+@@ -156,7 +156,7 @@
+         });
+         break;
+       case 'Stamen.TerrainBackground':
+-        self.mapLayer = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain-background/{z}/{x}/{y}{r}.{ext}', {
++        self.mapLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Shaded_Relief/MapServer/tile/{z}/{y}/{x}', {
+           attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+           subdomains: 'abcd',
+           minZoom: 0,
+@@ -170,10 +170,10 @@
+         });
+         break;
+       default:
+-        self.mapLayer = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
+-          attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
++        self.mapLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
++          attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
+           subdomains: 'abcd',
+-          maxZoom: 19
++          maxZoom: 16
+         });
+         break;
+     }

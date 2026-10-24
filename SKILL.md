@@ -57,6 +57,7 @@ Lis la fiche de référence correspondante (structure exacte + exemple) :
 | **Parcours / carte de jeu** : étapes reliées sur une carte, chacune avec un exercice | `H5P.GameMap` | `references/gamemap.md` |
 | **Sur image** : Image Hotspots · Find the Hotspot · Memory Game · Collage · Agamotto · Image Slider · Multimedia Choice · Drag and Drop · Guess the Answer | voir fiche | `references/image-activities.md` |
 | **Médias & outils** : Iframe Embedder · Audio Recorder · Documentation Tool · Interactive Video · Course Presentation | voir fiche | `references/media-and-tools.md` |
+| **Quiz sur carte** : « Où se trouve… ? », clic sur une carte (villes notées à la distance, pays) | `H5P.GeoQuiz` | `references/geoquiz.md` |
 | **Tout autre type** (Dictation, Branching Scenario, Virtual Tour 360…) | variable | `references/extending-new-types.md` |
 
 Le catalogue Lumi est vaste : **n'importe quel type** se traite via la méthode décrite dans
@@ -148,6 +149,7 @@ sources **réelles et libres**.
 - `references/gamemap.md` — Carte de jeu (Game Map) : parcours d'étapes ; pièges telemetry (x/y en premier) & fond empaqueté.
 - `references/image-activities.md` — activités sur image (Image Hotspots, Memory Game, Agamotto, Collage, Multimedia Choice…).
 - `references/media-and-tools.md` — Iframe, Audio Recorder, Documentation Tool, Interactive Video, Course Presentation.
+- `references/geoquiz.md` — Geography Quiz (quiz sur carte) : lib d'origine cassée dans Lumi (carte à 0 px), utiliser `gabarit-geoquiz.h5p` patché ; fabriques `assets/lib/geoquiz.mjs`.
 - `references/extending-new-types.md` — méthode universelle pour tout autre type.
 - `references/lumi-packaging.md` — format `.h5p`, gabarits, import dans Lumi.
 - `assets/templates/` — y déposer les gabarits `.h5p` exportés de Lumi.
