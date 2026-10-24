@@ -16,12 +16,19 @@ simples blocs de texte repliables, l'Accordéon.
 - Module de démonstration : « Enquête sur une source » (EMI cycle 4, 6 onglets, 5 exercices),
   `assets/examples/enquete-source/`.
 
+**Limites (constatées par Pierre sur Lumi Nuage, 2026-10-24)** :
+- **Aucun écran de résultats final** : l'élève ne voit que le score de chaque exercice ; le
+  total n'est envoyé qu'à la plateforme (xAPI), sans bilan affiché.
+- **Ne s'imbrique pas dans un Interactive Book** (ni dans une Page) : Tabs n'est pas dans la
+  liste des types autorisés de Column. Pour une séquence avec bilan, préférer le Book ;
+  réserver Tabs à une activité courte, autonome, à consulter dans le désordre.
+
 ## Disponibilité (vérifiée le 2026-10-24)
 
 | Plateforme | Tabs ? |
 |---|---|
 | **Hub H5P officiel** (`api.h5p.org`) | **Non** : Tabs n'est pas dans la liste du Hub (404). Le gabarit vient d'un export fourni par Pierre. |
-| **Lumi Nuage** | Le fichier d'origine porte des versions récentes (Collage 0.3.30, Components 1.0, coreApi 1.28) qu'on ne trouve pas sur le Hub : signe qu'il vient de la plateforme en ligne. À confirmer à l'import. |
+| **Lumi Nuage** | **Oui** (module exemple importé et joué par Pierre le 2026-10-24). |
 | **Digiquiz / La Digitale** | **Non** : pas de `H5P.Tabs` dans ses `libraries/`, et seulement Column 1.22 (Tabs exige 1.16). |
 | **Lumi desktop** | Oui (gabarit importé avec ses bibliothèques). |
 
