@@ -261,3 +261,5 @@ export HTML de Lumi (fichier unique), ou une plateforme où l'on installe la bib
   police assez grande : une vue de 590×300 à d = 8 sous un simple surtitre ; 3 phrases à trous maximum.
 - Lignes de connexion : panneau fin (largeur = longueur, hauteur 18–36) tourné en `rotateZ = atan2(dy, dx)`.
 - Exemple : `qu-est-ce-qu-internet` (coupe espace → fond de l'océan, photos Pixabay), sources dans les fichiers du projet.
+- Décor illustré de la vue d'ensemble : UNE image derrière tout (`assets/lib/impress-map-backdrop.py`, exemple),
+  à la profondeur ZB, de taille 640·(P+Z)/P × 360·(P+Z)/P où Z = z(caméra d'ensemble) − ZB. Pas de gel au rendu.
