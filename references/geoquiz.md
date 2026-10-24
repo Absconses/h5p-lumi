@@ -75,6 +75,15 @@ Vécu 2026-10-24, vérifié en ouvrant le lien public `/run/…` avec Playwright
   `geojson-data/`), test pays local. Testé : carte de 731 px, quiz Europe à 10/10.
   Fond : prendre `Esri.WorldImagery` (CARTO est barré dans la 1.1.9).
 
+**Éditeur de bureau Lumi : « Impossible d'ouvrir H5P »** (vécu 2026-10-24). Le `.h5p` envoyé
+par Pierre, exporté de Lumi en ligne, embarquait `H5P.JoubelUI` 1.3.**45**, qui exige
+`coreApi` 1.28. Le moteur de l'éditeur de bureau est plus ancien et refuse tout le paquet.
+Le gabarit embarque donc JoubelUI 1.3.19 (coreApi 1.3, pris dans `gabarit-questionset.h5p`).
+Règle générale : **aucune bibliothèque d'un gabarit ne doit exiger un `coreApi` > 1.24**.
+Pour vérifier un paquet avant de le livrer : `npm i @lumieducation/h5p-server`, puis
+`h5p.fs(config, lib, tmp, content).packageImporter.addPackageLibrariesAndContent(fichier, user)`.
+Cela reproduit l'import de Lumi (erreur `api-version-unsupported`).
+
 ## Structure du `content.json`
 
 ```json
