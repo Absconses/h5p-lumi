@@ -252,3 +252,12 @@ export HTML de Lumi (fichier unique), ou une plateforme où l'on installe la bib
 - Titre incrusté sur **une seule ligne** si le texte éditable suit (sinon il chevauche le texte).
 - Vidéo YouTube : iframe youtube-nocookie dans un AdvancedText à d = 8 (devant la caméra), seule à sa place.
 - Exemple complet : `voyage-infox-cinema` (sources dans les fichiers du projet, h5p/sources/).
+
+## Clics et ordre des vues (vérifié 2026-10-24)
+
+- Le navigateur donne le clic au **dernier élément du DOM** sous la souris, même s'il est derrière en 3D.
+  Mettre le décor (grands aplats, lignes, étiquettes) **au début** de `views`, les exercices après.
+- Blanks 1.4 et MarkTheWords 1.5 prennent **toute la largeur** de leur vue (comme SingleChoiceSet), avec une
+  police assez grande : une vue de 590×300 à d = 8 sous un simple surtitre ; 3 phrases à trous maximum.
+- Lignes de connexion : panneau fin (largeur = longueur, hauteur 18–36) tourné en `rotateZ = atan2(dy, dx)`.
+- Exemple : `qu-est-ce-qu-internet` (coupe espace → fond de l'océan, photos Pixabay), sources dans les fichiers du projet.
