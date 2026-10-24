@@ -57,6 +57,23 @@ Pour réappliquer à la main : `patch -p1` avec `geoquiz-patch.diff`, puis renom
 en `H5P.GeoQuizFix-1.1`, `machineName` dans `library.json`, `mainLibrary` et la dépendance
 dans `h5p.json`, et `H5P.GeoQuiz` → `H5P.GeoQuizFix` (3 fois) dans `js/GeoQuiz.js`.
 
+## Lumi en ligne (app.lumi.education) : ce qui marche et ce qui ne marche pas
+
+Vécu 2026-10-24, vérifié en ouvrant le lien public `/run/…` avec Playwright :
+- Lumi en ligne n'installe **que les bibliothèques de son catalogue** : un paquet avec
+  `H5P.GeoQuizFix` échoue (« Échoué install-missing-libraries »), et un `H5P.GeoQuiz` 1.1.10
+  est ignoré au profit de sa 1.1.9. Il affiche donc toujours la carte de 18 px.
+- Son import **filtre le HTML** : attributs `class` supprimés (une balise
+  `<strong class="h5p-actions">` dans l'intro devient `<strong></strong>`). Pas de
+  contournement par le contenu.
+- Ses pages `run` ont tous les `displayOptions` à false : pas de barre d'actions, d'où le bug.
+  Simulé : avec la barre (Télécharger, droits d'auteur), la 1.1.9 marche.
+- **Ce qui marche : l'export HTML.** Exporter en HTML depuis Lumi, puis corriger le fichier
+  avec `python3 assets/lib/geoquiz-fix-html.py export.html corrige.html <geojson-data>` :
+  hauteur réparée, contours des pays utilisés embarqués (un fichier HTML ne peut pas lire
+  `geojson-data/`), test pays local. Testé : carte de 731 px, quiz Europe à 10/10.
+  Fond : prendre `Esri.WorldImagery` (CARTO est barré dans la 1.1.9).
+
 ## Structure du `content.json`
 
 ```json
