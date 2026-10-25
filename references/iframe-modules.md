@@ -47,10 +47,14 @@ Lu dans le code de la bibliothèque (`iframe-embed.js`) :
   (ex. Image Sequencing : 735 px à 800 px de large, 2 150 px à 390 px) : on vise l'ordinateur ou
   le Chromebook du CDI, et on met un lien « Ouvrir en grand » sous le cadre.
 
-Ratios mesurés (largeur 1000) : Personality Quiz 4 réponses en images 1000/1050 ·
-Image Sequencing 8 images 1000/820 · Sort the Paragraphs 7 cartes 1000/1400 ·
-Image Multiple Hotspot (capture d'écran pleine page) 1000/1250 · Crossword 8 mots 1000/850 ·
-vidéo 16:9 1600/900.
+Mesurer la hauteur **après** « Vérifier » (retours, barre de score, boutons Réessayer /
+Solution s'ajoutent en bas), puis prévoir large : le thème de l'offline player et le zoom du
+navigateur grossissent les cartes. Ratios retenus (largeur 1000), testés par Pierre :
+Personality Quiz 4 réponses en images 1000/1200 · Image Sequencing 8 images 1000/950 ·
+Sort the Paragraphs 7 cartes 1000/1700 · Image Multiple Hotspot (capture pleine page)
+1000/1400 · Crossword 8 mots 1000/1000 · vidéo 16:9 1600/900. Un bouton absent en bas du cadre
+est presque toujours coupé, pas désactivé (Sort the Paragraphs n'affiche pas « Réessayer » si
+le score est parfait).
 
 **Toujours** entourer le cadre de deux textes dans la Column :
 
