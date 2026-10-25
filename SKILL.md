@@ -59,6 +59,7 @@ Lis la fiche de référence correspondante (structure exacte + exemple) :
 | **Parcours / carte de jeu** : étapes reliées sur une carte, chacune avec un exercice | `H5P.GameMap` | `references/gamemap.md` |
 | **Sur image** : Image Hotspots · Find the Hotspot · Memory Game · Collage · Agamotto · Image Slider · Multimedia Choice · Drag and Drop · Guess the Answer | voir fiche | `references/image-activities.md` |
 | **Présentation 3D « Prezi »** : vues placées dans l'espace, zoom/rotation de l'une à l'autre (Impressive Presentation, ALPHA) | `H5P.ImpressPresentation` | `references/impress-presentation.md` |
+| **Type refusé dans un livre/une page** (Crossword, Flashcards, Sort Paragraphs, Personality Quiz, Image Sequencing…) : l'intégrer par un cadre | `H5P.IFrameEmbed` | `references/iframe-modules.md` |
 | **Médias & outils** : Iframe Embedder · Audio Recorder · Documentation Tool · Interactive Video · Course Presentation | voir fiche | `references/media-and-tools.md` |
 | **Onglets** : une page par onglet (texte, médias, exercices notés), consultables dans n'importe quel ordre | `H5P.Tabs` | `references/tabs.md` |
 | **Visite virtuelle 360** : photos 360° reliées, points d'intérêt (texte, image, quiz) | `H5P.ThreeImage` | `references/virtual-tour.md` |
@@ -158,6 +159,7 @@ sources **réelles et libres**.
 - `references/media-and-tools.md` — Iframe, Audio Recorder, Documentation Tool, Interactive Video, Course Presentation.
 - `references/tabs.md` — Onglets (Tabs 1.1) : chaque onglet = Column **1.16** dont le titre fait le libellé ; gabarit `gabarit-tabs.h5p`, fabriques `assets/lib/tabs.mjs`, exemple `assets/examples/enquete-source/`. Absent de Digiquiz et du Hub officiel.
 - `references/geoquiz.md` — Geography Quiz (quiz sur carte) : lib d'origine cassée dans Lumi (carte à 0 px), utiliser `gabarit-geoquiz.h5p` patché ; fabriques `assets/lib/geoquiz.mjs`.
+- `references/iframe-modules.md` — intégrer un type refusé par la Column via Iframe Embedder : ratio (pas de taille), `minWidth` 280, aucun score remonté, source offline player par défaut ; `scripts/Get-LumiRun.py` récupère un module Nuage publié, `scripts/Slim-H5PImages.py` allège les images.
 - `references/partage-offline-player.md` — diffuser un `.h5p` par un simple lien (h5p-offline-player + GitHub) : quand le proposer plutôt que Nuage, limites (aucun résultat prof, 25/100 Mo, bouton « Open with its own scripts » pour les types hors catalogue).
 - `references/extending-new-types.md` — méthode universelle pour tout autre type.
 - `references/lumi-packaging.md` — format `.h5p`, gabarits, import dans Lumi.

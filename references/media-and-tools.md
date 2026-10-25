@@ -10,6 +10,10 @@ Intègre une page externe (un site, une carte, un exerciseur en ligne) dans un c
 Le seul du lot qui n'a besoin d'aucun média : juste une **URL**. Idéal pour encapsuler un
 outil web dans une Page/un Book.
 
+⚠️ `width`/`height` sont un **ratio** (le cadre n'a pas de défilement), `minWidth` à 280 pour le
+téléphone, et rien ne remonte dans le score du livre. Recette complète, ratios mesurés et choix
+de la source : `references/iframe-modules.md`.
+
 ## Audio Recorder — `H5P.AudioRecorder` (1.0)  (outil, pas de contenu)
 Permet à l'élève d'**enregistrer sa voix**. Il n'y a rien à « rédiger » :
 ```json
