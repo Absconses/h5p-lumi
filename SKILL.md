@@ -6,7 +6,8 @@ description: >-
   révision, images interactives, visites virtuelles 360, contenus en onglets
   (Tabs) et tout autre type du
   catalogue H5P. À partir
-  d'un brief (sujet, public, objectif), ce skill recherche de VRAIES images
+  d'un brief (sujet, public, objectif), ce skill part du fond (ce que l'élève
+  doit comprendre et faire) pour choisir la forme, recherche de VRAIES images
   libres de droits (Wikimedia Commons), rédige un contenu adapté au public
   (programmes Eduscol par défaut), produit un JSON conforme au type de contenu,
   le VALIDE, puis assemble un fichier .h5p importable dans Lumi. Utilise ce
@@ -20,31 +21,60 @@ description: >-
 # Génération de contenu H5P pour Lumi
 
 Ce skill transforme un **brief pédagogique** en une **activité H5P fiable**, prête à
-importer dans **Lumi**. Il code en dur un savoir-faire en 5 étapes : on ne devine pas, on
-**vérifie** (images réelles, JSON valide, paquet conforme) — c'est ce qui distingue un
-contenu utilisable d'un copier-coller qui casse à l'import.
+importer dans **Lumi**. Il code en dur un savoir-faire en 6 étapes : on **part du fond**
+(ce que l'élève doit comprendre et faire) pour trouver une forme qui le sert, puis on ne
+devine pas, on **vérifie** (images réelles, JSON valide, paquet conforme).
+
+**Règle de fond : le contenu informe la forme.** La tentation d'une IA est la forme la plus
+facile à générer (QCM, accordéon, texte + quiz). Elle n'est pas interdite, mais elle doit être
+un choix justifié par le contenu, jamais un réflexe. À l'inverse, aucun habillage
+(décor, bandeau, métaphore) n'est imposé : il n'existe que s'il porte du sens.
 
 ## Ce que tu produis (livrables)
 
 1. Un `content.json` **valide** et conforme au type de contenu demandé.
 2. (Si demandé / possible) un fichier **`.h5p` importable dans Lumi**.
-3. Un court récapitulatif : type, sujet, public, sources des images + licences.
+3. Un court récapitulatif : type, sujet, public, sources des images + licences, et **une
+   phrase par activité sur pourquoi cette forme** (le lien fond → forme).
 
-## Workflow en 5 étapes
+## Workflow en 6 étapes
+
+### Étape 0 — Partir du fond (obligatoire)
+
+Avant de penser à un type H5P, lis `references/conception-fond-forme.md` et analyse le
+contenu :
+- ce que l'élève doit savoir **faire** à la fin (un verbe observable : situer, ordonner,
+  distinguer, relier, repérer, justifier, produire…) ;
+- la **nature du savoir** (chronologie, chaîne d'étapes, spatial, catégories, système en
+  couches, confusions, analyse de document, décision, procédure, lexique…) ;
+- **où les élèves se trompent** vraiment ;
+- la **situation ou l'image** que le contenu porte déjà (un lieu, un trajet, une coupe, une
+  enquête…), s'il en porte une. Sinon, n'en invente pas.
+
+Puis déduis les formes qui font faire ce verbe (tableau de la fiche). **Si la demande ne
+fixe pas le type**, présente à l'utilisateur 2 ou 3 pistes contrastées (dont au moins une
+qui n'est pas un questionnaire), chacune en quelques lignes : la forme, ce que l'élève y
+fait, la contrainte (notée ou non, Nuage ou lien). Recommande-en une, puis construis.
+**Si l'utilisateur impose un type**, respecte-le et applique l'analyse à l'intérieur (ce que
+chaque question teste, distracteurs, feedbacks).
 
 ### Étape 1 — Cadrer le brief
 
 Identifie (et complète si besoin avec l'utilisateur) :
-- **Type d'activité** H5P (frise ? QCM ? autre ?).
-- **Sujet** et **objectif pédagogique**.
-- **Public** (niveau scolaire / adultes) → détermine ton, vocabulaire, difficulté.
-- **Contraintes** (nombre d'éléments, durée, références au programme…).
+- **Sujet**, **objectif pédagogique** (le verbe de l'étape 0) et **public** (niveau scolaire
+  / adultes) → détermine ton, vocabulaire, difficulté.
+- **Usage** : autonomie ou classe, durée, besoin de suivre les résultats (Lumi Nuage +
+  types notés) ou simple lien.
+- **Contraintes** (nombre d'éléments, références au programme…).
 
-Si le type ou le public manque et que ça change le résultat, **demande** avant de produire.
+Si le public ou l'usage manque et que ça change le résultat, **demande** avant de produire.
 
 ### Étape 2 — Choisir le type et lire sa fiche
 
-Lis la fiche de référence correspondante (structure exacte + exemple) :
+Le type découle de l'étape 0. Avant de générer, passe le **contrôle anti-moindre-effort** de
+`references/conception-fond-forme.md` (§4) : le verbe est-il servi ? ai-je pris ce type parce
+qu'il est facile ? l'habillage porte-t-il du sens ? Puis lis la fiche de référence
+correspondante (structure exacte + exemple) :
 
 | Besoin | Type(s) H5P | Fiche à lire |
 |---|---|---|
@@ -133,6 +163,8 @@ sources **réelles et libres**.
 
 ## Garde-fous
 
+- Ne jamais choisir un type avant d'avoir fait l'étape 0. Une majorité de QCM / Vrai-Faux
+  doit être justifiée par le contenu (confusions à démêler, diagnostic rapide).
 - Ne jamais inventer d'URL d'image : toujours passer par `Find-WikimediaImages.ps1` + `-Validate`.
 - Toujours valider le JSON avant d'empaqueter.
 - Signaler honnêtement toute approximation (date incertaine, image illustrative non
@@ -146,6 +178,7 @@ sources **réelles et libres**.
 - `scripts/Build-H5PPackage.ps1` — assemblage du `.h5p` à partir d'un gabarit (option `-Media` pour images/sons embarqués).
 - `scripts/New-H5PShareLink.ps1` — lien cliquable vers **h5p-offline-player** pour un `.h5p` rangé dans `partage/` (dépôt public) : `-Path partage\x.h5p [-Test]`. Voir `references/partage-offline-player.md`.
 - `scripts/Graft-H5PLibraries.ps1` — greffe une bibliothèque (+ ses dépendances) d'un gabarit riche (ex. `gabarit-column.h5p`) vers un gabarit pauvre. Sert à enrichir une **Game Map** (ou une Page/un Book) avec de nouveaux types d'exercices : `-Target … -Source … -Libraries "H5P.MultiChoice-1.16",… -OutputPath …`. Reconstruit `preloadedDependencies` proprement (aucune entrée vide).
+- `references/conception-fond-forme.md` — **à lire en premier** : interroger le contenu, nature du savoir → formes qui la servent, proposer des pistes, contrôle anti-moindre-effort. Grille de réflexion, pas gabarit.
 - `references/timeline.md` — structure + exemple de frise.
 - `references/question-multichoice.md` — QCM (MultiChoice) + squelette du Quiz (QuestionSet).
 - `references/quiz-family.md` — Vrai/Faux, Choix unique, Texte à trous, Marquer/Glisser les mots, Summary.
