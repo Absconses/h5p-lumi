@@ -106,4 +106,11 @@ d'images, 7 Mo après allègement, sans différence visible.
 - Les liens pointent vers `main` : ils ne marchent qu'une fois la PR fusionnée (pour tester avant,
   construire une variante qui pointe vers la branche).
 
-Exemple complet : `partage/wiki-1h/` (5 modules) et le livre « Wikipédia en 1 heure » v2.
+Exemple complet, validé par Pierre dans Lumi : `partage/wiki-1h/` (5 modules) et le livre
+« Wikipédia en 1 heure » v2. Scripts dans `assets/examples/wiki-1h/` :
+- `fix_modules.py` corrige des modules récupérés par `Get-LumiRun.py` (titres, l10n FR,
+  consignes) et les remballe ;
+- `build_v2.py` reconstruit le livre en clonant les params réels : fonctions `module()`
+  (consigne + cadre + lien « Ouvrir en grand »), `iframe()`, `scs()`, `dragtext()`, `mc()`,
+  puis déclare la closure des bibliothèques dans `h5p.json` (sans elle, un type ajouté comme
+  Single Choice Set ne se charge pas).
