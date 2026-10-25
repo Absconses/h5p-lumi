@@ -92,6 +92,10 @@ sources **réelles et libres**.
   professionnelle pour les adultes. Adapte si l'utilisateur précise un autre cadre.
 - **Feedback constructif** : consignes et remarques encourageantes, tournées vers
   l'apprentissage (surtout dans les quiz : explique *pourquoi* une réponse est fausse).
+- **Distracteurs intelligents** : chaque mauvaise réponse d'un QCM repose sur une erreur
+  qu'un élève fait vraiment (mot confondu, idée reçue, vérité partielle mal conclue…), et son
+  retour nomme le piège. Pas de distracteur absurde. Détails et champ à remplir selon le type :
+  `references/question-multichoice.md` > « Distracteurs intelligents ».
 - **Pas d'indice involontaire (« tell »)** : dans les questions à choix, toutes les réponses
   doivent se ressembler (style ET longueur comparables). NE mets JAMAIS de gras/italique — ni
   une formulation plus longue/précise — uniquement sur la **bonne** réponse : ce serait trop
