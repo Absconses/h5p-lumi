@@ -52,7 +52,13 @@ Solution s'ajoutent en bas), puis prévoir large : le thème de l'offline player
 navigateur grossissent les cartes. Ratios retenus (largeur 1000), testés par Pierre :
 Personality Quiz 4 réponses en images 1000/1200 · Image Sequencing 8 images 1000/950 ·
 Sort the Paragraphs 7 cartes 1000/1700 · Image Multiple Hotspot (capture pleine page)
-1000/1400 · Crossword 8 mots 1000/1000 · vidéo 16:9 1600/900. Un bouton absent en bas du cadre
+1000/1400 · Crossword 8 mots 1000/1000 · vidéo 16:9 1600/900.
+Livre « Mon identité numérique » (octobre 2026, `assets/examples/identite-numerique/`) :
+Impressive Presentation 1000/650 · Virtual Tour 360 1000/620 · GeoQuiz monde 1000/650 ·
+Grid Checker 7 lignes 1000/600 · Tabs (4 onglets, image 2:1 + QCM) 1000/1150 ·
+Personality Quiz sans images 1000/620 · Sort the Paragraphs 5 cartes 1000/1250 ·
+Crossword 9 mots 1000/1000. Par lien, **Impressive Presentation, GeoQuiz, Tabs, Grid Checker et
+Personality Quiz** affichent d'abord « Open with its own scripts » (testé) : le dire dans la consigne. Un bouton absent en bas du cadre
 est presque toujours coupé, pas désactivé (Sort the Paragraphs n'affiche pas « Réessayer » si
 le score est parfait).
 
