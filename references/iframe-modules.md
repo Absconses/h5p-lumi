@@ -68,6 +68,16 @@ vidéo 16:9 1600/900.
 | Digiquiz | Hébergement gratuit | Beaucoup de types manquent ; moins fiable |
 | Vidéo (Digiview, YouTube nocookie) | Rien à héberger | Ratio 16:9 |
 
+### Offline player dans un cadre : le service worker
+
+Le lecteur a besoin d'un *service worker*. Dans une page web normale (Nuage, ENT, autre site),
+il démarre bien dans le cadre (testé : les 5 modules de `partage/wiki-1h/` s'affichent).
+Si le navigateur bloque les stockages « tiers » (réglage strict, certains Chromebooks gérés), le
+cadre affiche « This browser does not run the player inside another site's page. Open it on its
+own. » : c'est exactement pour ce cas que le lien « Ouvrir l'activité en grand » est obligatoire
+sous chaque cadre. Les rendus de test peuvent aussi rester blancs quand le cadre est chargé dans
+une page `about:blank` : tester depuis une vraie URL `http://`.
+
 ## Récupérer un module déjà publié sur Lumi Nuage
 
 `scripts/Get-LumiRun.py` reconstruit un `.h5p` autonome à partir d'un lien run public :
