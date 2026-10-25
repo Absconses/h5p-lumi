@@ -62,6 +62,25 @@ Diaporama interactif : `presentation.slides[]`, chaque slide ayant des `elements
 Comme les diapos sont **positionnées au pixel**, la mise en page est bien plus simple **dans
 Lumi**. Le skill peut générer les contenus ; le placement se peaufine ensuite.
 
+### Course Presentation **dans un Interactive Book** (testé, exemple `assets/examples/journalisme-ia/`)
+La Column 1.18 accepte `H5P.CoursePresentation 1.26` : un livre peut **découper chaque chapitre**
+en 3 à 5 diapos, puis enchaîner sur une activité notée native. Règles qui marchent :
+- **Échelle** : le canevas 16:9 garde ses proportions ; `1em` = 16 px pour 640 px de large (≈ 20 px
+  dans un livre sur ordinateur, ≈ 10 px sur téléphone). Texte ≥ 1.3em, titres ≈ 2em, ~40 mots par
+  diapo au plus. Sur téléphone, c'est petit : à réserver à l'ordinateur, au Chromebook ou à la tablette.
+- `x`, `y`, `width`, `height` en **% du canevas**. Une image est **étirée** à sa boîte : hauteur =
+  `largeur × 16/9 × h/w` de l'image (fabrique `pic` de `cp.mjs`).
+- La CP centre le texte : envelopper chaque bloc dans `<div style="text-align:left">`.
+- `keywordListEnabled: false` (le menu latéral mange un tiers de la largeur) et
+  `override.hideSummarySlide: true` (le livre fait déjà le bilan des scores).
+- Couleur de fond : `presentation.globalBackgroundSelector.fillGlobalBackground`, et
+  `slideBackgroundSelector: {}` sur chaque diapo (aucun champ image vide).
+- Une question dans une diapo (Vrai/Faux, QCM…) est **notée et remonte au livre** ; garder les
+  activités longues (Drag Text, Drag and Drop, Mark the Words, Essay) **hors de la CP**, dans la
+  page, où elles restent lisibles.
+- Ce qui donne du sens à la CP : une **logique de diapos** propre au contenu (un trajet avec une
+  frise qui avance, une histoire heure par heure, une comparaison), pas un découpage arbitraire.
+
 ## Cornell Notes — `H5P.Cornell` (0.3)  (outil de prise de notes)
 Grille de **prise de notes selon la méthode Cornell** : une **source** à lire + 3 zones que
 l'élève remplit (mots-clés, notes, résumé). `mainLibrary=H5P.Cornell` → **pas d'enveloppe Column**.
