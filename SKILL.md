@@ -63,7 +63,7 @@ Lis la fiche de référence correspondante (structure exacte + exemple) :
 | **Médias & outils** : Iframe Embedder · Audio Recorder · Documentation Tool · Interactive Video · Course Presentation | voir fiche | `references/media-and-tools.md` |
 | **Onglets** : une page par onglet (texte, médias, exercices notés), consultables dans n'importe quel ordre | `H5P.Tabs` | `references/tabs.md` |
 | **Visite virtuelle 360** : photos 360° reliées, points d'intérêt (texte, image, quiz) | `H5P.ThreeImage` | `references/virtual-tour.md` |
-| **Quiz sur carte** : « Où se trouve… ? », clic sur une carte (villes notées à la distance, pays) | `H5P.GeoQuiz` | `references/geoquiz.md` |
+| **Quiz sur carte** : « Où se trouve… ? », clic sur une carte (villes notées à la distance, pays) | `H5P.GeoQuizFix` (GeoQuiz patché) | `references/geoquiz.md` |
 | **Tout autre type** (Dictation, Branching Scenario…) | variable | `references/extending-new-types.md` |
 
 Le catalogue Lumi est vaste : **n'importe quel type** se traite via la méthode décrite dans
