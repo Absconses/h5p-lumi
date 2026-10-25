@@ -42,7 +42,7 @@ ch.push(chapter('Avant de commencer', [
     + '<li>suivre le voyage de tes données ;</li><li>apprendre à reprendre la main, et à faire retirer une photo.</li></ul>'
     + "<p><strong>Comment ça marche ?</strong> Certaines activités s'ouvrent dans un cadre : elles servent à t'entraîner et ne comptent pas dans ton score. Les questions en dessous, elles, comptent.</p>", 'Objectifs'),
   ...module('quiz-internaute.h5p', 1000, 620, 'Questionnaire : quel internaute es-tu ?',
-    'Pour commencer : quel internaute es-tu ? Il n\'y a ni bonne ni mauvaise réponse.'),
+    'Pour commencer : quel internaute es-tu ? Il n\'y a ni bonne ni mauvaise réponse.', { scripts: true }),
 ]));
 
 const L = { montre: 'Ce que je montre', autres: 'Ce que les autres publient sur moi', applis: 'Ce que les applis enregistrent', algo: 'Ce que les algorithmes devinent' };
