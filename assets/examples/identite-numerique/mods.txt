@@ -1,0 +1,8 @@
+iceberg|../tpl/impresspresentation|H5P.ImpressPresentation 1.0|/home/user/h5p-lumi/assets/templates/gabarit-impresspresentation.h5p|L’iceberg de mon identité numérique|--slim
+quiz-internaute|../wk/quiz-rapport-wikipedia|H5P.PersonalityQuiz 1.1|/home/user/h5p-lumi/partage/wiki-1h/quiz-rapport-wikipedia.h5p|Quel internaute es-tu ?|
+qui-voit-quoi|../tpl/gridchecker|H5P.GridChecker 1.0|../gc.h5p|Qui peut voir quoi ?|--slim
+journee-de-traces|../tpl/virtualtour|H5P.ThreeImage 0.5|/home/user/h5p-lumi/assets/templates/gabarit-virtualtour.h5p|Une journée de traces|--slim
+voyage-donnees|../tpl/geoquiz|H5P.GeoQuiz 1.1|/home/user/h5p-lumi/assets/templates/gabarit-geoquiz.h5p|Où voyagent mes données ?|--slim
+reprendre-la-main|../tpl/tabs|H5P.Tabs 1.1|/home/user/h5p-lumi/assets/templates/gabarit-tabs.h5p|Reprendre la main|--slim
+retirer-une-photo|../wk/edition-collaborative|H5P.SortParagraphs 0.11|/home/user/h5p-lumi/partage/wiki-1h/edition-collaborative.h5p|Faire retirer une photo|
+mots-croises-identite|../wk/mots-croises-wikipedia|H5P.Crossword 0.5|/home/user/h5p-lumi/partage/wiki-1h/mots-croises-wikipedia.h5p|Les mots de l’identité numérique|
