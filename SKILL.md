@@ -198,4 +198,9 @@ sources **réelles et libres**.
 - `references/lumi-packaging.md` — format `.h5p`, gabarits, import dans Lumi.
 - `assets/lib/impress-factories.mjs` — fabriques Node pour Impressive Presentation (`station`, `textView`, `depth`, `layouts`, `overview`, `validate`).
 - `assets/examples/impresspresentation-exemple.content.json` — content.json de l'exemple officiel (référence de structure).
+- `assets/examples/vitrine-emi/` — livre **vitrine** « S'informer, vérifier, publier » (EMI, cycle 4) :
+  18 chapitres, **un type H5P différent par chapitre** (dont Interactive Video fabriquée, Agamotto,
+  Branching Scenario, Documentation Tool avec export Word, Timeline, Dialog Cards), chacun précédé
+  d'une *fiche technique* pour l'adulte (type, apport, noté ou non). Modèle à reprendre pour
+  présenter le skill à une direction ou en formation.
 - `assets/templates/` — y déposer les gabarits `.h5p` exportés de Lumi.
