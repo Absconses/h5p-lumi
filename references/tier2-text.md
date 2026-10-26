@@ -113,6 +113,9 @@ filtrables : chaque panneau a une image (optionnelle) + un titre + des **entrée
 ```
 `entries[]` s'aligne **par index** avec `properties[]`. Images optionnelles (`decorative:true`
 sans fichier, ou ajoutées dans Lumi).
+⚠️ **Vérifié (InfoWall 0.4, octobre 2026)** : le lecteur **n'affiche pas** `panelTitle`. Pour voir le nom
+de chaque panneau, en faire la **première propriété** (`showLabel:false`, `styling.bold:true`) et la
+répéter dans `entries[0]`. Exemple : `assets/examples/vitrine-emi-2/` (boîte à outils du vérificateur).
 
 ## Texte à trous avancé — `H5P.AdvancedBlanks`  (module « Complex fill the blanks »)
 

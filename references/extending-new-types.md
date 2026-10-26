@@ -64,3 +64,15 @@ Certains gros types (Course Presentation, Interactive Book) embarquent déjà de
 bibliothèques (MultiChoice, TrueFalse, Blanks, DragText, DialogCards, Summary, Table…).
 Si tu disposes d'un tel gabarit, tu peux lire le `semantics.json` de ces sous-types sans
 réexporter quoi que ce soit.
+
+## Raccourci Node : paramètres par défaut en français
+
+`assets/examples/vitrine-emi-2/defaults.mjs` construit l'objet `params` complet d'un type à partir
+de son `semantics.json` **et** de son `language/fr.json` (présent dans la plupart des bibliothèques) :
+tous les libellés sont déjà en français, on ne surcharge que le contenu (`lib('H5P.Blanks 1.14', dossier, {…})`).
+Deux règles de la correspondance semantics → content.json, vérifiées à l'exécution :
+
+- un **groupe à un seul champ est « déplié »** : la valeur du champ remplace le groupe
+  (`GuessTheAnswer.media` = directement le sous-contenu `H5P.Image`) ;
+- un groupe **optionnel mais lu sans test** par le code doit quand même exister
+  (`SimpleMultiChoice.alternatives[].feedback`, sinon le livre entier plante).

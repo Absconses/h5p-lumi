@@ -57,5 +57,6 @@ Comme des cartes, mais l'élève **tape** la réponse, qui est ensuite vérifié
 
 **Différence clé** : *Dialog Cards* = on retourne pour mémoriser (vocabulaire, définitions) ;
 *Flashcards* = on tape une réponse exacte (dates, mots précis). Pour ajouter une image à une
-carte, il faut un fichier embarqué (objet `image` avec `path`/`mime`) — par défaut, on s'en
-passe pour rester en texte simple.
+carte, il faut un fichier embarqué (objet `image` avec `path`/`mime`). ⚠️ **Vérifié (Flashcards 1.7)** :
+sans image, le lecteur affiche une **vignette grise vide** sur chaque carte ; donner une image à chaque
+carte (photo 4:3 sans indice de la réponse), cf. `assets/examples/vitrine-emi-2/`.

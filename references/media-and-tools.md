@@ -131,6 +131,10 @@ L'élève **écoute** une phrase et l'**écrit** ; correction automatique. `main
   "behaviour": { "scoring": { "ignorePunctuation":true }, "shuffleSentences":"never", "enableRetry":true, "enableSolutionsButton":true }, "l10n": { "checkAnswer":"Vérifier","…":"" }, "a11y": { "play":"Lecture","playSlowly":"Lecture lente","…":"" } }
 ```
 `sample` = audio normal, `sampleAlternative` = bouton « lecture lente ». ⚠️ Les audios vont dans **`content/audios/`** → empaqueter avec **`-Audio`** (pas `-Media`).
+🎙️ **Depuis un conteneur cloud (Linux, sans voix système)** : la synthèse Google répond
+(`https://translate.google.com/translate_tts?ie=UTF-8&tl=fr&client=tw-ob&q=<phrase encodée>`, ≤ 200 caractères,
+mp3) ; version lente : `ffmpeg -i p1.mp3 -filter:a atempo=0.72 p1-lent.mp3`. `edge-tts` échoue derrière le
+proxy TLS. Exemple : `assets/examples/vitrine-emi-2/` (dictée de la brève).
 🎙️ **AUDIO GÉNÉRABLE PAR LE SKILL** : Windows a la voix française **Hortense** (`System.Speech`, cf. `make-dictee-audio.ps1`) → dictée **100 % auto** (texte + voix). Démo : `dictee-emi.h5p`.
 
 ---
