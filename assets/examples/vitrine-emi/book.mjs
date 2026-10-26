@@ -409,11 +409,28 @@ ch.push(chapter('17. Ce que je retiens', [
 const book = { ...base, chapters: ch };
 book.showCoverPage = true;
 book.bookCover = {
-  coverDescription: '<p style="text-align:center"><strong>S\'informer, vérifier, publier</strong></p>'
-    + '<p style="text-align:center">L\'éducation aux médias et à l\'information en dix-huit chapitres, chacun bâti sur un type d\'activité interactive différent.</p>'
+  coverDescription: '<p style="text-align:center">L\'éducation aux médias et à l\'information en dix-huit chapitres, chacun bâti sur un type d\'activité interactive différent.</p>'
     + '<p style="text-align:center;font-size:0.9em">Cycle 4 · CDI</p>',
   coverMedium: image('images/cadrage-3-large.jpg', 1200, 800, 'Une foule de visiteurs photographie la Joconde au Louvre.', 'Couverture', PX('Foundry')),
 };
+// libellés d'interface en français (le gabarit est en anglais)
+Object.assign(book, {
+  read: 'Commencer', displayTOC: 'Afficher le sommaire', hideTOC: 'Masquer le sommaire',
+  nextPage: 'Chapitre suivant', previousPage: 'Chapitre précédent', chapterCompleted: 'Chapitre terminé !',
+  partCompleted: '@pages chapitres sur @total terminés', incompleteChapter: 'Chapitre non terminé',
+  navigateToTop: 'Revenir en haut', markAsFinished: "J'ai terminé ce chapitre",
+  fullscreen: 'Plein écran', exitFullscreen: 'Quitter le plein écran',
+  bookProgressSubtext: '@count chapitres sur @total', interactionsProgressSubtext: '@count activités sur @total',
+  submitReport: 'Envoyer mes résultats', restartLabel: 'Recommencer', summaryHeader: 'Bilan',
+  allInteractions: 'Toutes les activités', unansweredInteractions: 'Activités sans réponse',
+  scoreText: '@score / @maxscore', leftOutOfTotalCompleted: '@left activités terminées sur @max',
+  noInteractions: 'Aucune activité', score: 'Score', summaryAndSubmit: 'Bilan et envoi',
+  noChapterInteractionBoldText: "Tu n'as encore fait aucune activité.",
+  noChapterInteractionText: 'Fais au moins une activité avant de voir ton bilan.',
+  yourAnswersAreSubmittedForReview: 'Tes réponses ont été envoyées.',
+  bookProgress: 'Progression dans le livre', interactionsProgress: 'Activités terminées', totalScoreLabel: 'Score total',
+  a11y: { progress: 'Chapitre @chapter sur @total.', menu: 'Afficher ou masquer le sommaire.' },
+});
 book.behaviour = { ...base.behaviour, baseColor: '#1d3557', defaultTableOfContents: true, progressIndicators: true, progressAuto: true, displaySummary: true };
 fs.writeFileSync(OUT, JSON.stringify(book));
 console.log('livre :', ch.length, 'chapitres');
