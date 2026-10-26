@@ -32,6 +32,16 @@ Assistant multi-pages avec **export texte** (fiche-méthode, carnet de bord). Co
 → Pour la structure exacte des pages, lire le `semantics.json` de `H5P.StandardPage` dans le
 gabarit (méthode `extending-new-types.md`).
 
+**Vérifié (octobre 2026, `assets/examples/vitrine-emi/`, fiche d'enquête en 5 pages) :**
+- une `H5P.StandardPage 1.5` contient une `elementList` de `H5P.Text 1.1` (la consigne) et de
+  `H5P.TextInputField 1.2` (les champs) ;
+- `inputFieldSize` n'accepte que **`'1'`, `'3'` ou `'10'`** (lignes) — toute autre valeur est refusée ;
+- `requiredField:true` bloque la création du document tant que le champ est vide ;
+- la page d'export (`H5P.DocumentExportPage 1.5`) doit être **le dernier élément** de `pagesList` ;
+  elle produit un **document Word** téléchargeable, donc une trace écrite à rendre ou à imprimer ;
+- ⚠️ le gabarit `gabarit-interactivebook.h5p` ne contient PAS `DocumentExportPage` : pour un livre
+  avec export, empaqueter avec **`gabarit-interactivebook-reporter.h5p`**.
+
 ## Interactive Video — `H5P.InteractiveVideo` (1.27)  (nécessite une vidéo)
 Vidéo enrichie d'interactions **chronométrées** (quiz qui apparaissent à un instant T).
 Structure : `interactiveVideo.{ video:{files…}, assets:{interactions:[…]}, summary }`.
@@ -52,6 +62,15 @@ Structure : `interactiveVideo.{ video:{files…}, assets:{interactions:[…]}, s
 `from` = seconde d'apparition ; `pause:true` met la vidéo en pause. ⚠️ Comme tous les types du
 gabarit-maître, **envelopper dans une Column**. Le calage exact (secondes, position) se peaufine
 dans Lumi. ✅ Validé : `video-interactive-demo.h5p`.
+
+**Vidéo embarquée et fabriquée (octobre 2026, `assets/examples/vitrine-emi/`)** : quand aucune vidéo
+libre ne dit ce qu'on veut montrer, on peut en **fabriquer une** : une page HTML animée, enregistrée
+par Playwright (`recordVideo`), puis convertie par ffmpeg. Deux règles :
+- livrer le **mp4 (H.264) ET le webm** dans `files` : le Chromium de test ne lit pas le H.264 ;
+- empaqueter les vidéos sous `videos/…` **sans compression** (`ZIP_STORED`) : voir `packbook.py`
+  de l'exemple. Pour le rendu de test, le petit serveur doit répondre aux requêtes `Range`,
+  sinon la vidéo ne démarre pas.
+Poster : `video.startScreenOptions.poster` + `hideStartTitle:true` si le titre est déjà dans l'image.
 
 ## Course Presentation — `H5P.CoursePresentation` (1.26)  (diapos positionnées)
 Diaporama interactif : `presentation.slides[]`, chaque slide ayant des `elements[]` placés en

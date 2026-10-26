@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{width:1280px;height:720px;overflow:hidden;background:#1d3557;font-family:"DejaVu Sans",Arial,sans-serif}
+#title{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;color:#ffffff;z-index:5;background:#1d3557;transition:opacity .8s}
+#title h1{font-size:54px;margin-bottom:18px}
+#title p{font-size:26px;color:#cfe0f5}
+#phone{position:absolute;left:150px;top:20px;width:420px;height:680px;border-radius:38px;background:#111111;padding:14px}
+#screen{position:relative;width:392px;height:652px;border-radius:26px;overflow:hidden;background:#eef0f3}
+#bar{position:absolute;top:0;left:0;right:0;height:48px;background:#ffffff;z-index:2;display:flex;align-items:center;padding:0 16px;font-weight:bold;font-size:18px;color:#1d3557;border-bottom:1px solid #dddddd}
+#bar span{margin-left:auto;font-weight:normal;font-size:14px;color:#888888}
+#feed{position:absolute;top:48px;left:0;right:0;transition:transform 1.1s ease-in-out}
+.post{background:#ffffff;margin:10px 0;padding:12px 14px}
+.head{display:flex;align-items:center;gap:10px}
+.av{width:42px;height:42px;border-radius:50%;color:#ffffff;font-weight:bold;display:flex;align-items:center;justify-content:center;font-size:17px;flex:none}
+.name{font-weight:bold;font-size:15px;color:#222222}
+.meta{font-size:12.5px;color:#777777}
+.tag{font-size:12.5px;color:#555555;margin-top:6px}
+.txt{font-size:15.5px;line-height:1.38;color:#222222;margin:9px 0}
+.img{width:364px;height:205px;object-fit:cover;border-radius:8px;display:block}
+.link{font-size:12.5px;color:#666666;background:#f2f2f2;padding:6px 8px;border-radius:0 0 8px 8px}
+.foot{display:flex;gap:22px;font-size:13px;color:#666666;margin-top:9px}
+#right{position:absolute;left:640px;top:0;width:600px;height:720px;color:#ffffff;display:flex;flex-direction:column;justify-content:center}
+#right .n{font-size:22px;color:#a8c5e8;margin-bottom:10px}
+#right .q{font-size:34px;line-height:1.3}
+#end{position:absolute;inset:0;background:#1d3557;color:#ffffff;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;opacity:0;transition:opacity .8s;z-index:6;padding:0 120px}
+#end h2{font-size:40px;margin-bottom:20px}
+#end p{font-size:26px;color:#cfe0f5;line-height:1.4}
+</style></head><body>
+<div id="title"><h1>Mon fil d'actualité</h1><p>Mercredi, 17 h 42. Cinq messages, cinq natures différentes.</p></div>
+<div id="phone"><div id="screen">
+ <div id="bar">Fil d'actu<span>17:42</span></div>
+ <div id="feed">
+  <div class="post"><div class="head"><div class="av" style="background:#2a6f97">CM</div><div><div class="name">Le Courrier de Montval ✔</div><div class="meta">@courrier_montval · 2 h</div></div></div>
+   <div class="txt">Travaux : l’avenue Jean-Jaurès sera fermée aux voitures du 3 au 5 novembre. La mairie met en place une navette gratuite et une déviation par le boulevard du Lac.<br><span style="color:#777777">Par Julie Marchand</span></div>
+   <img class="img" src="travaux.jpg"><div class="link">courrier-montval.fr · Article complet</div>
+   <div class="foot"><span>♡ 214</span><span>💬 37</span><span>↻ 52</span></div></div>
+  <div class="post"><div class="head"><div class="av" style="background:#d1495b">L</div><div><div class="name">Léa ✨</div><div class="meta">@lea.style · 4 h</div></div></div>
+   <div class="tag">Partenariat rémunéré avec Pas de Loup</div>
+   <div class="txt">Mes nouvelles baskets préférées 😍 ultra confortables pour la rentrée ! Avec mon code LEA15, profitez de -15 % 👟</div>
+   <img class="img" src="baskets.jpg">
+   <div class="foot"><span>♡ 18 k</span><span>💬 940</span><span>↻ 1,2 k</span></div></div>
+  <div class="post"><div class="head"><div class="av" style="background:#edae49">TR</div><div><div class="name">Tonton Râleur</div><div class="meta">@tonton_raleur · 5 h</div></div></div>
+   <div class="txt">Vu « Galaxie 9 » hier soir. Franchement, le pire film de l'année : scénario vide, deux heures d'ennui. Ne gaspillez pas votre argent.</div>
+   <img class="img" src="cinema.jpg">
+   <div class="foot"><span>♡ 321</span><span>💬 88</span><span>↻ 12</span></div></div>
+  <div class="post"><div class="head"><div class="av" style="background:#000000">!!</div><div><div class="name">INFO CHOC 24</div><div class="meta">@info_choc_24 · 12 min</div></div></div>
+   <div class="txt">🚨 URGENT : les écrans font perdre la mémoire des ados en 3 mois, et les médecins le CACHENT !!! Partagez avant que ce soit supprimé ‼️</div>
+   <img class="img" src="ecrans.jpg">
+   <div class="foot"><span>♡ 9,8 k</span><span>💬 2,1 k</span><span>↻ 15 k</span></div></div>
+  <div class="post"><div class="head"><div class="av" style="background:#00798c">🦆</div><div><div class="name">Le Canard Sérieux</div><div class="meta">@canard_serieux · 1 j</div></div></div>
+   <div class="tag">Site d'actualité parodique</div>
+   <div class="txt">Un collégien termine ses devoirs avant 22 h : la communauté scientifique sous le choc.</div>
+   <img class="img" src="devoirs.jpg">
+   <div class="foot"><span>♡ 45 k</span><span>💬 3,4 k</span><span>↻ 8,7 k</span></div></div>
+  <div style="height:400px"></div>
+ </div>
+</div></div>
+<div id="right"><div class="n" id="num"></div><div class="q" id="q"></div></div>
+<div id="end"><h2>Dans un fil, tout a la même forme.</h2><p>Même taille, même police, mêmes boutons « J'aime ».<br>C'est à toi de repérer la nature de chaque message.</p></div>
+<script>
+const feed=document.getElementById('feed');
+const posts=[...document.querySelectorAll('.post')];
+const say=(n,q)=>{document.getElementById('num').textContent=n;document.getElementById('q').textContent=q;};
+const go=(i)=>{const p=posts[i];const y=p.offsetTop-(604-p.offsetHeight)/2;feed.style.transform=`translateY(${-Math.max(0,y)}px)`;};
+// calendrier (s) : titre 0-3, puis 5 posts de 7 s (1 s de défilement + 6 s de pause), fin à 38 s
+const T=[];const at=(s,f)=>T.push(setTimeout(f,s*1000));
+window.start=()=>{
+ at(2.4,()=>{document.getElementById('title').style.opacity=0;});
+ for(let i=0;i<5;i++){
+  at(3+i*7,()=>{go(i);say('',' ');});
+  at(4.2+i*7,()=>say(`Message ${i+1} sur 5`,'Information, publicité, opinion, rumeur ou parodie ?'));
+ }
+ at(38,()=>{document.getElementById('end').style.opacity=1;});
+};
+go(0);
+</script>
+</body></html>
