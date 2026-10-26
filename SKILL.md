@@ -203,4 +203,10 @@ sources **réelles et libres**.
   Branching Scenario, Documentation Tool avec export Word, Timeline, Dialog Cards), chacun précédé
   d'une *fiche technique* pour l'adulte (type, apport, noté ou non). Modèle à reprendre pour
   présenter le skill à une direction ou en formation.
+- `assets/examples/vitrine-emi-2/` — **tome 2** de la vitrine (22 chapitres, les 28 autres types
+  fiables : Image Juxtaposition, Multimedia Choice, Collage, Image Pairing, Image Slider, Image Hotspots,
+  Find the Hotspot, Dictation, Audio Recorder, Speak the Words, Questionnaire, Guess the Answer, Chart,
+  Arithmetic Quiz, Advanced Blanks, Memory Game, Flashcards, Find the Words, Information Wall, KewAr Code,
+  Game Map, Cornell Notes, Structure Strip, Essay, Question Set…) ; `defaults.mjs` génère les paramètres
+  français d'un type depuis `semantics.json` + `language/fr.json`.
 - `assets/templates/` — y déposer les gabarits `.h5p` exportés de Lumi.

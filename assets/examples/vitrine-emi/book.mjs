@@ -55,6 +55,7 @@ ch.push(chapter('Avant-propos : à l\'attention de la direction', [
     + 'utilisable tel quel avec une classe de 4e ou de 3e.</p>'
     + '<p>Le fil conducteur suit le trajet d\'une information : <strong>la recevoir</strong> (chapitres 1 à 6), <strong>la vérifier</strong> (7 à 12), '
     + 'puis <strong>la partager et protéger ses données</strong> (13 à 17).</p>'
+    + `<p>Un <strong>tome 2</strong>, <a href="${PLAYER}${RAW}/vitrine-emi-2/livre-vitrine-emi-2.h5p" target="_blank" rel="noopener"><em>« Regarder, écouter, écrire »</em></a>, présente les vingt-huit autres types d'activités.</p>`
     + '<p><strong>Comment lire ce livre ?</strong> Chaque chapitre s\'ouvre sur une <span style="background-color:#eef2f7">&nbsp;fiche technique&nbsp;</span> '
     + 'destinée à l\'adulte : le type d\'activité, ce qu\'il apporte, et où il fonctionne. La suite s\'adresse aux élèves.</p>', 'Présentation'),
   sub('H5P.Accordion 1.0', {
