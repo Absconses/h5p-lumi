@@ -125,7 +125,7 @@ save('sigles', merge(tpl('flashcards'), {
 
 /* 8. Find the Words : mots cachés ----------------------------------------------------------------- */
 save('mots-caches', merge(tpl('findthewords'), {
-  taskDescription: 'Retrouve dans la grille dix mots de l\'information (sans accents).',
+  taskDescription: '', // bug FindTheWords 1.4 : la grille ne répond plus si elle est trop bas dans la page (consigne dans le livre)
   wordList: 'source,depeche,chapo,legende,credit,rumeur,radio,podcast,antenne,journal',
   behaviour: { fillPool: 'abcdefghijklmnopqrstuvwxyz', preferOverlap: true, showVocabulary: true, enableShowSolution: true, enableRetry: true },
   l10n: { check: 'Vérifier', tryAgain: 'Recommencer', showSolution: 'Voir la solution', found: '@found mots trouvés sur @totalWords', timeSpent: 'Temps passé', score: 'Tu as trouvé @score mot(s) sur @total', wordListHeader: 'Les mots à trouver' },
@@ -212,14 +212,14 @@ const stage = (label, cx, cy, neighbors, contents, extra = {}) => ({
 const stages = [
   stage('Le port : une photo choc', 10, 76, [1], [text('<p><strong>Mercredi, 18 h.</strong> Une photo circule dans tous les groupes : « Le gymnase du collège inondé, plus de sport jusqu\'en juin ! » Radio JM veut en parler jeudi. Avant, l\'équipe doit faire escale sur chaque île de l\'archipel.</p><p>Clique sur l\'île de la Source pour commencer.</p>', 'Départ')], { canBeStartStage: true }),
   stage('Île de la Source', 28, 45, [0, 2], [mc('La photo a été publiée en premier par le compte « @info_choc_77 », créé il y a trois jours, sans nom ni contact. Que peut-on en dire ?', [
-    { t: 'On ne sait pas qui est derrière : la source n\'est pas identifiable, il faut chercher ailleurs.', ok: true },
-    { t: 'Le compte a beaucoup d\'abonnés, donc il est fiable.', fb: 'Le nombre d\'abonnés ne dit rien de la fiabilité : il s\'achète, et une infox en attire beaucoup.' },
-    { t: 'Le nom contient « info » : c\'est un média.', fb: 'N\'importe qui peut mettre « info » dans un pseudo. Un média se présente : nom, adresse, responsables.' },
+    { t: 'On ne sait pas qui tient ce compte : il faut chercher ailleurs.', ok: true },
+    { t: 'Le compte a beaucoup d\'abonnés : il est donc sûrement fiable.', fb: 'Le nombre d\'abonnés ne dit rien de la fiabilité : il s\'achète, et une infox en attire beaucoup.' },
+    { t: 'Le nom du compte contient « info » : c\'est donc un vrai média.', fb: 'N\'importe qui peut mettre « info » dans un pseudo. Un média se présente : nom, adresse, responsables.' },
   ], 'La source')]),
   stage('Île de la Date', 47, 71, [1, 3], [tf('La recherche montre que cette photo a été publiée pour la première fois en 2019. Elle peut quand même montrer le gymnase cette semaine.', false,
     'Exact : si la photo existe depuis 2019, elle ne peut pas montrer ce qui se passe cette semaine.', 'Une photo publiée en 2019 ne peut pas montrer un événement de cette semaine : elle est sortie de son contexte.', 'La date')]),
   stage('Île de l\'Image', 61, 31, [2, 4], [mc('Quel outil permet de retrouver où et quand une photo a déjà été publiée ?', [
-    { t: 'Une recherche d\'image inversée (TinEye, Google Lens…).', ok: true },
+    { t: 'Une recherche d\'image inversée (TinEye).', ok: true },
     { t: 'Un zoom sur la photo pour voir les détails.', fb: 'Zoomer aide à observer, mais ne dit pas où la photo a déjà circulé.' },
     { t: 'Le nombre de partages de la photo.', fb: 'Le nombre de partages mesure la viralité, pas l\'origine.' },
   ], 'L\'image')]),

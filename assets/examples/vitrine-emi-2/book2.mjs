@@ -83,8 +83,8 @@ ch.push(chapter('1. Avant, après : une photo retouchée', [
     { t: 'La lumière : la scène paraît ensoleillée.', ok: true, fb: '' },
     { t: 'Les couleurs : elles sont plus chaudes et plus vives.', ok: true },
     { t: 'L\'ambiance : on croirait qu\'il fait beau, alors qu\'il pleuvait.', ok: true },
-    { t: 'Des passants ont été ajoutés dans la rue.', fb: 'Regarde bien : les personnes sont les mêmes. La retouche ici ne touche que la lumière et les couleurs.' },
-    { t: 'Rien d\'important : ce n\'est qu\'un filtre.', fb: 'Un « simple » filtre change la météo apparente : il raconte autre chose que la réalité du jour.' },
+    { t: 'Les personnes : des passants ont été ajoutés dans la rue.', fb: 'Regarde bien : les personnes sont les mêmes. La retouche ici ne touche que la lumière et les couleurs.' },
+    { t: 'Rien d\'important : c\'est la même photo, avec un filtre.', fb: 'Un « simple » filtre change la météo apparente : il raconte autre chose que la réalité du jour.' },
   ], 'Ce que la retouche change', { type: 'multi', ok: 'Oui : sans rien ajouter, un filtre change le récit de la photo.' }),
   retiens('Une retouche peut changer l\'impression sans rien ajouter ni effacer. En France, depuis 2017, une photo publicitaire dont on a modifié la silhouette d\'un mannequin doit porter la mention « photographie retouchée ».'),
 ]));
@@ -130,7 +130,7 @@ ch.push(chapter('3. Un lieu, quatre récits', [
     { t: 'Le point de vue : de près, de loin, d\'en bas.', ok: true },
     { t: 'La lumière et les couleurs : coucher de soleil, noir et blanc…', ok: true },
     { t: 'Ce que le photographe choisit de montrer : la foule, la ville, le ciel.', ok: true },
-    { t: 'Le monument lui-même.', fb: 'Non : c\'est toujours la même tour. C\'est le regard du photographe qui change.' },
+    { t: 'Le monument lui-même : sa forme et sa taille ont été modifiées.', fb: 'Non : c\'est toujours la même tour. C\'est le regard du photographe qui change.' },
   ], 'Ce qui change', { type: 'multi', ok: 'Exact : une photo n\'est jamais « la réalité », c\'est un choix de regard.' }),
   retiens('Une même réalité peut raconter quatre histoires : majestueuse, inquiétante, envahie de touristes, lointaine. Avant de croire une photo, demande-toi : <em>qu\'est-ce que le photographe a choisi de montrer, et de cacher ?</em>'),
 ]));
@@ -163,7 +163,7 @@ ch.push(chapter('5. Une info, cinq formats', [
   }, 'Image Slider', 'Une info, cinq formats'),
   scs([
     ['Quel format est écrit pour les journalistes, pas pour le public ?', ['La dépêche d\'agence', 'Le post sur un réseau social', 'Le podcast']],
-    ['Quel format est pensé pour être compris sans le son ?', ['La vidéo verticale sous-titrée', 'Le podcast', 'La dépêche d\'agence']],
+    ['Quel format est pensé pour être compris sans le son ?', ['La vidéo verticale', 'Le podcast', 'La dépêche d\'agence']],
     ['Quel format permet d\'écouter en faisant autre chose ?', ['Le podcast', 'L\'article en ligne', 'La vidéo verticale']],
     ['Quel format donne le plus de détails et de contexte ?', ['L\'article en ligne', 'Le post sur un réseau social', 'La vidéo verticale']],
   ], 'Quiz des formats'),
@@ -356,7 +356,7 @@ ch.push(chapter('13. Les sigles de l\'info', [
 /* ===== 14. Find the Words ===== */
 ch.push(chapter('14. Mots cachés', [
   fiche('Mots cachés (Find the Words)', 'Une grille de lettres générée automatiquement à partir d\'une liste de mots.', OU_CADRE),
-  ...module('mots-caches.h5p', 1000, 800, 'Mots cachés de l\'info', 'Trouve les dix mots en glissant la souris (ou le doigt) sur les lettres.'),
+  ...module('mots-caches.h5p', 1000, 800, 'Mots cachés de l\'info', 'Retrouve dans la grille dix mots de l\'information, écrits sans accents : glisse la souris (ou le doigt) de la première à la dernière lettre.'),
 ]));
 
 /* ===== 15. Find Multiple Hotspots (repris de « Wikipédia en 1 h ») ===== */
@@ -377,9 +377,9 @@ ch.push(chapter('17. La boîte à outils du vérificateur', [
   fiche('Mur d\'informations (Information Wall)', 'Des fiches avec un champ de recherche qui filtre en direct : un annuaire, un glossaire, une boîte à outils.', OU_CADRE),
   ...module('boite-outils.h5p', 1000, 1150, 'La boîte à outils du vérificateur', 'Tape « image », « vidéo » ou « date » dans le champ de recherche pour filtrer les outils.'),
   mc('Une photo étonnante circule et tu veux savoir si elle a déjà été publiée avant. Quel outil choisis-tu en premier ?', [
-    { t: 'Une recherche d\'image inversée (TinEye ou Google Lens).', ok: true },
-    { t: 'La Wayback Machine.', fb: 'Elle archive des pages web, pas des photos isolées. Elle sert à voir une page à une date passée.' },
-    { t: 'La recherche ICANN.', fb: 'Elle renseigne sur un nom de domaine (un site), pas sur une photo.' },
+    { t: 'Une recherche d\'image inversée (TinEye).', ok: true },
+    { t: 'Une archive du web (Wayback Machine).', fb: 'Elle archive des pages web, pas des photos isolées. Elle sert à voir une page à une date passée.' },
+    { t: 'Une recherche de domaine (ICANN).', fb: 'Elle renseigne sur un nom de domaine (un site), pas sur une photo.' },
   ], 'Choisir l\'outil', { ok: 'Oui : la recherche inversée retrouve les publications plus anciennes de la même image.' }),
 ]));
 
@@ -388,8 +388,8 @@ ch.push(chapter('18. Le QR code de l\'affiche', [
   fiche('QR code (KewAr Code)', 'Un QR code généré dans l\'activité : il peut mener à un site, un événement, un contact… Pratique pour relier une affiche papier à une ressource en ligne.', OU_CADRE),
   ...module('qr-affiche.h5p', 1000, 470, 'Le QR code de l\'affiche', 'Lis l\'affiche, puis clique sur le QR code pour voir l\'adresse.'),
   mc('Le QR code mène à <code>https://radio-jm.cadeaux-gratuits.example/connexion</code>, une page qui demande ton identifiant et ton mot de passe de l\'ENT. Que fais-tu ?', [
-    { t: 'Je ne donne rien : le site n\'appartient pas à Radio JM et un cadeau contre des identifiants, c\'est un piège.', ok: true },
-    { t: 'Je me connecte : l\'adresse contient « radio-jm ».', fb: 'Piège : le vrai nom du site est ce qui précède le premier « / », lu de droite à gauche : « cadeaux-gratuits.example ». « radio-jm » n\'est qu\'un préfixe que n\'importe qui peut choisir.' },
+    { t: 'Je ne donne rien : ce site n\'est pas celui de Radio JM, c\'est un piège.', ok: true },
+    { t: 'Je me connecte : l\'adresse du site contient bien « radio-jm ».', fb: 'Piège : le vrai nom du site est ce qui précède le premier « / », lu de droite à gauche : « cadeaux-gratuits.example ». « radio-jm » n\'est qu\'un préfixe que n\'importe qui peut choisir.' },
     { t: 'Je me connecte : l\'affiche est collée dans le collège, donc elle est officielle.', fb: 'N\'importe qui peut coller une affiche, ou un autocollant sur une vraie affiche. Le lieu ne garantit rien.' },
   ], 'Méfie-toi du QR code', { ok: 'Exact : on appelle cette arnaque le « quishing », l\'hameçonnage par QR code.' }),
   retiens('Un QR code cache une adresse. Avant d\'ouvrir la page, regarde <strong>l\'adresse complète</strong>. Et un vrai service ne te demande jamais ton mot de passe en échange d\'un cadeau.'),
@@ -437,7 +437,7 @@ ch.push(chapter('22. Le grand quiz', [
     questions: [
       mc('Sous une photo, la mention « Photo d\'illustration » signifie que…', [
         { t: 'l\'image ne montre pas l\'événement raconté.', ok: true },
-        { t: 'la photo a été retouchée.', fb: 'Une retouche se signale autrement. « Illustration » veut dire : image d\'ambiance, pas l\'événement.' },
+        { t: 'la photo a été retouchée par la rédaction.', fb: 'Une retouche se signale autrement. « Illustration » veut dire : image d\'ambiance, pas l\'événement.' },
         { t: 'la photo a été prise par le journaliste.', fb: 'C\'est le crédit qui dit qui a pris la photo.' },
       ], 'Photo d\'illustration'),
       tf('Un détail recadré d\'une photo authentique peut tromper.', true, 'Oui, comme la « vague » du chapitre 4.', 'Souviens-toi de la fresque du chapitre 4 : le détail faisait croire à une vraie vague.', 'Recadrage'),
@@ -451,7 +451,7 @@ ch.push(chapter('22. Le grand quiz', [
       ], 'Lire un sondage'),
       mc('Pour savoir où une photo a déjà été publiée, j\'utilise…', [
         { t: 'une recherche d\'image inversée.', ok: true },
-        { t: 'le nombre de « J\'aime ».', fb: 'Les « J\'aime » mesurent le succès, pas l\'origine.' },
+        { t: 'la date affichée sous la publication.', fb: 'Les « J\'aime » mesurent le succès, pas l\'origine.' },
       ], 'Recherche inversée'),
       tf('Dans l\'adresse https://radio-jm.cadeaux-gratuits.example/connexion, le site s\'appelle « radio-jm ».', false, 'Exact : le nom de domaine est « cadeaux-gratuits.example ».', 'Non : on lit le nom de domaine juste avant le premier « / », de droite à gauche : « cadeaux-gratuits.example ».', 'Nom de domaine'),
     ],
