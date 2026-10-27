@@ -35,3 +35,12 @@ Une grille où l'élève entoure les mots cachés.
 }
 ```
 `wordList` = mots séparés par des **virgules**, en **lettres A–Z** (sans espaces ni accents).
+
+> ⚠️ **Bug de FindTheWords 1.4 : la grille ne répond plus si elle est trop bas dans la page.** Le
+> calcul de la souris suppose que la grille commence à moins de ¾ d'une case du haut du document
+> (≈ 30 à 48 px). Une consigne (`taskDescription`) qui passe sur deux lignes, un cadre étroit (cases
+> plus petites) ou tout contenu au-dessus du module suffit à casser le glisser : l'activité ne
+> marche alors qu'« en grand » (plein écran). **Laisser `taskDescription` vide** et mettre la
+> consigne à l'extérieur (texte du chapitre au-dessus du cadre Iframe Embedder). Ne jamais le
+> placer sous d'autres contenus dans une Column. Test automatique : `assets/examples/vitrine-emi-2/ftwtest.mjs`
+> (glisse sur chaque mot à une largeur donnée et compte les mots trouvés).

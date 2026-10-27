@@ -70,5 +70,9 @@ python3 pack2.py <gabarit.h5p> livre.json <media> sortie.h5p "<titre>"   # image
 - **Information Wall 0.4** : `panelTitle` n'est **pas affiché** ; mettre le nom en première propriété (en gras).
 - **Flashcards** sans image : le lecteur affiche une vignette grise ; donner une image à chaque carte.
 - **Advanced Fill the Blanks** : retirer l'image d'exemple du gabarit (`media`).
+- **Find the Words** : `taskDescription` vide, consigne dans le livre ; sinon la grille ne répond
+  plus dans un cadre étroit (voir `references/word-games.md`, test : `node ftwtest.mjs <extrait> 480`).
+- **Longueur des réponses** : corrigée après coup dans les deux tomes (la bonne réponse était
+  presque toujours la plus longue) ; contrôle : `python3 ../../../scripts/audit-reponses.py *.h5p`.
 - **Game Map** : progression `roaming: 'complete'` et étape de départ en texte ; dessiner la carte sans
   chemin peint (le Game Map trace ses propres chemins).

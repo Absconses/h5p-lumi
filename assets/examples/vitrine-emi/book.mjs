@@ -237,7 +237,7 @@ ch.push(chapter('6. Le cadrage change le sens', [
       buttonFullscreenEnter: 'Plein écran', buttonFullscreenExit: 'Quitter le plein écran' },
   }, 'Agamotto', 'Trois cadrages d\'une même photo'),
   mc('Un site publie le cadrage serré avec la légende « Le Louvre est vide, les touristes ne viennent plus ». Qu\'en penses-tu ?', [
-    { t: 'La photo est authentique, mais le cadrage cache la foule : la légende trompe', ok: true, fb: 'Exact : pas besoin de truquer une image pour tromper, il suffit de couper.' },
+    { t: 'La photo est vraie, mais son cadrage cache la foule', ok: true, fb: 'Exact : pas besoin de truquer une image pour tromper, il suffit de couper.' },
     { t: 'La photo est un montage, puisqu\'elle ne montre pas la foule', fb: 'Piège : rien n\'a été ajouté ni effacé. La photo est vraie, c\'est le cadre qui trompe.' },
     { t: 'La légende est vraie, puisque la photo ne montre personne', fb: 'Piège : une photo montre ce qui est dans le cadre, pas ce qui est autour.' },
     { t: 'On ne peut rien dire sans connaître le photographe', fb: 'Le photographe compte, mais ici on peut déjà comparer avec la photo entière : la légende est fausse.' },
@@ -250,9 +250,9 @@ ch.push(chapter("7. Le voyage d'une infox", [
   intro("Comment une fausse information naît-elle, puis s'emballe-t-elle jusqu'à enfermer les gens dans une bulle ? Suis son voyage avec la flèche ➜ en bas à droite."),
   ...module('voyage-infox.h5p', 1000, 650, "Présentation 3D : le voyage d'une infox", 'Suis les étapes du voyage, jusqu\'au quiz final.', { narrow: true, scripts: true }),
   scs([
-    ['Pourquoi une infox circule-t-elle plus vite qu\'une info vérifiée ?', ['Elle provoque de l\'émotion (peur, colère) qui pousse à partager', 'Elle est toujours publiée par des médias connus', 'Elle est plus longue et plus détaillée']],
-    ['Qu\'est-ce qu\'une bulle de filtres ?', ['Un fil qui ne montre que des contenus proches de ce que j\'aime déjà', 'Un réglage qui bloque les infox', 'Un groupe privé entre amis']],
-    ['Quel est le meilleur réflexe devant un message choquant ?', ['Attendre et chercher la source avant de partager', 'Le partager pour prévenir mes amis', 'Le croire s\'il a beaucoup de « J\'aime »']],
+    ['Pourquoi une infox circule-t-elle plus vite qu\'une info vérifiée ?', ['Elle provoque une émotion qui pousse à partager', 'Elle est toujours publiée par des médias connus', 'Elle est plus longue et donne plus de détails']],
+    ['Qu\'est-ce qu\'une bulle de filtres ?', ['Un fil qui me montre surtout ce que j\'aime déjà', 'Un réglage du réseau qui bloque les fausses infos', 'Un groupe privé où l\'on discute entre amis']],
+    ['Quel est le meilleur réflexe devant un message choquant ?', ['Attendre et chercher la source avant de partager', 'Le partager tout de suite pour prévenir mes amis', 'Le croire s\'il a déjà beaucoup de « J\'aime »']],
   ], 'Le voyage d\'une infox'),
   fiche('Série de choix uniques (Single Choice Set)', 'Questions rapides, une à la fois, avec correction immédiate : bon pour vérifier ce qu\'on a retenu.', OU_NOTE),
 ]));
@@ -296,9 +296,9 @@ ch.push(chapter('12. Wikipédia, une encyclopédie qui se vérifie', [
   intro("Sur Wikipédia, tout le monde peut écrire. Alors pourquoi peut-on souvent s'y fier ? Parce qu'un article change pas à pas, sous le regard des autres, et que chaque affirmation doit citer une source."),
   ...module('/wiki-1h/edition-collaborative.h5p', 1000, 1700, "Remettre en ordre : la vie d'un article Wikipédia", 'Remets les étapes de la vie d\'un article dans l\'ordre, puis clique sur « Vérifier ».'),
   mc('Tu lis sur Wikipédia une phrase suivie de « [réf. nécessaire] ». Que signifie cette mention ?', [
-    { t: "Aucune source ne prouve encore cette phrase : il faut s'en méfier", ok: true, fb: 'Exact : un contributeur signale qu\'il manque une source. La phrase est peut-être vraie, mais rien ne le prouve encore.' },
-    { t: 'La phrase a été vérifiée par un expert', fb: 'Piège : c\'est l\'inverse. La mention signale une phrase NON sourcée.' },
-    { t: "C'est un lien vers un autre article", fb: 'Piège : les liens sont en bleu. « Réf. nécessaire » signale un manque de source.' },
+    { t: "Aucune source ne prouve encore cette phrase", ok: true, fb: 'Exact : un contributeur signale qu\'il manque une source. La phrase est peut-être vraie, mais rien ne le prouve encore.' },
+    { t: 'Un expert a déjà vérifié et validé cette phrase', fb: 'Piège : c\'est l\'inverse. La mention signale une phrase NON sourcée.' },
+    { t: "C'est un lien vers l'article qui donne la preuve", fb: 'Piège : les liens sont en bleu. « Réf. nécessaire » signale un manque de source.' },
     { t: 'La page est protégée contre les modifications', fb: 'Piège : la protection est signalée par un cadenas, pas par cette mention.' },
   ], 'Référence nécessaire'),
 ]));
@@ -310,8 +310,8 @@ ch.push(chapter('13. Privé, ça veut dire quoi ?', [
   ...module('/identite-numerique/qui-voit-quoi.h5p', 1000, 600, 'Grille : qui peut voir quoi ?',
     'Coche toutes les personnes qui peuvent voir chaque information, puis clique sur « Vérifier ».', { scripts: true }),
   mc("Une abonnée fait une capture d'écran d'une story privée et l'envoie à toute la classe. Que montre cette situation ?", [
-    { t: "Un contenu privé peut devenir public dès que quelqu'un le copie", ok: true, fb: 'Exact : le réglage protège la publication, pas les copies.' },
-    { t: 'Le réseau social a mal protégé le compte', fb: "Piège : le réseau a fait son travail. C'est une personne autorisée qui a copié la story." },
+    { t: "Un contenu privé devient public dès qu'on le copie", ok: true, fb: 'Exact : le réglage protège la publication, pas les copies.' },
+    { t: 'Le réseau social a mal réglé la protection du compte', fb: "Piège : le réseau a fait son travail. C'est une personne autorisée qui a copié la story." },
     { t: "C'est impossible : on ne peut pas capturer une story privée", fb: "Piège : certaines applis préviennent quand on fait une capture, mais aucune ne peut l'empêcher vraiment." },
   ], 'La capture d\'écran'),
 ]));
@@ -322,10 +322,10 @@ ch.push(chapter('14. Où voyagent mes données ?', [
   intro("Quand tu publies une vidéo depuis ta chambre, elle part sur des serveurs à l'autre bout de l'Europe, ou du monde. Qui la garde ? Quelle loi te protège ?"),
   ...module('/identite-numerique/voyage-donnees.h5p', 1000, 650, 'Quiz sur carte : où voyagent mes données ?', 'Réponds aux questions en cliquant sur la carte.', { scripts: true }),
   mc("Ton compte TikTok est géré par une société installée en Irlande, qui appartient à un groupe chinois. Quelle règle protège tes données ?", [
-    { t: "Le RGPD, parce que TikTok propose ses services aux habitants de l'Union européenne", ok: true, fb: 'Exact : ce qui compte, c\'est où vivent les utilisateurs, pas où est le siège.' },
+    { t: "Le RGPD, car TikTok s'adresse à des Européens", ok: true, fb: 'Exact : ce qui compte, c\'est où vivent les utilisateurs, pas où est le siège.' },
     { t: "Aucune, car l'entreprise n'est pas française", fb: 'Piège : le RGPD protège tous les habitants de l\'Union européenne, quelle que soit la nationalité de l\'entreprise.' },
-    { t: 'La loi chinoise, car le groupe est chinois', fb: 'Piège : pour ses utilisateurs européens, TikTok doit respecter le RGPD.' },
-    { t: 'La loi américaine, car Internet a été inventé aux États-Unis', fb: "Piège : l'histoire d'Internet ne décide pas de la loi qui s'applique à tes données." },
+    { t: 'La loi chinoise, car le groupe TikTok est chinois', fb: 'Piège : pour ses utilisateurs européens, TikTok doit respecter le RGPD.' },
+    { t: 'La loi américaine, car Internet est né aux États-Unis', fb: "Piège : l'histoire d'Internet ne décide pas de la loi qui s'applique à tes données." },
   ], 'Quelle loi me protège ?'),
 ]));
 
@@ -396,10 +396,10 @@ ch.push(chapter('17. Ce que je retiens', [
   fiche('Résumé à construire (Summary)', 'L\'élève reconstruit la synthèse phrase après phrase, en choisissant à chaque fois l\'affirmation juste : la trace écrite se fabrique en répondant.', OU_NOTE),
   summary('Choisis à chaque fois la phrase juste : elles forment ton résumé.', [
     ["Avant de partager, je regarde qui parle et pourquoi.", 'Avant de partager, je regarde le nombre de « J\'aime ».', 'Un message partagé par un ami est forcément fiable.'],
-    ['Une photo authentique peut tromper par son cadrage ou sa légende.', 'Une photo authentique dit toujours la vérité.', 'Seules les photos retouchées peuvent tromper.'],
-    ["Une info vraie sortie de son contexte (date, lieu) peut devenir fausse.", "Une info vraie le reste quelle que soit sa date.", "Un article de journal est toujours d'actualité."],
+    ['Une vraie photo peut tromper par son cadrage.', 'Une photo authentique dit toujours la vérité.', 'Seules les photos retouchées peuvent tromper.'],
+    ["Une info vraie sortie de son contexte peut tromper.", "Une info vraie le reste quelle que soit sa date.", "Un article de journal reste vrai et d'actualité."],
     ["Sur Wikipédia, une affirmation sérieuse cite une source que je peux vérifier.", "Sur Wikipédia, tout est vrai puisque tout le monde peut corriger.", "Sur Wikipédia, rien n'est fiable puisque tout le monde peut écrire."],
-    ["Le RGPD protège mes données, même si l'entreprise est à l'étranger.", 'Le RGPD ne concerne que les entreprises françaises.', 'Un compte privé suffit à protéger toutes mes données.'],
+    ["Le RGPD protège mes données, même hors de France.", 'Le RGPD ne concerne que les entreprises françaises.', 'Un compte privé suffit à protéger toutes mes données.'],
   ], 'Ce que je retiens'),
   text('<p style="font-size:0.8em;color:#555555"><strong>Crédits.</strong> Photos Pixabay (licence Pixabay) : Foundry (salle de la Joconde), InstagramFOTOGRAFIN, Fotorech, anncapictures, ghcassel, Tho-Ge (fil d\'actualité) ; '
     + 'SplitShire et OrnaW (chapitres 10 et 11, repris du livre « Qui t\'informe ? »). Frise : images Wikimedia Commons, auteurs et licences indiqués sous chaque image. '

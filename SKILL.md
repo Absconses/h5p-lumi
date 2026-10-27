@@ -128,6 +128,12 @@ sources **réelles et libres**.
   une formulation plus longue/précise — uniquement sur la **bonne** réponse : ce serait trop
   évident. Le gras va dans la **consigne**, les **feedbacks** et les **textes explicatifs**
   (frises, cartes), jamais dans une option « gagnante ».
+  **Biais n° 1 constaté par l'utilisateur sur tous les premiers modules : la bonne réponse était
+  presque toujours la plus longue et la plus « construite »** (nuance, justification « : … »,
+  parenthèse d'exemples). Remèdes : la justification va dans le **feedback**, pas dans l'option ;
+  les distracteurs reçoivent la même construction (« X, car … » faux mais plausible) ; la bonne
+  réponse est parfois la plus **courte**. Contrôle obligatoire avant livraison :
+  `python3 scripts/audit-reponses.py <paquet.h5p>` → 0 ligne `LONGUE`.
 - **Langue** : rédige dans la langue cible (français par défaut).
 - **LaTeX** : formules encapsulées par `\\( ... \\)` exclusivement, jamais de `$` seul.
 - **Crédits** : pour chaque média, une `caption` (légende pédagogique) ET un `credit`

@@ -62,6 +62,12 @@ Structure dérivée du `semantics.json` officiel de H5P.MultiChoice.
 - **Aucun « tell »** : pas de gras/italique (ni une formulation plus longue ou plus précise)
   réservé à la bonne réponse — les options doivent être **uniformes** en style et en longueur.
   Le gras se met dans la consigne et le feedback, jamais sur l'option correcte.
+- **Longueur** : c'est le tell le plus fréquent (la bonne réponse nuancée et justifiée, les fausses
+  courtes et sèches). Écris d'abord toutes les options, puis égalise : sors la justification de la
+  bonne réponse vers son feedback, donne aux distracteurs la même structure (« X : parce que … »)
+  avec une fausse raison plausible, et fais en sorte que la plus longue ne soit pas toujours la bonne.
+  Vérifie avec `python3 scripts/audit-reponses.py paquet.h5p` (aussi valable pour Single Choice Set
+  et Summary) : aucune ligne `LONGUE` ne doit rester.
 
 ### Validation
 
