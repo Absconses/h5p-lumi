@@ -15,14 +15,14 @@ Structure dérivée du `semantics.json` officiel de H5P.MultiChoice.
       "correct": true,
       "tipsAndFeedback": {
         "tip": "",                                                // indice avant validation
-        "chosenFeedback": "<div>Exact&nbsp;! Au CERN en 1989.</div>",
+        "chosenFeedback": "<div>Exact&nbsp;! Il l'a inventé au CERN en 1989 pour partager des documents entre chercheurs.</div>",
         "notChosenFeedback": ""
       }
     },
     {
-      "text": "<div>Bill Gates</div>",
+      "text": "<div>Bill Gates</div>",                           // erreur réelle : « l'informatique = Microsoft »
       "correct": false,
-      "tipsAndFeedback": { "tip": "", "chosenFeedback": "<div>Non : lui, c'est Microsoft.</div>", "notChosenFeedback": "" }
+      "tipsAndFeedback": { "tip": "", "chosenFeedback": "<div>Piège fréquent : Bill Gates a fondé Microsoft (logiciels), mais il n'a pas inventé le Web. Cherche qui travaillait au CERN.</div>", "notChosenFeedback": "" }
     }
   ],
   "behaviour": {
@@ -57,8 +57,8 @@ Structure dérivée du `semantics.json` officiel de H5P.MultiChoice.
 
 - Au moins **une** réponse `"correct": true` (le validateur le vérifie).
 - Pour un QCM à réponse unique → `behaviour.type` = `"single"` ; à réponses multiples → `"multi"`.
-- Donne un **feedback formatif** dans `chosenFeedback` (pas juste « faux » : explique *pourquoi*).
-- Construis des distracteurs **plausibles** (erreurs typiques de l'élève), pas absurdes.
+- **Distracteurs intelligents** : voir la section suivante. Chaque mauvaise réponse a un
+  `chosenFeedback` qui nomme le piège.
 - **Aucun « tell »** : pas de gras/italique (ni une formulation plus longue ou plus précise)
   réservé à la bonne réponse — les options doivent être **uniformes** en style et en longueur.
   Le gras se met dans la consigne et le feedback, jamais sur l'option correcte.
@@ -68,6 +68,39 @@ Structure dérivée du `semantics.json` officiel de H5P.MultiChoice.
   avec une fausse raison plausible, et fais en sorte que la plus longue ne soit pas toujours la bonne.
   Vérifie avec `python3 scripts/audit-reponses.py paquet.h5p` (aussi valable pour Single Choice Set
   et Summary) : aucune ligne `LONGUE` ne doit rester.
+
+### Distracteurs intelligents (règle de Pierre, 2026-10-25)
+
+Une mauvaise réponse sert à **révéler une erreur réelle**, pas à remplir la liste. Pour chaque
+distracteur, demande-toi : *quel élève choisirait ça, et pourquoi ?* S'il n'y a pas de réponse,
+remplace-le.
+
+- **Partir des erreurs que les élèves font vraiment** sur cette notion. Exemples de sources
+  d'erreur fréquentes (des pistes, pas une grille à remplir) :
+  - mot proche ou confondu (Internet / Web, auteur / éditeur) ;
+  - idée reçue ou intuition trompeuse (« ce qui est en tête de Google est fiable ») ;
+  - vérité partielle mal conclue (vrai fait, mauvaise déduction) ;
+  - erreur de méthode (lire le titre sans le texte, confondre date de publication et date
+    des faits).
+- **Pas de distracteur absurde ni humoristique** : il ne piège personne et donne la réponse
+  par élimination. Mieux vaut **2 distracteurs solides que 3 dont un faible**.
+- **`chosenFeedback` de chaque distracteur = le piège nommé + la remise sur la voie**, en
+  1 ou 2 phrases, sans redonner la bonne réponse mot pour mot. Exemple :
+  *« Piège classique : Google classe selon la popularité et la publicité, pas selon la
+  fiabilité. Regarde plutôt qui a écrit la page. »* — et non *« Faux. »*
+- **`chosenFeedback` de la bonne réponse** : confirme **pourquoi** c'est juste (l'élève a
+  pu deviner).
+- Garde la règle « aucun tell » ci-dessus : un bon distracteur a la même longueur et le même
+  style que la bonne réponse.
+
+**Où mettre le retour selon le type :**
+
+| Type | Retour par réponse ? | Où écrire le piège |
+|---|---|---|
+| `H5P.MultiChoice` | oui | `answers[].tipsAndFeedback.chosenFeedback` |
+| `H5P.TrueFalse` | non (un seul retour) | `behaviour.feedbackOnWrong` : nomme l'idée reçue visée |
+| `H5P.SingleChoiceSet`, `H5P.Summary` | **non** | aucun champ : si le piège mérite une explication, utilise plutôt `H5P.MultiChoice` |
+| `H5P.Blanks`, `H5P.DragText` | non | l'indice `*réponse:indice*` (Blanks) ou la consigne |
 
 ### Validation
 

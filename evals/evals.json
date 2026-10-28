@@ -10,7 +10,7 @@
     {
       "id": 2,
       "prompt": "Fais-moi un quiz H5P de 4 questions pour des 4e, sur Internet, le Web et les moteurs de recherche (différence Internet/Web, rôle d'un moteur, repérer une source fiable). Feedback qui explique les réponses.",
-      "expected_output": "content.json H5P.QuestionSet (questions H5P.MultiChoice) valide, >=1 réponse correcte par question, feedback formatif, distracteurs plausibles, vocabulaire niveau 4e.",
+      "expected_output": "content.json H5P.QuestionSet (questions H5P.MultiChoice) valide, >=1 réponse correcte par question, feedback formatif, distracteurs plausibles, vocabulaire niveau 4e. Distracteurs fondés sur des erreurs réelles d'élèves (ex. confondre Internet et Web, croire que le premier résultat Google est fiable), aucun distracteur absurde, chaque chosenFeedback de distracteur nomme le piège.",
       "files": []
     },
     {
