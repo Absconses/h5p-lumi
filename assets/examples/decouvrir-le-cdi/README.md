@@ -27,7 +27,9 @@ lui-même pendant la mission (étape 6).
 python3 draw.py <dossier_polices_avec_Bebas.ttf> media/          # images + geo.json (positions des zones)
 node build.mjs <repo_h5p-lumi> <gabarit-interactivebook-reporter_extrait> media/ out/ <gabarit-personalityquiz_extrait>
 python3 ../vitrine-emi-2/pack2.py ../../templates/gabarit-interactivebook-reporter.h5p out/livre.json media/ out/ma-premiere-visite-au-cdi.h5p "Ma première visite au CDI" --slim
-python3 ../vitrine-emi-2/pack2.py ../../templates/gabarit-personalityquiz.h5p out/quel-lecteur.json media/ out/quel-lecteur.h5p "Quel lecteur es-tu ?" --slim
+# Quiz en format Personality Quiz 1.0 (le lecteur hors ligne plante sur du 1.1) :
+# remplacer content/content.json dans partage/decouvrir-le-cdi/quel-lecteur.h5p, qui embarque la bibliothèque 1.0
+cp ../../../partage/decouvrir-le-cdi/quel-lecteur.h5p out/ && mkdir -p out/content && cp out/quel-lecteur.json out/content/content.json && (cd out && zip -q quel-lecteur.h5p content/content.json)
 python3 ../../../scripts/audit-reponses.py out/ma-premiere-visite-au-cdi.h5p   # 0 biaisée
 ```
 
