@@ -1,4 +1,4 @@
-# Empaquette un content.json dans un .h5p a partir du gabarit Geography Quiz (H5P.GeoQuiz).
+# Empaquette un content.json dans un .h5p a partir du gabarit Geography Quiz (H5P.GeoQuizFix).
 # Usage : python3 pack.py <gabarit-geoquiz.h5p> <content.json> <sortie.h5p> "<titre>"
 # Garde toutes les bibliotheques du gabarit (editeurs compris -> modifiable dans Lumi).
 import json, sys, os, zipfile

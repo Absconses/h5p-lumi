@@ -1,7 +1,7 @@
 /* =====================================================================
- *  geoquiz.mjs — fabriques pour H5P.GeoQuiz 1.1 (Geography Quiz)
+ *  geoquiz.mjs — fabriques pour H5P.GeoQuizFix 1.1 (Geography Quiz patche)
  *
- *  Versions = celles de assets/templates/gabarit-geoquiz.h5p (GeoQuiz 1.1.10
+ *  Versions = celles de assets/templates/gabarit-geoquiz.h5p (GeoQuizFix 1.1.10
  *  PATCHE par le skill, voir references/geoquiz.md).
  *
  *  Usage :

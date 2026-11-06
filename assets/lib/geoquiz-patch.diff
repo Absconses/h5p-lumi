@@ -1,7 +1,28 @@
-diff -ruN -x geojson-data gq/H5P.GeoQuiz-1.1/js/GeoQuiz.js gqfix/H5P.GeoQuiz-1.1/js/GeoQuiz.js
---- a/H5P.GeoQuiz-1.1/js/GeoQuiz.js	2026-10-24 10:23:58.000000000 +0000
-+++ b/H5P.GeoQuiz-1.1/js/GeoQuiz.js	2026-10-24 10:39:17.205084949 +0000
-@@ -430,7 +430,7 @@
+diff -ruN -x geojson-data a/H5P.GeoQuiz-1.1/js/GeoQuiz.js b/H5P.GeoQuiz-1.1/js/GeoQuiz.js
+--- a/H5P.GeoQuiz-1.1/js/GeoQuiz.js	2026-10-24 13:45:07.112270981 +0000
++++ b/H5P.GeoQuiz-1.1/js/GeoQuiz.js	2026-10-24 13:45:07.147082317 +0000
+@@ -1,6 +1,8 @@
+ var H5P = H5P || {};
+ 
+-H5P.GeoQuiz = (function ($, JoubelUI, Question) {
++// Patch h5p-lumi : bibliotheque renommee H5P.GeoQuizFix pour ne jamais entrer en
++// conflit avec un H5P.GeoQuiz 1.1.9 deja installe (Lumi en ligne garde l'ancien).
++H5P.GeoQuizFix = (function ($, JoubelUI, Question) {
+   /**
+    * @constructor
+    * @extends Question
+@@ -9,8 +11,8 @@
+    * @param {Object} contentData H5P instance data
+    */
+    function GeoQuiz(options, contentId, contentData) {
+-    if (!(this instanceof H5P.GeoQuiz)) {
+-      return new H5P.GeoQuiz(options, contentId, contentData);
++    if (!(this instanceof H5P.GeoQuizFix)) {
++      return new H5P.GeoQuizFix(options, contentId, contentData);
+     }
+     this.contentId = contentId;
+     Question.call(this, 'geoquiz');
+@@ -430,7 +432,7 @@
        }
        // Store user answer as a leaflet marker with icon
        var answerIcon = self.geoquiz.whichMarker(points);
@@ -10,7 +31,7 @@ diff -ruN -x geojson-data gq/H5P.GeoQuiz-1.1/js/GeoQuiz.js gqfix/H5P.GeoQuiz-1.1
          isCorrect = true;
        }
  
-@@ -475,15 +475,69 @@
+@@ -475,15 +477,69 @@
      var self = this;
      self.mapLayers.correctAnswerArea = undefined;
      return new Promise(function(resolve, reject) {
@@ -83,7 +104,17 @@ diff -ruN -x geojson-data gq/H5P.GeoQuiz-1.1/js/GeoQuiz.js gqfix/H5P.GeoQuiz-1.1
     * Load geoJSON encoded country multipolygon
     *
     * @param {String} area name to load
-@@ -560,13 +614,18 @@
+@@ -493,7 +549,8 @@
+     return new Promise(function(resolve, reject) {
+       setTimeout(function() {
+         self.correctAnswerCountry = '';
+-        $.getJSON( self.getLibraryFilePath('') + "geojson-data/" + area + ".geo.json")
++        var embedded = H5P.GeoQuizFixGeo && H5P.GeoQuizFixGeo[area];
++        (embedded ? $.Deferred().resolve(embedded) : $.getJSON( self.getLibraryFilePath('') + "geojson-data/" + area + ".geo.json"))
+           .done(function( json ) {
+             self.mapLayers.correctAnswerArea = new L.FeatureGroup();
+             var geojsonLayer = L.geoJson(json);
+@@ -560,13 +617,18 @@
     * Sets container height as ratio of 16:9 to container width.
     */
    GeoQuiz.prototype.setContainerHeight = function() {
@@ -105,7 +136,7 @@ diff -ruN -x geojson-data gq/H5P.GeoQuiz-1.1/js/GeoQuiz.js gqfix/H5P.GeoQuiz-1.1
      return containerHeight;
    };  
  
-@@ -601,40 +660,29 @@
+@@ -601,40 +663,29 @@
        var latlng = self.coordSplit(self.options.mapCenter);
        self.map.setView(latlng, self.options.mapZoom);
        self.map.on('click', self.addMarker, {geoquiz: self});
@@ -159,7 +190,7 @@ diff -ruN -x geojson-data gq/H5P.GeoQuiz-1.1/js/GeoQuiz.js gqfix/H5P.GeoQuiz-1.1
            });
            self.map.addLayer(Stamen_TerrainBackground);
            break;
-@@ -651,6 +699,22 @@
+@@ -651,6 +702,23 @@
    };
  
    /**
@@ -172,7 +203,8 @@ diff -ruN -x geojson-data gq/H5P.GeoQuiz-1.1/js/GeoQuiz.js gqfix/H5P.GeoQuiz-1.1
 +    self.map.attributionControl.addAttribution('Fond muet : Natural Earth');
 +    var style = { color: '#8a8a8a', weight: 1, fillColor: '#f4f1e8', fillOpacity: 1 };
 +    codes.forEach(function (code) {
-+      $.getJSON(self.getLibraryFilePath('') + 'geojson-data/' + code + '.geo.json').done(function (json) {
++      var embedded = H5P.GeoQuizFixGeo && H5P.GeoQuizFixGeo[code];
++      (embedded ? $.Deferred().resolve(embedded) : $.getJSON(self.getLibraryFilePath('') + 'geojson-data/' + code + '.geo.json')).done(function (json) {
 +        L.geoJson(json, { style: style, interactive: false }).addTo(self.map).bringToBack();
 +      });
 +    });
@@ -182,25 +214,87 @@ diff -ruN -x geojson-data gq/H5P.GeoQuiz-1.1/js/GeoQuiz.js gqfix/H5P.GeoQuiz-1.1
     * Get marker icon by points reached
     */
    GeoQuiz.prototype.whichMarker = function (points) {
-diff -ruN -x geojson-data gq/H5P.GeoQuiz-1.1/library.json gqfix/H5P.GeoQuiz-1.1/library.json
---- a/H5P.GeoQuiz-1.1/library.json	2026-10-24 10:23:58.000000000 +0000
-+++ b/H5P.GeoQuiz-1.1/library.json	2026-10-24 10:28:56.423078049 +0000
+@@ -671,12 +739,14 @@
+    */
+   GeoQuiz.prototype.defineMarkers = function () {
+     // Create the answer marker icons
+-    var imgPath = this.getLibraryFilePath('') + 'css/images/';
++    var libPath = this.getLibraryFilePath('') + 'css/images/';
++    var imgs = H5P.GeoQuizFixIcons || {};
++    var img = function (name) { return imgs[name] || libPath + name; };
+ 
+     // more then 75%
+     var greenIcon = new L.Icon({
+-      iconUrl: imgPath + 'marker-icon-2x-green.png',
+-      shadowUrl: imgPath + 'marker-shadow.png',
++      iconUrl: img('marker-icon-2x-green.png'),
++      shadowUrl: img('marker-shadow.png'),
+       iconSize: [25, 41],
+       iconAnchor: [12, 41],
+       popupAnchor: [1, -34],
+@@ -685,8 +755,8 @@
+ 
+     // less then 75%
+     var yellowIcon = new L.Icon({
+-      iconUrl: imgPath + 'marker-icon-2x-yellow.png',
+-      shadowUrl: imgPath + 'marker-shadow.png',
++      iconUrl: img('marker-icon-2x-yellow.png'),
++      shadowUrl: img('marker-shadow.png'),
+       iconSize: [25, 41],
+       iconAnchor: [12, 41],
+       popupAnchor: [1, -34],
+@@ -695,8 +765,8 @@
+ 
+     // less then 50%
+     var orangeIcon = new L.Icon({
+-      iconUrl: imgPath + 'marker-icon-2x-orange.png',
+-      shadowUrl: imgPath + 'marker-shadow.png',
++      iconUrl: img('marker-icon-2x-orange.png'),
++      shadowUrl: img('marker-shadow.png'),
+       iconSize: [25, 41],
+       iconAnchor: [12, 41],
+       popupAnchor: [1, -34],
+@@ -705,8 +775,8 @@
+ 
+     // less then 25%
+     var redIcon = new L.Icon({
+-      iconUrl: imgPath + 'marker-icon-2x-red.png',
+-      shadowUrl: imgPath + 'marker-shadow.png',
++      iconUrl: img('marker-icon-2x-red.png'),
++      shadowUrl: img('marker-shadow.png'),
+       iconSize: [25, 41],
+       iconAnchor: [12, 41],
+       popupAnchor: [1, -34],
+@@ -715,8 +785,8 @@
+     
+     // Correct answer pin
+     var blueIcon = new L.Icon({
+-      iconUrl: imgPath + 'marker-icon-2x-blue.png',
+-      shadowUrl: imgPath + 'marker-shadow.png',
++      iconUrl: img('marker-icon-2x-blue.png'),
++      shadowUrl: img('marker-shadow.png'),
+       iconSize: [30, 50],
+       iconAnchor: [15, 50],
+       popupAnchor: [1, -34],
+diff -ruN -x geojson-data a/H5P.GeoQuiz-1.1/library.json b/H5P.GeoQuiz-1.1/library.json
+--- a/H5P.GeoQuiz-1.1/library.json	2026-10-24 13:45:07.112523985 +0000
++++ b/H5P.GeoQuiz-1.1/library.json	2026-10-24 13:45:07.146621241 +0000
 @@ -1 +1 @@
 -{"title":"Geography Quiz","description":"Create a Quiz on wich the users click on a leaflet map to answer the questions.","majorVersion":1,"minorVersion":1,"patchVersion":9,"runnable":1,"fullscreen":0,"embedTypes":["iframe"],"machineName":"H5P.GeoQuiz","license":"MIT","author":"fabforge, Fabian Dennler","coreApi":{"majorVersion":1,"minorVersion":1},"preloadedCss":[{"path":"css/leaflet.css"},{"path":"css/GeoQuiz.css"}],"preloadedJs":[{"path":"js/leaflet.js"},{"path":"js/GeoQuiz.js"}],"preloadedDependencies":[{"machineName":"H5P.JoubelUI","majorVersion":1,"minorVersion":3},{"machineName":"H5P.Question","majorVersion":1,"minorVersion":3}],"editorDependencies":[{"machineName":"H5PEditor.ShowWhen","majorVersion":1,"minorVersion":0},{"machineName":"H5PEditor.VerticalTabs","majorVersion":1,"minorVersion":3},{"machineName":"H5PEditor.CoordinateSelector","majorVersion":1,"minorVersion":0}]}
 \ No newline at end of file
-+{"title": "Geography Quiz", "description": "Create a Quiz on wich the users click on a leaflet map to answer the questions.", "majorVersion": 1, "minorVersion": 1, "patchVersion": 10, "runnable": 1, "fullscreen": 0, "embedTypes": ["iframe"], "machineName": "H5P.GeoQuiz", "license": "MIT", "author": "fabforge, Fabian Dennler", "coreApi": {"majorVersion": 1, "minorVersion": 1}, "preloadedCss": [{"path": "css/leaflet.css"}, {"path": "css/GeoQuiz.css"}], "preloadedJs": [{"path": "js/leaflet.js"}, {"path": "js/GeoQuiz.js"}], "preloadedDependencies": [{"machineName": "H5P.JoubelUI", "majorVersion": 1, "minorVersion": 3}, {"machineName": "H5P.Question", "majorVersion": 1, "minorVersion": 3}], "editorDependencies": [{"machineName": "H5PEditor.ShowWhen", "majorVersion": 1, "minorVersion": 0}, {"machineName": "H5PEditor.VerticalTabs", "majorVersion": 1, "minorVersion": 3}, {"machineName": "H5PEditor.CoordinateSelector", "majorVersion": 1, "minorVersion": 0}]}
++{"title": "Geography Quiz (corrigé)", "description": "Create a Quiz on wich the users click on a leaflet map to answer the questions.", "majorVersion": 1, "minorVersion": 1, "patchVersion": 12, "runnable": 1, "fullscreen": 0, "embedTypes": ["iframe"], "machineName": "H5P.GeoQuizFix", "license": "MIT", "author": "fabforge, Fabian Dennler", "coreApi": {"majorVersion": 1, "minorVersion": 1}, "preloadedCss": [{"path": "css/leaflet.css"}, {"path": "css/GeoQuiz.css"}], "preloadedJs": [{"path": "js/leaflet.js"}, {"path": "js/geojson-data.js"}, {"path": "js/marker-icons.js"}, {"path": "js/GeoQuiz.js"}], "preloadedDependencies": [{"machineName": "H5P.JoubelUI", "majorVersion": 1, "minorVersion": 3}, {"machineName": "H5P.Question", "majorVersion": 1, "minorVersion": 3}], "editorDependencies": [{"machineName": "H5PEditor.ShowWhen", "majorVersion": 1, "minorVersion": 0}, {"machineName": "H5PEditor.VerticalTabs", "majorVersion": 1, "minorVersion": 3}, {"machineName": "H5PEditor.CoordinateSelector", "majorVersion": 1, "minorVersion": 0}]}
 \ No newline at end of file
-diff -ruN gq/H5PEditor.CoordinateSelector-1.0/library.json gqfix/H5PEditor.CoordinateSelector-1.0/library.json
---- a/H5PEditor.CoordinateSelector-1.0/library.json	2026-10-24 10:23:58.000000000 +0000
-+++ b/H5PEditor.CoordinateSelector-1.0/library.json	2026-10-24 10:30:51.079594066 +0000
+diff -ruN -x geojson-data a/H5PEditor.CoordinateSelector-1.0/library.json b/H5PEditor.CoordinateSelector-1.0/library.json
+--- a/H5PEditor.CoordinateSelector-1.0/library.json	2026-10-24 13:45:07.113247303 +0000
++++ b/H5PEditor.CoordinateSelector-1.0/library.json	2026-10-24 13:45:07.151755753 +0000
 @@ -1 +1 @@
 -{"title":"H5PEditor.CoordinateSelector","majorVersion":1,"minorVersion":0,"patchVersion":3,"runnable":0,"machineName":"H5PEditor.CoordinateSelector","coreApi":{"majorVersion":1,"minorVersion":12},"author":"fabforge, Fabian Dennler","preloadedJs":[{"path":"scripts/leaflet.js"},{"path":"scripts/coordinate-selector.js"},{"path":"scripts/map-selector.js"}],"preloadedCss":[{"path":"styles/leaflet.css"},{"path":"styles/coordinate-selector.css"}]}
 \ No newline at end of file
 +{"title": "H5PEditor.CoordinateSelector", "majorVersion": 1, "minorVersion": 0, "patchVersion": 4, "runnable": 0, "machineName": "H5PEditor.CoordinateSelector", "coreApi": {"majorVersion": 1, "minorVersion": 12}, "author": "fabforge, Fabian Dennler", "preloadedJs": [{"path": "scripts/leaflet.js"}, {"path": "scripts/coordinate-selector.js"}, {"path": "scripts/map-selector.js"}], "preloadedCss": [{"path": "styles/leaflet.css"}, {"path": "styles/coordinate-selector.css"}]}
 \ No newline at end of file
-diff -ruN gq/H5PEditor.CoordinateSelector-1.0/scripts/map-selector.js gqfix/H5PEditor.CoordinateSelector-1.0/scripts/map-selector.js
---- a/H5PEditor.CoordinateSelector-1.0/scripts/map-selector.js	2026-10-24 10:23:58.000000000 +0000
-+++ b/H5PEditor.CoordinateSelector-1.0/scripts/map-selector.js	2026-10-24 10:36:35.274015293 +0000
+diff -ruN -x geojson-data a/H5PEditor.CoordinateSelector-1.0/scripts/map-selector.js b/H5PEditor.CoordinateSelector-1.0/scripts/map-selector.js
+--- a/H5PEditor.CoordinateSelector-1.0/scripts/map-selector.js	2026-10-24 13:45:07.114368603 +0000
++++ b/H5PEditor.CoordinateSelector-1.0/scripts/map-selector.js	2026-10-24 13:45:07.152453655 +0000
 @@ -44,10 +44,10 @@
       * @type {Array}
       */
