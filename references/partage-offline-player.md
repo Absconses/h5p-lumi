@@ -92,5 +92,14 @@ un QR code). Les noms de fichiers : minuscules, tirets, sans accents ni espaces.
   `partage/enquete-aigle-svt.h5p`.
 - **Cache** : après avoir remplacé un fichier, ajouter `?v=2` (puis 3…) à l'URL brute dans le lien,
   sinon GitHub (≈5 min) ou le navigateur de l'élève peuvent servir l'ancienne version.
+- **Balises affichées en clair** (constaté 2026-11-06) : le lecteur vérifie le contenu comme un
+  site H5P et **échappe** le HTML des champs « texte simple » (ex. la consigne de Find the
+  Hotspot, `taskDescription` d'Image Hotspot Question) : `<p><strong>Clique…` s'affiche tel quel.
+  Lumi, lui, l'affichait en gras. Avant de publier : `python3 scripts/check-texte-simple.py
+  <gabarit_extrait> content.json "<Bibliothèque principale X.Y>"` doit ne rien lister.
+- **Cadre vers un autre module (Iframe Embedder)** : écrire `embed?src=<URL brute NON encodée>`,
+  sans autre paramètre (comme les livres vitrine et identité numérique). Encodée, l'adresse est
+  prise pour un chemin du lecteur (404). Le lien texte « Ouvrir en grand » peut, lui, être encodé
+  et porter `&custom-css=`.
 - Affichage souvent plus propre que Lumi (étiquettes de glisser-déposer non tronquées, plein
   écran).
