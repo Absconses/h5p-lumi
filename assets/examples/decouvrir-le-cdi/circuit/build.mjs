@@ -175,7 +175,7 @@ p.add(map);
 const QUIZ = [
   ['Comment appelle-t-on le texte écrit par l\'autrice, avant qu\'il devienne un livre ?', 'Le manuscrit', 'Le cahier de brouillon', 'Le résumé du livre'],
   ['Le numéro ISBN, imprimé au dos du livre, sert à…', 'Reconnaître ce livre parmi tous les autres', 'Indiquer le prix exact du livre en magasin', 'Dire combien de pages contient le livre'],
-  ['Au CDI, où ranges-tu un livre qui explique la vie des océans ?', 'Avec les livres de sciences, selon son sujet', 'Avec les romans d\'aventure, selon sa couleur', 'Avec les plus grands livres, selon sa taille'],
+  ['Au CDI, où ranges-tu un livre qui explique la vie des océans ?', 'Avec les sciences, selon son numéro Dewey', 'Avec les romans d\'aventure, selon sa pastille', 'Avec les plus grands livres, selon leur taille'],
   ['Sur le dos du roman, l\'étiquette indique « R MOR ». Que veut dire « MOR » ?', 'Le début du nom de l\'autrice', 'Le début du titre du roman', 'Le début du nom de son genre'],
   ['Au CDI, que fait-on d\'un livre très abîmé ou que plus personne n\'emprunte ?', 'On le retire des rayons', 'On le cache dans la réserve pour toujours', 'On le rend au libraire qui l\'a vendu'],
   ['Que fait-on avec une boîte à livres ?', 'On y prend et on y dépose des livres', 'On y achète des livres à petit prix', 'On y rend les livres du CDI le soir'],
