@@ -120,6 +120,12 @@ shot(cam(S.desherb, 'Le désherbage'), { bg: 's12-desherbage.jpg', from: 'desher
 // Nouvelle vie
 shot(cam(S.boite, 'La boîte à livres'), { bg: 's13-boite.jpg', from: 'boite', name: 'Boîte à livres', html: T.boite });
 
+// Dézoom : on remonte d'un coup d'œil toute la chaîne avant les exercices (même cadre que la carte).
+{
+  const cx = FRAME.x + FRAME.w / 2, cy = FRAME.y + FRAME.h / 2, zc = ZB + (FRAME.w / 640) * P - P;
+  p.add(camera({ x: cx, y: cy, z: zc, rotateX: 0, rotateY: 0, rotateZ: 0 }, 'Tout le voyage du livre (récap)'));
+}
+
 // --- activités : photo + exercice DEVANT la caméra (cliquable), hors du chemin ---------
 const activity = (pose, { bg, from, name, action }) => {
   shot(pose, { bg, from, name });
@@ -134,7 +140,7 @@ activity(cam(at(10500, -700), 'Qui fait quoi ?'), { bg: 's14-quifait.jpg', from:
       questions: [
         '<p><span style="font-size:0.85em">L\'*autrice/auteur/auteure* écrit le manuscrit, l\'*éditrice/éditeur* le choisit et paie sa fabrication.</span></p>',
         '<p><span style="font-size:0.85em">L\'*illustrateur/illustratrice* dessine la couverture, l\'*imprimeur/imprimeuse/imprimerie* fabrique le livre.</span></p>',
-        '<p><span style="font-size:0.85em">Le *libraire* le vend ; au CDI, le professeur *documentaliste* l\'équipe et le range.</span></p>',
+        '<p><span style="font-size:0.85em">Le *libraire* le vend ; au CDI, le professeur *documentaliste* le prépare et le range.</span></p>',
       ],
       score: 'Tu as @score point(s) sur @total.', showSolutions: 'Voir la solution', tryAgain: 'Recommencer', checkAnswer: 'Vérifier',
       notFilledOut: 'Remplis toutes les cases.',
@@ -144,7 +150,7 @@ activity(cam(at(10500, 800), 'Au CDI ?'), { bg: 's15-aucdi.jpg', from: 'activite
   action: { library: 'H5P.MarkTheWords 1.5', metadata: { contentType: 'Mark the Words', license: 'U', title: 'Ça se passe au CDI ?' },
     params: {
       taskDescription: '<p><strong>Clique sur les mots qui décrivent ce qui se passe AU CDI.</strong></p>',
-      textField: '<p>Le livre est imprimé, puis stocké dans un entrepôt et vendu en librairie. Au collège, il est *équipé*, *catalogué* et *exposé* avec les nouveautés. Il est *rangé* au rayon selon sa nature, *emprunté* par les élèves puis, des années plus tard, *désherbé*.</p>',
+      textField: '<p>Le livre est imprimé, puis stocké dans un entrepôt et vendu en librairie. Au collège, il reçoit un *tampon* et une *étiquette* sur le dos, puis il est *exposé* avec les nouveautés. Ensuite, il est *rangé* au rayon, *emprunté* par les élèves et, des années plus tard, *retiré* des rayons.</p>',
       checkAnswerButton: 'Vérifier', tryAgainButton: 'Recommencer', showSolutionButton: 'Voir la solution',
       score: 'Tu as @score point(s) sur @total.',
       behaviour: { enableRetry: true, enableSolutionsButton: true },
@@ -167,12 +173,12 @@ p.add(map);
 
 // --- quiz et crédits -------------------------------------------------------------------
 const QUIZ = [
-  ['Comment s\'appelle le texte de l\'auteur avant d\'être publié ?', 'Le manuscrit', 'Le brouillon officiel', 'Le contrat d\'édition'],
-  ['À quoi sert l\'ISBN ?', 'À identifier le livre', 'À fixer le prix du livre en magasin', 'À noter la qualité du livre'],
-  ['Au CDI, où range-t-on un documentaire sur les océans ?', 'Avec les sciences, grâce à son numéro Dewey', 'Avec les romans d\'aventure, grâce à sa pastille', 'Avec les grands livres, rangés selon leur taille'],
-  ['Au CDI, que veut dire la cote « R MOR » ?', 'Roman d\'un auteur nommé Moreau', 'Roman rangé au rayon Mystère', 'Roman de la collection Moreau'],
-  ['Que veut dire « désherber » au CDI ?', 'Retirer les livres abîmés ou oubliés', 'Réparer les livres abîmés ou déchirés', 'Ranger les livres revenus de prêt'],
-  ['Que fait-on avec une boîte à livres ?', 'On prend et on dépose des livres', 'On les vend à petit prix aux élèves', 'On rend les livres du CDI le soir'],
+  ['Comment appelle-t-on le texte écrit par l\'autrice, avant qu\'il devienne un livre ?', 'Le manuscrit', 'Le cahier de brouillon', 'Le résumé du livre'],
+  ['Le numéro ISBN, imprimé au dos du livre, sert à…', 'Reconnaître ce livre parmi tous les autres', 'Indiquer le prix exact du livre en magasin', 'Dire combien de pages contient le livre'],
+  ['Au CDI, où ranges-tu un livre qui explique la vie des océans ?', 'Avec les sciences, selon son numéro Dewey', 'Avec les romans d\'aventure, selon sa pastille', 'Avec les plus grands livres, selon leur taille'],
+  ['Sur le dos du roman, l\'étiquette indique « R MOR ». Que veut dire « MOR » ?', 'Le début du nom de l\'autrice', 'Le début du titre du roman', 'Le début du nom de son genre'],
+  ['Au CDI, que fait-on d\'un livre très abîmé ou que plus personne n\'emprunte ?', 'On le retire des rayons', 'On le cache dans la réserve pour toujours', 'On le rend au libraire qui l\'a vendu'],
+  ['Que fait-on avec une boîte à livres ?', 'On y prend et on y dépose des livres', 'On y achète des livres à petit prix', 'On y rend les livres du CDI le soir'],
 ];
 const q = cam(at(12000, 0), 'Quiz');
 shot(q, { bg: 's16-quiz.jpg', from: 'quiz', name: 'Quiz' });
