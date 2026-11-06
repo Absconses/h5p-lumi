@@ -290,32 +290,36 @@ const book = L('H5P.InteractiveBook 1.11', {
 }, 'Interactive Book', 'Ma première visite au CDI').params;
 fs.writeFileSync(`${OUT}/livre.json`, JSON.stringify(book));
 
-/* ================= Module en cadre : Quel lecteur es-tu ? ================= */
-const DET = 'Le détective', EXP = "L'explorateur", REV = 'Le rêveur', SEN = 'Le cœur sensible';
+/* ================= Module en cadre : Quel lecteur es-tu ? =================
+   Format Personality Quiz 1.0 (et non 1.1) : le lecteur hors ligne, ouvert par lien /embed,
+   joue ce type avec sa propre version 1.0.8. Un contenu 1.1 (personalitiesGroup, questionsGroup)
+   y plante : « Cannot read properties of undefined (reading 'length') ».
+   En 1.0 : listes à plat, champ personality = noms exacts séparés par « , » (pas de « =2 »),
+   textes simples (pas de HTML), apostrophes typographiques, image: {} obligatoire. */
+const DET = 'Le détective', EXP = 'L’explorateur', REV = 'Le rêveur', SEN = 'Le cœur sensible';
 const q = (t, answers) => ({ text: t, image: {}, answers: answers.map(([a, p]) => ({ text: a, personality: p, image: {} })) });
-const pqTpl = JSON.parse(fs.readFileSync(`${PQ}/content/content.json`, "utf8"));
-const pq = merge(pqTpl, {
-  showTitleScreen: false,
-  titleScreen: { titleScreenIntroduction: '<p style="text-align:center"></p>' },
-  personalitiesGroup: { personalities: [
-    { name: DET, image: {}, description: '<p>Tu aimes les mystères, les indices et les frissons. Cherche les rayons <strong>Enquête</strong> et <strong>Fantastique</strong>.</p>' },
-    { name: EXP, image: {}, description: '<p>Tu aimes l\'action, les voyages et la nature. Cherche les rayons <strong>Aventure</strong> et <strong>Animalier</strong>.</p>' },
-    { name: REV, image: {}, description: '<p>Tu aimes les mondes inventés, la magie ou le futur. Cherche les rayons <strong>Fantasy</strong>, <strong>Science-fiction</strong> et <strong>Mythes</strong>.</p>' },
-    { name: SEN, image: {}, description: '<p>Tu aimes les personnages, les sentiments et les histoires vraies. Cherche les rayons <strong>Romance</strong> et <strong>Littératures du réel</strong>.</p>' },
-  ] },
-  questionsGroup: { questions: [
-    q('Un samedi idéal, c\'est…', [['Résoudre une énigme ou un escape game', `${DET}=2`], ['Une randonnée ou une sortie au zoo', `${EXP}=2`], ['Jouer à un jeu vidéo de dragons', `${REV}=2`], ['Passer la journée avec mes amis', `${SEN}=2`]]),
-    q('Au cinéma, tu choisis…', [['Un film qui fait un peu peur', `${DET}=2`], ['Un film de pirates ou de survie', `${EXP}=2`], ['Un film dans l\'espace', `${REV}=2`], ['Une histoire d\'amitié ou d\'amour', `${SEN}=2`]]),
-    q('Le héros que tu préfères…', [['Un détective qui remarque tout', `${DET}=2`], ['Une naufragée qui se débrouille', `${EXP}=2`], ['Un apprenti sorcier', `${REV}=2`], ['Un élève comme moi', `${SEN}=2`]]),
-    q('Tu ouvres un livre. Tu veux d\'abord…', [['Savoir qui est le coupable', `${DET}=2`], ['Partir loin de chez moi', `${EXP}=2`], ['Découvrir un monde inventé', `${REV}=2`], ['Ressentir des émotions', `${SEN}=2`]]),
-    q('Ton objet porte-bonheur serait…', [['Une loupe', `${DET}=2`], ['Une boussole', `${EXP}=2`], ['Une baguette ou un robot', `${REV}=2`], ['Un carnet secret', `${SEN}=2`]]),
-  ] },
-  resultScreen: { animation: 'none', displayTitle: true, displayDescription: true, imagePosition: 'background' },
-  visual: { isAnimationOn: true, showProgressBar: true, appearance: 'classic', colorButton: '#1d3557', colorProgressBar: '#e76f51' },
-  l10n: { noQuestions: 'Aucune question valide.', noPersonalities: 'Profils manquants ou en double.', start: 'Commencer',
-    currentOfTotal: '@current sur @total', skip: 'Passer', reset: 'Recommencer', notFinished: "Le questionnaire n'est pas terminé." },
-  a11y: { wheelStarted: 'Patiente un instant.', titleScreenWasOpened: "L'écran d'accueil est ouvert.",
-    progressBar: 'Barre de progression', resultsTitle: 'Voici ton résultat.', standby: 'Patiente.' },
-});
+const pq = {
+  titleScreen: { title: { text: 'Quel lecteur es-tu ?', display: true }, image: {}, skip: false },
+  resultScreen: { animation: 'fade-in', displayTitle: true, displayDescription: true, imagePosition: 'inline' },
+  personalities: [
+    { name: DET, image: {}, description: 'Tu aimes les mystères, les indices et les frissons. Cherche les rayons Enquête et Fantastique.' },
+    { name: EXP, image: {}, description: 'Tu aimes l’action, les voyages et la nature. Cherche les rayons Aventure et Animalier.' },
+    { name: REV, image: {}, description: 'Tu aimes les mondes inventés, la magie ou le futur. Cherche les rayons Fantasy, Science-fiction et Mythes.' },
+    { name: SEN, image: {}, description: 'Tu aimes les personnages, les sentiments et les histoires vraies. Cherche les rayons Romance et Littératures du réel.' },
+  ],
+  questions: [
+    q('Un samedi idéal, c’est…', [['Résoudre une énigme ou un escape game', DET], ['Une randonnée ou une sortie au zoo', EXP], ['Jouer à un jeu vidéo de dragons', REV], ['Passer la journée avec mes amis', SEN]]),
+    q('Au cinéma, tu choisis…', [['Un film qui fait un peu peur', DET], ['Un film de pirates ou de survie', EXP], ['Un film dans l’espace', REV], ['Une histoire d’amitié ou d’amour', SEN]]),
+    q('Le héros que tu préfères…', [['Un détective qui remarque tout', DET], ['Une naufragée qui se débrouille', EXP], ['Un apprenti sorcier', REV], ['Un élève comme moi', SEN]]),
+    q('Tu ouvres un livre. Tu veux d’abord…', [['Savoir qui est le coupable', DET], ['Partir loin de chez moi', EXP], ['Découvrir un monde inventé', REV], ['Ressentir des émotions', SEN]]),
+    q('Ton objet porte-bonheur serait…', [['Une loupe', DET], ['Une boussole', EXP], ['Une baguette ou un robot', REV], ['Un carnet secret', SEN]]),
+  ],
+  startText: 'Commencer',
+  progressText: 'Question @question sur @total',
+  retakeText: 'Recommencer',
+  animation: true,
+  buttonColor: '1d3557',
+  progressbarColor: 'e76f51',
+};
 fs.writeFileSync(`${OUT}/quel-lecteur.json`, JSON.stringify(pq));
-console.log('ok livre + quel-lecteur');
+console.log('ok livre + quel-lecteur (PersonalityQuiz 1.0)');

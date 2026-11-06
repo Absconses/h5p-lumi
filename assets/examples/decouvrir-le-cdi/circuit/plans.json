@@ -1,0 +1,167 @@
+[
+ {
+  "src": "src/titre.jpg",
+  "out": "media/s00-titre.jpg",
+  "title": "LA VIE D'UN LIVRE",
+  "kicker": "EMI · De l'autrice à la boîte à livres",
+  "accent": "f1c40f",
+  "side": "left",
+  "fx": 1.0
+ },
+ {
+  "src": "src/auteur.jpg",
+  "out": "media/s01-autrice.jpg",
+  "title": "L'AUTRICE",
+  "kicker": "Créer · Étape 1 · L'idée",
+  "accent": "b26bd6",
+  "side": "left",
+  "fx": 0.7
+ },
+ {
+  "src": "src/editeur.jpg",
+  "out": "media/s02-editeur.jpg",
+  "title": "LA MAISON D'ÉDITION",
+  "kicker": "Créer · Étape 2 · Le choix",
+  "accent": "b26bd6",
+  "side": "left"
+ },
+ {
+  "src": "src/illustration.jpg",
+  "out": "media/s03-couverture.jpg",
+  "title": "LA COUVERTURE",
+  "kicker": "Créer · Étape 3 · L'image",
+  "accent": "b26bd6",
+  "side": "left",
+  "fx": 0.8
+ },
+ {
+  "src": "src/imprimerie.jpg",
+  "out": "media/s04-imprimerie.jpg",
+  "title": "L'IMPRIMERIE",
+  "kicker": "Fabriquer · Étape 4",
+  "accent": "ff7a18",
+  "side": "left",
+  "fx": 0.8
+ },
+ {
+  "src": "src/identite-dos.jpg",
+  "out": "media/s05-identite.jpg",
+  "title": "SA CARTE D'IDENTITÉ",
+  "kicker": "Fabriquer · Étape 5 · ISBN",
+  "accent": "ff7a18",
+  "side": "left",
+  "fx": 0.5,
+  "dark": 0.75
+ },
+ {
+  "src": "src/entrepot.jpg",
+  "out": "media/s06-entrepot.jpg",
+  "title": "L'ENTREPÔT",
+  "kicker": "Vendre · Étape 6 · La distribution",
+  "accent": "00d2ff",
+  "side": "left",
+  "fx": 0.7
+ },
+ {
+  "src": "src/librairie.jpg",
+  "out": "media/s07-librairie.jpg",
+  "title": "LA LIBRAIRIE",
+  "kicker": "Vendre · Étape 7",
+  "accent": "00d2ff",
+  "side": "left",
+  "fx": 0.8
+ },
+ {
+  "src": "src/arrivee.jpg",
+  "out": "media/s08-equipement.jpg",
+  "title": "ARRIVÉE AU CDI",
+  "kicker": "Au CDI · Étape 8 · L'équipement",
+  "accent": "2ecc71",
+  "side": "left",
+  "fx": 0.8
+ },
+ {
+  "src": "src/nouveautes.jpg",
+  "out": "media/s09-nouveautes.jpg",
+  "title": "LES NOUVEAUTÉS",
+  "kicker": "Au CDI · Étape 9 · En vitrine",
+  "accent": "2ecc71",
+  "side": "left",
+  "fx": 0.7
+ },
+ {
+  "src": "src/rayon.jpg",
+  "out": "media/s10-rayon.jpg",
+  "title": "AU RAYON",
+  "kicker": "Au CDI · Étape 10 · La cote",
+  "accent": "2ecc71",
+  "side": "left",
+  "fx": 0.6
+ },
+ {
+  "src": "src/lecteur.jpg",
+  "out": "media/s11-lecteurs.jpg",
+  "title": "LES LECTEURS",
+  "kicker": "Au CDI · Étape 11 · Le prêt",
+  "accent": "2ecc71",
+  "side": "left",
+  "fx": 0.9
+ },
+ {
+  "src": "src/desherbage.jpg",
+  "out": "media/s12-desherbage.jpg",
+  "title": "LE DÉSHERBAGE",
+  "kicker": "Au CDI · Étape 12 · Faire de la place",
+  "accent": "2ecc71",
+  "side": "left",
+  "fx": 0.8
+ },
+ {
+  "src": "src/boite.jpg",
+  "out": "media/s13-boite.jpg",
+  "title": "LA BOÎTE À LIVRES",
+  "kicker": "Nouvelle vie · Étape 13",
+  "accent": "f1c40f",
+  "side": "left",
+  "fx": 0.75,
+  "fy": 0.4
+ },
+ {
+  "src": "src/activite1.jpg",
+  "out": "media/s14-quifait.jpg",
+  "title": "",
+  "kicker": "À toi de jouer · Qui fait quoi ?",
+  "accent": "f1c40f",
+  "side": "left",
+  "dark": 0.95
+ },
+ {
+  "src": "src/activite2.jpg",
+  "out": "media/s15-aucdi.jpg",
+  "title": "",
+  "kicker": "À toi de jouer · Ça se passe au CDI ?",
+  "accent": "f1c40f",
+  "side": "left",
+  "dark": 0.95
+ },
+ {
+  "src": "src/quiz.jpg",
+  "out": "media/s16-quiz.jpg",
+  "title": "",
+  "kicker": "",
+  "accent": "f1c40f",
+  "side": "full",
+  "dark": 0.85,
+  "blur": 8
+ },
+ {
+  "src": "src/credits.jpg",
+  "out": "media/s17-credits.jpg",
+  "title": "",
+  "kicker": "",
+  "accent": "f1c40f",
+  "side": "full",
+  "dark": 0.9,
+  "blur": 4
+ }
+]

@@ -167,6 +167,8 @@ Chaque réponse pointe vers un ou plusieurs **profils** (par leur **nom**). Idé
 ```
 ⚠️ `answers[].personality` doit reprendre **exactement** un `name` de `personalities` (plusieurs possibles, séparés par des virgules). Images en `{}` si non utilisées.
 
+⚠️ **Lecteur hors ligne (lien `/embed`) : écrire en format 1.0, pas 1.1.** Le lecteur joue ce type avec sa propre version 1.0.8 ; un contenu 1.1 (ci-dessus) y plante avec « Cannot read properties of undefined (reading 'length') » (constaté 2026-11-02). Format 1.0 : listes à plat `personalities` / `questions`, `titleScreen: { title: { text, display }, image: {}, skip }`, `startText`, `progressText` (`@question` / `@total`), `retakeText`, `animation`, `buttonColor` / `progressbarColor` **sans #** ; `personality` = noms seuls séparés par `, ` (pas de pondération `=2`) ; textes sans HTML ; apostrophes typographiques ’ ; `image: {}` **obligatoire** partout. Le paquet doit déclarer `H5P.PersonalityQuiz 1.0` et embarquer la bibliothèque 1.0 : repartir de `partage/decouvrir-le-cdi/quel-lecteur.h5p` (exemple complet : `assets/examples/decouvrir-le-cdi/build.mjs`).
+
 ## Quiz d'arithmétique — `H5P.ArithmeticQuiz`  (maths, questions auto-générées)
 
 Rien à rédiger : on **configure** seulement (hors thème « doc », inclus pour être complet).
