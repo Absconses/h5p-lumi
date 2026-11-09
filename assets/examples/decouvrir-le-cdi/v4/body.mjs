@@ -183,18 +183,25 @@ const MAPS = [
   ['enquête et policier', 'policier'], ['fantasy', 'fantasy'], ['fantastique', 'fantastique'], ['aventure', 'aventure'],
   ['romance', 'romance'], ['humour', 'humour'], ['société et tranches de vie', 'societe'], ['roman classique', 'classique'],
 ];
-const roadmaps = () => sub('H5P.ImageSlider 1.1', {
+// Une carte entière est illisible dans la colonne du livre : pour chaque genre, un diaporama
+// carte entière → moitié gauche (niveaux 1-2) → moitié droite (niveaux 3-4), à pleine largeur.
+const roadmap = ([g, f]) => sub('H5P.ImageSlider 1.1', {
   // Liste à un seul champ : chaque élément EST la bibliothèque ImageSlide (pas { imageSlide: … }).
-  imageSlides: MAPS.map(([g, f]) => sub('H5P.ImageSlide 1.1', { image: image(`roadmap-${f}.jpg`, `Carte du genre ${g}, du plus accessible au moins accessible`, `Carte ${g}`) }, 'Image Slide', `Carte ${g}`)),
-  aspectRatioMode: 'auto',
-  a11y: { nextSlide: 'Carte suivante', prevSlide: 'Carte précédente', gotoSlide: 'Aller à la carte %slide' },
-}, 'Image Slider', 'Les cartes des genres');
-const ch6maps = process.env.NOMAPS ? [] : [
-  text(`<h3>🗺️ Où en es-tu dans ton genre ?</h3>
-<p>Chaque genre a sa <strong>carte</strong>, du plus accessible (niveau 1, souvent des BD) au plus exigeant (niveau 4, les grands classiques). Fais défiler les cartes avec les flèches et trouve celle de <strong>ton genre préféré</strong>.</p>
-<p>Repère un livre que tu as déjà lu, ou le niveau où tu te sens bien. <strong>Tu en auras besoin pour la mission.</strong></p>`, 'Cartes des genres'),
-  roadmaps(),
-];
+  imageSlides: [
+    [`roadmap-${f}.jpg`, `Carte du genre ${g}, vue d’ensemble`],
+    [`roadmap-${f}-a.jpg`, `Carte du genre ${g}, niveaux 1 et 2`],
+    [`roadmap-${f}-b.jpg`, `Carte du genre ${g}, niveaux 3 et 4`],
+  ].map(([img, alt]) => sub('H5P.ImageSlide 1.1', { image: image(img, alt, alt) }, 'Image Slide', alt)),
+  aspectRatioMode: 'notFixed',
+  a11y: { nextSlide: 'Image suivante', prevSlide: 'Image précédente', gotoSlide: 'Aller à l’image %slide' },
+}, 'Image Slider', `Carte ${g}`);
+const EMO = { policier: '🕵️', fantasy: '🐉', fantastique: '👻', aventure: '🧭', romance: '💗', humour: '😂', societe: '🏙️', classique: '🖋️' };
+const ch6bis = chapter('6 bis. 🗺️ Les cartes des genres', [
+  text(`<h2 style="color:#1d3557">🗺️ Où en es-tu dans ton genre ?</h2>
+<p>Chaque genre a sa <strong>carte</strong>, du plus accessible (niveau 1, souvent des BD) au plus exigeant (niveau 4, les grands classiques).</p>
+<p>Descends jusqu’à la carte de <strong>ton genre préféré</strong>. Clique sur la flèche → pour <strong>zoomer</strong> : d’abord les niveaux 1 et 2, puis les niveaux 3 et 4. Repère un livre que tu as déjà lu, ou le niveau où tu te sens bien. <strong>Tu en auras besoin pour la mission.</strong></p>`, 'Intro cartes'),
+  ...MAPS.flatMap(([g, f]) => [text(`<h3>${EMO[f]} ${g[0].toUpperCase() + g.slice(1)}</h3>`, `Titre ${g}`), roadmap([g, f])]),
+]);
 
 /* ===== Ch.6 Les genres ⭐ ===== */
 const ch6 = chapter('6. ⭐ Trouver ses genres préférés', [
@@ -240,7 +247,6 @@ ${accroche('Tu as aimé un livre ? Le plus beau, c’est de trouver le suivant.'
     GENRES.map(([g, c]) => `${g} → pastille *${c}*`), 'Couleurs des genres'),
   text(bonus('<p>Trouve dans les rayons un roman dont <strong>tu hésites à deviner le genre</strong>. Compare ta réponse avec sa pastille : qu’est-ce qui t’a trompé·e ?</p>'), 'Bonus genres'),
   text(retiens('<p>Pour reconnaître un genre, j’observe <strong>la pastille</strong>, <strong>l’illustration</strong>, <strong>le titre</strong>, et je lis <strong>la quatrième de couverture</strong> pour y repérer des <strong>mots-indices</strong>.</p>'), 'Je retiens'),
-  ...ch6maps,
 ]);
 
 /* ===== Ch.7 Dewey ⭐ ===== */
@@ -316,7 +322,7 @@ const parcours = sub('H5P.DocumentationTool 1.8', {
     page('2. Je me situe', [
       dtext(process.env.NOMAPS
         ? '<p>Demande à ton professeur la <strong>carte de ton genre</strong> (du niveau 1 au niveau 4).</p>'
-        : '<p>Retourne voir la <strong>carte de ton genre</strong> (étape 6), ou l’affiche près des rayons.</p>'),
+        : '<p>Retourne voir la <strong>carte de ton genre</strong> (étape 6 bis), ou l’affiche près des rayons.</p>'),
       field('Sur la carte de mon genre, je me situe au niveau… parce que…', 'Niveau 2, parce que j’ai déjà lu…', '3'),
     ], '<p>Pas de bonne ou de mauvaise réponse : le niveau 1 n’est pas « pour les petits ». C’est juste le point de départ.</p>'),
     page('3. Je creuse', [
@@ -372,6 +378,6 @@ ${carte('🔴', 'Conseiller', '#fbeef0', '<p>Je fais mon parcours, <strong>puis 
 const book = clone(tpl);
 book.showCoverPage = true;
 book.bookCover = { coverDescription: cover, coverMedium: image('carte-mentale-cdi.jpg', 'Le CDI, un espace informationnel', 'Couverture') };
-book.chapters = [ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, ch9];
+book.chapters = [ch1, ch2, ch3, ch4, ch5, ch6, ...(process.env.NOMAPS ? [] : [ch6bis]), ch7, ch8, ch9];
 fs.writeFileSync(OUT, JSON.stringify(book));
 console.log('OK', book.chapters.length, 'chapitres');
