@@ -181,26 +181,30 @@ ${avecAide('<p>Glisse chaque étiquette au bout de sa flèche.</p>')}`, 'Intro')
 // NOMAPS=1 : version publique sans les cartes (elles contiennent des couvertures réelles).
 const MAPS = [
   ['enquête et policier', 'policier'], ['fantasy', 'fantasy'], ['fantastique', 'fantastique'], ['science-fiction et dystopie', 'sf'], ['aventure', 'aventure'],
-  ['romance', 'romance'], ['humour', 'humour'], ['société et tranches de vie', 'societe'], ['roman classique', 'classique'],
+  ['romance', 'romance'], ['mythes et récits historiques', 'mythes'], ['humour', 'humour'], ['société et tranches de vie', 'societe'], ['roman classique', 'classique'],
 ];
 // Une carte entière est illisible dans la colonne du livre : pour chaque genre, un diaporama
 // carte entière → moitié gauche (niveaux 1-2) → moitié droite (niveaux 3-4), à pleine largeur.
-const roadmap = ([g, f]) => sub('H5P.ImageSlider 1.1', {
-  // Liste à un seul champ : chaque élément EST la bibliothèque ImageSlide (pas { imageSlide: … }).
-  imageSlides: [
-    [`roadmap-${f}.jpg`, `Carte du genre ${g}, vue d’ensemble`],
-    [`roadmap-${f}-a.jpg`, `Carte du genre ${g}, niveaux 1 et 2`],
-    [`roadmap-${f}-b.jpg`, `Carte du genre ${g}, niveaux 3 et 4`],
-  ].map(([img, alt]) => sub('H5P.ImageSlide 1.1', { image: image(img, alt, alt) }, 'Image Slide', alt)),
-  aspectRatioMode: 'notFixed',
-  a11y: { nextSlide: 'Image suivante', prevSlide: 'Image précédente', gotoSlide: 'Aller à l’image %slide' },
-}, 'Image Slider', `Carte ${g}`);
-const EMO = { policier: '🕵️', fantasy: '🐉', fantastique: '👻', sf: '🚀', aventure: '🧭', romance: '💗', humour: '😂', societe: '🏙️', classique: '🖋️' };
-const ch6bis = chapter('6 bis. 🗺️ Les cartes des genres', [
-  text(`<h2 style="color:#1d3557">🗺️ Où en es-tu dans ton genre ?</h2>
-<p>Chaque genre a sa <strong>carte</strong>, du plus accessible (niveau 1, souvent des BD) au plus exigeant (niveau 4, les grands classiques).</p>
-<p>Descends jusqu’à la carte de <strong>ton genre préféré</strong>. Clique sur la flèche → pour <strong>zoomer</strong> : d’abord les niveaux 1 et 2, puis les niveaux 3 et 4. Repère un livre que tu as déjà lu, ou le niveau où tu te sens bien. <strong>Tu en auras besoin pour la mission.</strong></p>`, 'Intro cartes'),
-  ...MAPS.flatMap(([g, f]) => [text(`<h3>${EMO[f]} ${g[0].toUpperCase() + g.slice(1)}</h3>`, `Titre ${g}`), roadmap([g, f])]),
+// La carte entière en Image (proportions justes), puis un diaporama des deux moitiés zoomées
+// (niveaux 1-2, niveaux 3-4). Les deux moitiés ont le même format : pas de vide sous le diaporama.
+const roadmap = ([g, f]) => [
+  image(`roadmap-${f}.jpg`, `Carte du genre ${g}, du plus accessible au moins accessible`, `Carte ${g}`),
+  sub('H5P.ImageSlider 1.1', {
+    // Liste à un seul champ : chaque élément EST la bibliothèque ImageSlide (pas { imageSlide: … }).
+    imageSlides: [
+      [`roadmap-${f}-a.jpg`, `Carte du genre ${g}, niveaux 1 et 2 (zoom)`],
+      [`roadmap-${f}-b.jpg`, `Carte du genre ${g}, niveaux 3 et 4 (zoom)`],
+    ].map(([img, alt]) => sub('H5P.ImageSlide 1.1', { image: image(img, alt, alt) }, 'Image Slide', alt)),
+    aspectRatioMode: 'auto',
+    a11y: { nextSlide: 'Niveaux 3 et 4', prevSlide: 'Niveaux 1 et 2', gotoSlide: 'Aller à l’image %slide' },
+  }, 'Image Slider', `Zoom ${g}`),
+];
+const EMO = { policier: '🕵️', fantasy: '🐉', fantastique: '👻', sf: '🚀', aventure: '🧭', romance: '💗', mythes: '🏛️', humour: '😂', societe: '🏙️', classique: '🖋️' };
+const ch6bis = chapter('6 bis. 🌿 Les cartes des genres', [
+  text(`<h2 style="color:#2d6a4f">🌿 Chemin buissonnier · Les cartes des genres</h2><p style="color:#555555"><em>⏱ le temps que tu veux · rien n’est noté</em></p>
+<p>Ici, on <strong>flâne</strong>. Chaque genre a sa carte, du plus accessible (niveau 1, souvent des BD) au plus exigeant (niveau 4, les grands classiques). Promène-toi d’une carte à l’autre, arrête-toi sur les couvertures qui t’intriguent, même dans un genre que tu ne lis jamais.</p>
+<p>Sous chaque carte, les flèches font un <strong>zoom</strong> : niveaux 1 et 2, puis niveaux 3 et 4. Si un livre te fait envie, retiens son titre : il pourrait servir pour ta mission.</p>`, 'Intro cartes'),
+  ...MAPS.flatMap(([g, f]) => [text(`<h3>${EMO[f]} ${g[0].toUpperCase() + g.slice(1)}</h3>`, `Titre ${g}`), ...roadmap([g, f])]),
 ]);
 
 /* ===== Ch.6 Les genres ⭐ ===== */
