@@ -202,8 +202,10 @@ const roadmap = ([g, f]) => [
 const EMO = { policier: '🕵️', fantasy: '🐉', fantastique: '👻', sf: '🚀', aventure: '🧭', romance: '💗', mythes: '🏛️', humour: '😂', societe: '🏙️', classique: '🖋️' };
 const ch6bis = chapter('6 bis. 🌿 Les cartes des genres', [
   text(`<h2 style="color:#2d6a4f">🌿 Chemin buissonnier · Les cartes des genres</h2><p style="color:#555555"><em>⏱ le temps que tu veux · rien n’est noté</em></p>
-<p>Ici, on <strong>flâne</strong>. Chaque genre a sa carte, du plus accessible (niveau 1, souvent des BD) au plus exigeant (niveau 4, les grands classiques). Promène-toi d’une carte à l’autre, arrête-toi sur les couvertures qui t’intriguent, même dans un genre que tu ne lis jamais.</p>
-<p>Sous chaque carte, les flèches font un <strong>zoom</strong> : niveaux 1 et 2, puis niveaux 3 et 4. Si un livre te fait envie, retiens son titre : il pourrait servir pour ta mission.</p>`, 'Intro cartes'),
+<p>Et si tu voyais tes lectures comme un <strong>voyage</strong> ?</p>
+<p>Chacune de ces cartes dessine un <strong>parcours de lecteur</strong> à travers un genre : on part des îles les plus accessibles (niveau 1, souvent des BD) pour aller, petit à petit, vers le continent des grands textes (niveau 4). Elles servent à deux choses : <strong>te situer</strong> (où en es-tu, toi, dans ce genre ?) et, <strong>si l’envie t’en prend</strong>, <strong>avancer</strong> d’une étape pour mieux connaître un genre que tu aimes.</p>
+<p>Personne ne t’oblige à aller jusqu’au bout : chaque île vaut le voyage. Prends ton temps, flâne d’une carte à l’autre, laisse-toi tenter par une couverture, même dans un genre que tu n’as jamais essayé.</p>
+<p>Sous chaque carte, les flèches font un <strong>zoom</strong> : niveaux 1 et 2, puis niveaux 3 et 4. Un titre te fait de l’œil ? Note-le : il pourrait bien devenir ta prochaine lecture.</p>`, 'Intro cartes'),
   ...MAPS.flatMap(([g, f]) => [text(`<h3>${EMO[f]} ${g[0].toUpperCase() + g.slice(1)}</h3>`, `Titre ${g}`), ...roadmap([g, f])]),
 ]);
 
