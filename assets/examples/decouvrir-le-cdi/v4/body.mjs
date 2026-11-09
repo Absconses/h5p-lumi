@@ -304,7 +304,6 @@ const ch8 = chapter('8. Je vérifie avant la mission', [
 ]);
 
 /* ===== Ch.9 La mission ⭐ (Documentation Tool, export du document) ===== */
-const carte = (emoji, nom, bg, html) => box(`<p><strong>${emoji} Carte ${nom}</strong></p>${html}`, bg);
 const field = (task, ph, rows = '1') => sub('H5P.TextInputField 1.2', { taskDescription: task, placeholderText: ph, inputFieldSize: rows, requiredField: false, remainingChars: 'Caractères restants : @chars' }, 'Text Input Field', 'Champ');
 const dtext = (html) => sub('H5P.Text 1.1', { text: html }, 'Text', 'Texte');
 const page = (title, elements, helpText) => sub('H5P.StandardPage 1.5', { elementList: elements, helpTextLabel: 'Besoin d’aide ?', ...(helpText ? { helpText } : {}) }, 'Standard page', title);
@@ -314,7 +313,6 @@ const parcours = sub('H5P.DocumentationTool 1.8', {
     page('1. Je me repère', [
       dtext('<p>Dans les rayons des romans, trouve un livre d’un <strong>genre que tu aimes</strong> (ou qui te tente).</p>'),
       field('Prénom, nom et classe :', 'Léa Martin, 6e B'),
-      field('Ma carte mission (Boussole, Explorateur ou Conseiller) :', 'Explorateur'),
       field('Titre et auteur du roman :', '« … », de …'),
       field('Son genre et la couleur de sa pastille :', 'Enquête, pastille rouge'),
       field('Sa cote complète :', 'pastille + 3 lettres'),
@@ -336,10 +334,9 @@ const parcours = sub('H5P.DocumentationTool 1.8', {
       field('Ma passion :', 'le foot, les chats, l’espace…'),
       field('Titre du documentaire :', '« … »'),
       field('Son nombre Dewey et sa grande classe :', '796, classe 700 Arts, loisirs, sports'),
-    ], '<p>Cherche d’abord la grande classe dans le tableau Dewey (étape 7), puis va au rayon qui porte ce nombre.</p>'),
-    page('5. Je conseille et j’emprunte', [
+    ], '<p>Cherche d’abord la grande classe dans le tableau Dewey (étape 7), puis va au rayon qui porte ce nombre. Tu ne sais pas quoi chercher ? Essaie le 500 (animaux, Terre, espace) ou le 700 (sports, dessin, musique).</p>'),
+    page('5. J’emprunte', [
       field('Le livre que j’emprunte aujourd’hui (si j’en ai envie) :', '« … »'),
-      field('🔴 Carte Conseiller : le livre que j’ai conseillé à un camarade, et pourquoi :', 'J’ai conseillé « … » à … parce qu’il aime…', '3'),
     ]),
     page('6. Je repense à mon heure', [
       field('Ce qui m’a le plus aidé·e aujourd’hui :', '', '3'),
@@ -359,11 +356,7 @@ const parcours = sub('H5P.DocumentationTool 1.8', {
 const ch9 = chapter('9. ⭐ Ma mission : mon parcours de lecteur', [
   text(`<h2 style="color:#1d3557">🎯 Ma mission · Mon parcours de lecteur</h2><p style="color:#555555"><em>⏱ environ 15 minutes · dans les rayons</em></p>
 ${accroche('Un bon lecteur ne lit pas au hasard : il suit ses envies, d’un livre à l’autre. À toi de tracer ton propre chemin dans le CDI.')}
-<p>Choisis ta carte mission, puis pars dans les rayons avec ta tablette ou ton ordinateur. Tu rempliras ton parcours page par page, <strong>au fil de tes découvertes</strong>.</p>`, 'Intro'),
-  text(`<h3>Choisis ta carte</h3>
-${carte('🟢', 'Boussole', '#e8f6ee', '<p>Je ne sais pas encore ce que j’aime ? Je pars d’un genre que j’ai trouvé intéressant aujourd’hui. Pour le documentaire, je peux chercher dans le <strong>500</strong> (animaux, Terre, espace) ou le <strong>700</strong> (sports, dessin, musique).</p>')}
-${carte('🔵', 'Explorateur', '#eef4fb', '<p>Je fais mon parcours tout·e seul·e, sans indice.</p>')}
-${carte('🔴', 'Conseiller', '#fbeef0', '<p>Je fais mon parcours, <strong>puis je deviens conseiller·ère</strong> pour un camarade. Je lui pose deux questions (« Quel livre as-tu aimé ? Qu’est-ce qui te passionne ? »), puis je lui conseille un livre en lui expliquant pourquoi.</p>')}`, 'Cartes'),
+<p>Pars dans les rayons avec ta tablette ou ton ordinateur. Tu rempliras ton parcours page par page, <strong>au fil de tes découvertes</strong>.</p>`, 'Intro'),
   text(`<h3>Comment ton parcours sera regardé</h3>
 <table border="1" cellpadding="6" style="border-collapse:collapse;width:100%">
 <tr><th>Critère</th><th>Ce qu’on regarde</th></tr>
