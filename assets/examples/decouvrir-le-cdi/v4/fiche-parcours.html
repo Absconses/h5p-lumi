@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><title>Mon parcours de lecteur</title>
+<style>
+@page { size: A4; margin: 12mm; }
+body { font-family: "DejaVu Sans", Arial, sans-serif; font-size: 10pt; color: #1d1d1d; margin: 0; }
+h1 { font-size: 17pt; margin: 0 0 1mm; color: #1d3557; }
+.sous { margin: 0 0 4mm; color: #555; }
+.ligne { display: flex; gap: 6mm; margin-bottom: 3mm; }
+.ligne span { flex: 1; border-bottom: 1px solid #999; padding-bottom: 1mm; }
+.bloc { border: 1.5px solid #1d3557; border-radius: 3mm; padding: 2.5mm 4mm; margin-bottom: 3mm; }
+.bloc h2 { font-size: 12pt; margin: 0 0 2mm; color: #1d3557; }
+.champ { border-bottom: 1px dotted #888; height: 6mm; margin-bottom: 0.5mm; }
+.lab { font-size: 9pt; color: #444; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; column-gap: 6mm; }
+table { width: 100%; border-collapse: collapse; font-size: 9.5pt; }
+td, th { border: 1px solid #888; padding: 1.5mm 2mm; text-align: left; }
+th { background: #eef4fb; }
+.case { width: 14mm; text-align: center; }
+.cartes { page-break-before: always; }
+.carte { border: 2px dashed #888; border-radius: 4mm; padding: 6mm; margin-bottom: 8mm; font-size: 12pt; }
+.carte h2 { margin: 0 0 3mm; font-size: 15pt; }
+.v { background: #e8f6ee; } .b { background: #eef4fb; } .r { background: #fbeef0; }
+</style></head><body>
+
+<h1>📖 Mon parcours de lecteur, comme Matilda</h1>
+<p class="sous">Nom, prénom : ............................................................ Classe : ........... Ma carte : 🟢 Boussole · 🔵 Explorateur · 🔴 Mme Phelps</p>
+
+<div class="bloc"><h2>1. Je me repère : un roman d’un genre que j’aime</h2>
+<div class="grid2">
+<div><div class="lab">Titre</div><div class="champ"></div></div>
+<div><div class="lab">Auteur</div><div class="champ"></div></div>
+<div><div class="lab">Genre et couleur de la pastille</div><div class="champ"></div></div>
+<div><div class="lab">Cote (pastille + 3 lettres)</div><div class="champ"></div></div>
+</div></div>
+
+<div class="bloc"><h2>2. Je creuse : un deuxième livre qui ressemble au premier</h2>
+<div class="grid2">
+<div><div class="lab">Titre</div><div class="champ"></div></div>
+<div><div class="lab">Cote</div><div class="champ"></div></div>
+</div>
+<div class="lab">Il ressemble au premier parce que… (même genre ? même auteur ? même sujet ?)</div><div class="champ"></div>
+<div class="lab">Un indice trouvé sur sa quatrième de couverture :</div><div class="champ"></div>
+</div>
+
+<div class="bloc"><h2>3. Je m’aventure : un documentaire sur une de mes passions</h2>
+<div class="grid2">
+<div><div class="lab">Ma passion</div><div class="champ"></div></div>
+<div><div class="lab">Titre du documentaire</div><div class="champ"></div></div>
+<div><div class="lab">Nombre Dewey et sa grande classe (000 à 900)</div><div class="champ"></div></div>
+<div><div class="lab">Cote complète</div><div class="champ"></div></div>
+</div></div>
+
+<div class="bloc"><h2>4. J’emprunte (si j’en ai envie)</h2>
+<div class="lab">Le livre que j’emprunte aujourd’hui :</div><div class="champ"></div>
+<div class="lab">🔴 Carte Mme Phelps : le livre que j’ai conseillé à ………………………, et pourquoi :</div><div class="champ"></div>
+</div>
+
+<table>
+<tr><th>Critère</th><th>Ce qu’on regarde</th><th class="case">Moi</th><th class="case">Prof</th></tr>
+<tr><td>1. Je me repère</td><td>Les cotes sont justes : on peut retrouver les livres dans les rayons.</td><td></td><td></td></tr>
+<tr><td>2. Je creuse</td><td>Le 2ᵉ livre ressemble vraiment au 1ᵉʳ, et je l’explique avec un indice.</td><td></td><td></td></tr>
+<tr><td>3. Je m’aventure</td><td>Le documentaire correspond à ma passion et à la bonne classe Dewey.</td><td></td><td></td></tr>
+</table>
+
+<div class="bloc" style="margin-top:4mm"><h2>💭 Je repense à mon heure</h2>
+<div class="lab">Ce qui m’a le plus aidé·e :</div><div class="champ"></div>
+<div class="lab">Ce qui a été difficile :</div><div class="champ"></div>
+<div class="lab">Le livre que j’ai envie de lire en premier :</div><div class="champ"></div>
+</div>
+
+<div class="cartes">
+<p class="sous">Cartes missions, à découper et à distribuer (ou à laisser choisir).</p>
+<div class="carte v"><h2>🟢 Carte Boussole</h2>
+<p>Je ne sais pas encore ce que j’aime ? Je pars d’un genre que j’ai trouvé intéressant aujourd’hui.</p>
+<p>Pour le documentaire, je peux chercher dans le <strong>500</strong> (animaux, Terre, espace) ou le <strong>700</strong> (sports, dessin, musique).</p>
+<p>Je peux relire les étapes 5, 6 et 7 du livre si j’ai besoin.</p></div>
+<div class="carte b"><h2>🔵 Carte Explorateur</h2>
+<p>Je fais les 4 étapes de mon parcours tout·e seul·e, sans indice.</p></div>
+<div class="carte r"><h2>🔴 Carte Mme Phelps</h2>
+<p>Je fais mon parcours, <strong>puis je deviens Mme Phelps</strong> pour un camarade.</p>
+<p>Je lui pose deux questions : « Quel livre as-tu aimé ? Qu’est-ce qui te passionne ? »</p>
+<p>Puis je lui conseille un livre du CDI, et je lui explique pourquoi il devrait lui plaire.</p></div>
+</div>
+</body></html>
