@@ -1,8 +1,8 @@
-/* ================= V4 : fil rouge Matilda, 3 temps, chemin buissonnier, tâche finale ================= */
+/* ================= V4 : 3 temps, roadmaps de genres, chemin buissonnier, tâche finale ================= */
 // Usage : node build.mjs <gabarit extrait> <content.json> <media>   (build.mjs = lib-head.mjs + body.mjs)
 
 /* ---------- Petits blocs de mise en forme ---------- */
-const matilda = (html) => box(`<p>📖 <strong>Matilda</strong></p>${html}`, '#f3eefb');
+const accroche = (html) => `<p style="font-size:1.05em"><em>${html}</em></p>`;
 const decouvre = (html) => box(`<p><strong>🔍 Je découvre</strong></p>${html}`, '#eef4fb');
 const avecAide = (html) => `<h3>🤝 Je m'entraîne, avec de l'aide si besoin</h3>${html}`;
 const seul = (html) => `<h3>✋ Je fais seul·e</h3>${html}`;
@@ -60,17 +60,16 @@ const dragOnImage = (imgName, labels, title, intro) => {
 };
 
 /* ================= COUVERTURE ================= */
-const cover = `<h2 style="text-align:center">🔎 Découvrir le CDI, comme Matilda</h2>
-<p style="text-align:center">Matilda avait quatre ans quand elle est entrée seule dans la bibliothèque de son village. Elle y a trouvé bien plus que des livres : <strong>ses goûts à elle</strong>.</p>
-<p style="text-align:center"><strong>🎯 Ta mission, à la fin de cette heure :</strong> construire <strong>ton parcours de lecteur</strong>. Tu trouveras un livre que tu aimes, un deuxième qui lui ressemble, et un documentaire sur une de tes passions.</p>
+const cover = `<h2 style="text-align:center">🔎 Découvrir le CDI</h2>
+<p style="text-align:center">Le CDI, c’est un endroit pour se repérer… et pour découvrir <strong>ce que tu aimes lire</strong>.</p>
+<p style="text-align:center"><strong>🎯 Ta mission, à la fin de cette heure :</strong> tracer <strong>ton parcours de lecteur</strong>. Tu trouveras un livre que tu aimes, tu te situeras sur la carte de ton genre, tu choisiras le livre suivant, et un documentaire sur une de tes passions.</p>
 <p style="text-align:center">⭐ étape indispensable pour la mission (si tu es en retard, fais-la en priorité) · 🌿 chemin buissonnier · ⚡ défi bonus</p>
 <p style="text-align:center"><em>EMI · 6e · environ 1 heure · 9 étapes</em></p>`;
 
 /* ===== Ch.1 Où est le CDI ? ===== */
 const ch1 = chapter('1. Où est le CDI ?', [
   text(`${banner('Étape 1', 'Où se trouve le CDI ?', 3)}
-${matilda('<p>Un après-midi, pendant que sa mère joue au loto, Matilda marche <strong>toute seule</strong> jusqu’à la bibliothèque du village. Pour y arriver, il faut savoir où elle est !</p>')}
-<p>Toi aussi, tu dois savoir trouver le <strong>CDI</strong> (le <strong>Centre de Documentation et d’Information</strong>) sans qu’on t’y emmène. Sur le plan, repère d’abord le <strong>pavillon Bellevue</strong>, puis cherche la grande salle <strong>juste à côté du hall rond et du salon des visiteurs</strong>.</p>`, 'Intro'),
+<p>Tu dois savoir trouver le <strong>CDI</strong> (le <strong>Centre de Documentation et d’Information</strong>) sans qu’on t’y emmène. Sur le plan, repère d’abord le <strong>pavillon Bellevue</strong>, puis cherche la grande salle <strong>juste à côté du hall rond et du salon des visiteurs</strong>.</p>`, 'Intro'),
   findHotspot('plan-ecole.jpg', 'Clique sur le CDI sur le plan.', [
     { ok: true, x: 52.2, y: 32.6, w: 10.1, h: 14.8, fb: 'Bravo ! Le CDI se trouve dans le pavillon Bellevue, juste à côté du hall rond et du salon des visiteurs.' },
     { ok: false, x: 84.5, y: 0, w: 15.5, h: 22.5, fb: 'Ici, c’est la villa Rouge. Le CDI est plus près du centre du plan, dans le pavillon Bellevue.' },
@@ -84,7 +83,6 @@ ${matilda('<p>Un après-midi, pendant que sa mère joue au loto, Matilda marche 
 /* ===== Ch.2 À quoi sert le CDI ? ===== */
 const ch2 = chapter('2. À quoi sert le CDI ?', [
   text(`${banner('Étape 2', 'À quoi sert le CDI ?', 6)}
-${matilda('<p>À la bibliothèque, Mme Phelps, la bibliothécaire, laisse Matilda s’installer dans un grand fauteuil. La petite fille y reste des heures, à lire en paix. Une bibliothèque, ce n’est pas seulement un endroit où l’on range des livres.</p>')}
 ${decouvre('<p>Souviens-toi de la <strong>carte mentale</strong> que nous avons construite ensemble en classe. Elle montre les <strong>4 grandes missions</strong> du CDI.</p>')}`, 'Intro'),
   image('carte-mentale-cdi.jpg', 'Carte mentale : le CDI permet de s’informer, d’apprendre, de produire et de vivre ensemble', 'Carte mentale'),
   text(avecAide('<p>Lis bien chaque proposition : certaines ont un piège.</p>'), 'Accompagné'),
@@ -115,7 +113,7 @@ const CIRCUIT = `https://h5p-offline-player.vercel.app/embed?src=${RAW}`;
 const GRAND = `https://h5p-offline-player.vercel.app/embed?src=${encodeURIComponent(RAW)}&custom-css=${encodeURIComponent(CSS)}`;
 const ch3 = chapter('3. 🌿 Le voyage d’un livre', [
   text(`<h2 style="color:#2d6a4f">🌿 Chemin buissonnier · Le voyage d’un livre</h2><p style="color:#555555"><em>⏱ le temps que tu veux · rien n’est noté</em></p>
-${matilda('<p>Chez elle, Matilda voyage sans bouger de sa chambre : avec les livres, elle part sur de vieux voiliers, traverse l’Afrique ou l’Inde. Mais le livre lui-même, d’où vient-il ? Lui aussi a fait un long voyage avant d’arriver sur l’étagère.</p>')}
+${accroche('Avec les livres, on voyage sans bouger de sa chambre. Mais le livre lui-même, d’où vient-il ? Lui aussi a fait un long voyage avant d’arriver sur l’étagère.')}
 <p>Ici, pas d’exercice à réussir. <strong>Promène-toi</strong> sur la carte de la ville du livre en suivant « Le Secret du phare ». Avance avec la flèche →, arrête-toi où tu veux, reviens en arrière si ça te plaît.</p>`, 'Intro'),
   sub('H5P.IFrameEmbed 1.0', { source: CIRCUIT, width: '1000', height: '650', minWidth: '280', resizeSupported: true }, 'Iframe Embedder', 'Le circuit d’un livre'),
   text(`<p style="font-size:0.9em">Le cadre est trop petit ? <a href="${GRAND}" target="_blank" rel="noopener">Ouvrir le voyage du livre en grand</a>.</p>
@@ -125,7 +123,6 @@ ${matilda('<p>Chez elle, Matilda voyage sans bouger de sa chambre : avec les liv
 /* ===== Ch.4 Emprunter ===== */
 const ch4 = chapter('4. Emprunter un livre', [
   text(`${banner('Étape 4', 'Emporter un livre chez soi', 4)}
-${matilda('<p>Un jour, Mme Phelps dit à Matilda qu’elle peut <strong>emprunter</strong> des livres : les emporter chez elle, puis les rapporter. Matilda n’en revient pas ! Depuis, elle lit le soir, dans sa chambre.</p>')}
 ${avecAide('<p>Souviens-toi de ce que nous avons fait ensemble au comptoir du CDI.</p>')}`, 'Intro'),
   dragText('<strong>Remets les étapes du prêt dans l’ordre.</strong>', [
     'Étape 1 → *Je choisis un livre dans les rayons*',
@@ -151,7 +148,7 @@ ${avecAide('<p>Souviens-toi de ce que nous avons fait ensemble au comptoir du CD
 /* ===== Ch.5 Lire un livre comme un détective ⭐ ===== */
 const ch5 = chapter('5. ⭐ Un livre, de la couverture au dos', [
   text(`${banner('Étape 5', 'Observer un livre comme un détective', 7)}
-${matilda('<p>Matilda a lu tous les livres pour enfants. Pour choisir le suivant, elle ne peut pas tous les ouvrir ! Elle doit savoir où chercher les <strong>indices</strong>.</p>')}
+${accroche('Pour choisir un livre, tu ne peux pas tous les lire en entier ! Il faut savoir où chercher les indices.')}
 ${avecAide('<p>Glisse chaque étiquette au bout de sa flèche.</p>')}`, 'Intro'),
   ...dragOnImage('parties-livre-vierge.jpg', [
     { label: 'Tranche', from: [12, 672], to: [515, 36], tip: 'C’est le côté où l’on voit les pages.' },
@@ -180,10 +177,29 @@ ${avecAide('<p>Glisse chaque étiquette au bout de sa flèche.</p>')}`, 'Intro')
 </ul>`), 'Je retiens'),
 ]);
 
+/* ===== Roadmaps de genres (cartes du professeur documentaliste) ===== */
+// NOMAPS=1 : version publique sans les cartes (elles contiennent des couvertures réelles).
+const MAPS = [
+  ['enquête et policier', 'policier'], ['fantasy', 'fantasy'], ['fantastique', 'fantastique'], ['aventure', 'aventure'],
+  ['romance', 'romance'], ['humour', 'humour'], ['société et tranches de vie', 'societe'], ['roman classique', 'classique'],
+];
+const roadmaps = () => sub('H5P.ImageSlider 1.1', {
+  // Liste à un seul champ : chaque élément EST la bibliothèque ImageSlide (pas { imageSlide: … }).
+  imageSlides: MAPS.map(([g, f]) => sub('H5P.ImageSlide 1.1', { image: image(`roadmap-${f}.jpg`, `Carte du genre ${g}, du plus accessible au moins accessible`, `Carte ${g}`) }, 'Image Slide', `Carte ${g}`)),
+  aspectRatioMode: 'auto',
+  a11y: { nextSlide: 'Carte suivante', prevSlide: 'Carte précédente', gotoSlide: 'Aller à la carte %slide' },
+}, 'Image Slider', 'Les cartes des genres');
+const ch6maps = process.env.NOMAPS ? [] : [
+  text(`<h3>🗺️ Où en es-tu dans ton genre ?</h3>
+<p>Chaque genre a sa <strong>carte</strong>, du plus accessible (niveau 1, souvent des BD) au plus exigeant (niveau 4, les grands classiques). Fais défiler les cartes avec les flèches et trouve celle de <strong>ton genre préféré</strong>.</p>
+<p>Repère un livre que tu as déjà lu, ou le niveau où tu te sens bien. <strong>Tu en auras besoin pour la mission.</strong></p>`, 'Cartes des genres'),
+  roadmaps(),
+];
+
 /* ===== Ch.6 Les genres ⭐ ===== */
 const ch6 = chapter('6. ⭐ Trouver ses genres préférés', [
   text(`${banner('Étape 6', 'Reconnaître les genres de romans', 10)}
-${matilda('<p>Quand Matilda a fini les livres pour enfants, elle demande à Mme Phelps d’autres lectures. Mme Phelps lui propose des histoires de toutes sortes. Matilda en aime certaines plus que d’autres : petit à petit, elle découvre <strong>ses goûts</strong>.</p>')}
+${accroche('Tu as aimé un livre ? Le plus beau, c’est de trouver le suivant.')}
 <p>Au CDI, les romans sont classés par <strong>genre</strong>. Savoir reconnaître un genre, c’est le premier pas pour trouver <strong>les livres qui te ressemblent</strong>.</p>`, 'Intro'),
   text(decouvre(`<p>Regarde comment je devine le genre d’un livre en lisant sa <strong>quatrième de couverture</strong> :</p>
 <p style="padding-left:1em;border-left:3px solid #8aa;">En <strong>2150</strong>, la Terre est devenue trop chaude pour y vivre. Lina, douze ans, embarque à bord d’un immense <strong>vaisseau</strong> en route vers une nouvelle <strong>planète</strong>. Mais le <strong>robot</strong> qui pilote le navire se met à désobéir…</p>
@@ -224,15 +240,16 @@ ${matilda('<p>Quand Matilda a fini les livres pour enfants, elle demande à Mme 
     GENRES.map(([g, c]) => `${g} → pastille *${c}*`), 'Couleurs des genres'),
   text(bonus('<p>Trouve dans les rayons un roman dont <strong>tu hésites à deviner le genre</strong>. Compare ta réponse avec sa pastille : qu’est-ce qui t’a trompé·e ?</p>'), 'Bonus genres'),
   text(retiens('<p>Pour reconnaître un genre, j’observe <strong>la pastille</strong>, <strong>l’illustration</strong>, <strong>le titre</strong>, et je lis <strong>la quatrième de couverture</strong> pour y repérer des <strong>mots-indices</strong>.</p>'), 'Je retiens'),
+  ...ch6maps,
 ]);
 
 /* ===== Ch.7 Dewey ⭐ ===== */
 const ch7 = chapter('7. ⭐ Les documentaires et la classification Dewey', [
   text(`${banner('Étape 7', 'Explorer le monde réel avec les documentaires', 7)}
-${matilda('<p>Chez Matilda, il n’y a qu’un seul livre : un <strong>livre de cuisine</strong>, celui de sa mère. Ce n’est pas un roman : il explique quelque chose de <strong>réel</strong>. C’est un <strong>documentaire</strong>.</p>')}
+${accroche('Un livre de recettes de cuisine n’invente pas d’histoire : il explique quelque chose de réel. C’est un documentaire.')}
 <p>Les documentaires ne sont pas rangés par genre, mais par <strong>sujet</strong>, grâce à un système inventé en 1876 par l’Américain <strong>Melvil Dewey</strong>. Il a partagé tous les savoirs en <strong>10 grandes classes</strong>, de 000 à 900.</p>`, 'Intro'),
   image('dewey.jpg', 'Les 10 classes de la classification décimale de Dewey', 'Tableau Dewey'),
-  text(decouvre(`<p>Regarde comment je range le livre de cuisine de Matilda :</p>
+  text(decouvre(`<p>Regarde comment je range un livre de recettes de cuisine :</p>
 <ol><li>Je me demande : <strong>de quoi parle-t-il ?</strong> De cuisine, c’est-à-dire de savoir-faire pratiques.</li>
 <li>Je cherche la <strong>grande classe</strong> : les savoir-faire pratiques, ce sont les <strong>techniques</strong>. Donc <strong>600</strong>.</li>
 <li>Le nombre exact est plus <strong>précis</strong> : pour la cuisine, c’est <strong>641</strong>. Plus le nombre est long, plus le sujet est précis.</li></ol>`), 'Je découvre Dewey'),
@@ -280,33 +297,75 @@ const ch8 = chapter('8. Je vérifie avant la mission', [
   ], 'Bilan'),
 ]);
 
-/* ===== Ch.9 La mission ⭐ ===== */
+/* ===== Ch.9 La mission ⭐ (Documentation Tool, export du document) ===== */
 const carte = (emoji, nom, bg, html) => box(`<p><strong>${emoji} Carte ${nom}</strong></p>${html}`, bg);
+const field = (task, ph, rows = '1') => sub('H5P.TextInputField 1.2', { taskDescription: task, placeholderText: ph, inputFieldSize: rows, requiredField: false, remainingChars: 'Caractères restants : @chars' }, 'Text Input Field', 'Champ');
+const dtext = (html) => sub('H5P.Text 1.1', { text: html }, 'Text', 'Texte');
+const page = (title, elements, helpText) => sub('H5P.StandardPage 1.5', { elementList: elements, helpTextLabel: 'Besoin d’aide ?', ...(helpText ? { helpText } : {}) }, 'Standard page', title);
+const parcours = sub('H5P.DocumentationTool 1.8', {
+  taskDescription: 'Mon parcours de lecteur',
+  pagesList: [
+    page('1. Je me repère', [
+      dtext('<p>Dans les rayons des romans, trouve un livre d’un <strong>genre que tu aimes</strong> (ou qui te tente).</p>'),
+      field('Prénom, nom et classe :', 'Léa Martin, 6e B'),
+      field('Ma carte mission (Boussole, Explorateur ou Conseiller) :', 'Explorateur'),
+      field('Titre et auteur du roman :', '« … », de …'),
+      field('Son genre et la couleur de sa pastille :', 'Enquête, pastille rouge'),
+      field('Sa cote complète :', 'pastille + 3 lettres'),
+    ], '<p>La cote est collée sur le dos du livre. Pour un roman : la pastille de couleur et les 3 premières lettres du nom de l’auteur.</p>'),
+    page('2. Je me situe', [
+      dtext(process.env.NOMAPS
+        ? '<p>Demande à ton professeur la <strong>carte de ton genre</strong> (du niveau 1 au niveau 4).</p>'
+        : '<p>Retourne voir la <strong>carte de ton genre</strong> (étape 6), ou l’affiche près des rayons.</p>'),
+      field('Sur la carte de mon genre, je me situe au niveau… parce que…', 'Niveau 2, parce que j’ai déjà lu…', '3'),
+    ], '<p>Pas de bonne ou de mauvaise réponse : le niveau 1 n’est pas « pour les petits ». C’est juste le point de départ.</p>'),
+    page('3. Je creuse', [
+      dtext('<p>Trouve un <strong>deuxième livre</strong> qui ressemble au premier : le livre suivant sur la carte, le même auteur, ou le même genre. Va le chercher dans les rayons.</p>'),
+      field('Titre et auteur :', '« … », de …'),
+      field('Sa cote :', 'pastille + 3 lettres'),
+      field('Il ressemble au premier parce que… (cite un indice de sa quatrième de couverture)', 'Comme dans le premier, il y a… La quatrième de couverture parle de…', '3'),
+    ], '<p>Lis la quatrième de couverture : c’est là que se trouvent les mots-indices.</p>'),
+    page('4. Je m’aventure', [
+      dtext('<p>Trouve un <strong>documentaire</strong> sur une de tes passions.</p>'),
+      field('Ma passion :', 'le foot, les chats, l’espace…'),
+      field('Titre du documentaire :', '« … »'),
+      field('Son nombre Dewey et sa grande classe :', '796, classe 700 Arts, loisirs, sports'),
+    ], '<p>Cherche d’abord la grande classe dans le tableau Dewey (étape 7), puis va au rayon qui porte ce nombre.</p>'),
+    page('5. Je conseille et j’emprunte', [
+      field('Le livre que j’emprunte aujourd’hui (si j’en ai envie) :', '« … »'),
+      field('🔴 Carte Conseiller : le livre que j’ai conseillé à un camarade, et pourquoi :', 'J’ai conseillé « … » à … parce qu’il aime…', '3'),
+    ]),
+    page('6. Je repense à mon heure', [
+      field('Ce qui m’a le plus aidé·e aujourd’hui :', '', '3'),
+      field('Ce qui a été difficile :', '', '3'),
+      field('Le livre que j’ai le plus envie de lire :', '', '1'),
+    ]),
+    sub('H5P.DocumentExportPage 1.5', {
+      description: '<p>Bravo ! Clique sur <strong>Créer mon document</strong> pour voir ton parcours, puis <strong>Exporter</strong> pour le télécharger et le rendre à ton professeur.</p>',
+      createDocumentLabel: 'Créer mon document', submitTextLabel: 'Envoyer', submitSuccessTextLabel: 'Ton parcours a été envoyé !',
+      selectAllTextLabel: 'Tout sélectionner', exportTextLabel: 'Exporter', helpTextLabel: 'Besoin d’aide ?',
+      requiresInputErrorMessage: 'Des champs sont encore vides sur ces pages : @pages',
+    }, 'Document export page', 'Exporter'),
+  ],
+  i10n: { previousLabel: 'Précédent', nextLabel: 'Suivant', closeLabel: 'Fermer' },
+}, 'Documentation Tool', 'Mon parcours de lecteur');
+
 const ch9 = chapter('9. ⭐ Ma mission : mon parcours de lecteur', [
-  text(`<h2 style="color:#1d3557">🎯 Ma mission · Mon parcours de lecteur, comme Matilda</h2><p style="color:#555555"><em>⏱ environ 15 minutes · dans les rayons</em></p>
-${matilda('<p>Matilda n’a pas lu un livre au hasard : elle a suivi ses envies, d’un livre à l’autre, avec l’aide de Mme Phelps. À toi de tracer <strong>ton propre chemin</strong> dans le CDI.</p>')}
-<p>Prends ta <strong>fiche « Mon parcours de lecteur »</strong> (demande-la à ton professeur) et un crayon. Choisis ta carte mission, puis pars dans les rayons.</p>`, 'Intro'),
-  text(`<h3>Les 4 étapes de ton parcours</h3>
-<ol>
-<li><strong>Je me repère.</strong> Je trouve un roman d’un genre que j’aime. Je note son titre, son genre, sa pastille et sa cote.</li>
-<li><strong>Je creuse.</strong> Je trouve un deuxième livre qui ressemble au premier (même genre, même auteur, ou même sujet). J’écris pourquoi, avec un indice de sa quatrième de couverture.</li>
-<li><strong>Je m’aventure.</strong> Je trouve un documentaire sur une de mes passions. Je note son nombre Dewey et sa cote.</li>
-<li><strong>J’emprunte</strong> l’un des trois, si j’en ai envie.</li>
-</ol>`, 'Étapes'),
+  text(`<h2 style="color:#1d3557">🎯 Ma mission · Mon parcours de lecteur</h2><p style="color:#555555"><em>⏱ environ 15 minutes · dans les rayons</em></p>
+${accroche('Un bon lecteur ne lit pas au hasard : il suit ses envies, d’un livre à l’autre. À toi de tracer ton propre chemin dans le CDI.')}
+<p>Choisis ta carte mission, puis pars dans les rayons avec ta tablette ou ton ordinateur. Tu rempliras ton parcours page par page, <strong>au fil de tes découvertes</strong>.</p>`, 'Intro'),
   text(`<h3>Choisis ta carte</h3>
 ${carte('🟢', 'Boussole', '#e8f6ee', '<p>Je ne sais pas encore ce que j’aime ? Je pars d’un genre que j’ai trouvé intéressant aujourd’hui. Pour le documentaire, je peux chercher dans le <strong>500</strong> (animaux, Terre, espace) ou le <strong>700</strong> (sports, dessin, musique).</p>')}
-${carte('🔵', 'Explorateur', '#eef4fb', '<p>Je fais les 4 étapes tout·e seul·e, sans indice.</p>')}
-${carte('🔴', 'Mme Phelps', '#fbeef0', '<p>Je fais mon parcours, <strong>puis je deviens Mme Phelps</strong> pour un camarade. Je lui pose deux questions (« Quel livre as-tu aimé ? Qu’est-ce qui te passionne ? »), puis je lui conseille un livre en lui expliquant pourquoi.</p>')}`, 'Cartes'),
-  text(`<h3>Comment ta fiche sera regardée</h3>
+${carte('🔵', 'Explorateur', '#eef4fb', '<p>Je fais mon parcours tout·e seul·e, sans indice.</p>')}
+${carte('🔴', 'Conseiller', '#fbeef0', '<p>Je fais mon parcours, <strong>puis je deviens conseiller·ère</strong> pour un camarade. Je lui pose deux questions (« Quel livre as-tu aimé ? Qu’est-ce qui te passionne ? »), puis je lui conseille un livre en lui expliquant pourquoi.</p>')}`, 'Cartes'),
+  text(`<h3>Comment ton parcours sera regardé</h3>
 <table border="1" cellpadding="6" style="border-collapse:collapse;width:100%">
 <tr><th>Critère</th><th>Ce qu’on regarde</th></tr>
 <tr><td>1. Je me repère</td><td>Les cotes sont justes : on peut retrouver les livres dans les rayons.</td></tr>
-<tr><td>2. Je creuse</td><td>Le 2ᵉ livre ressemble vraiment au 1ᵉʳ, et je l’explique avec un indice.</td></tr>
+<tr><td>2. Je creuse</td><td>Le 2ᵉ livre prolonge vraiment le 1ᵉʳ, et je l’explique avec un indice.</td></tr>
 <tr><td>3. Je m’aventure</td><td>Le documentaire correspond à ma passion et à la bonne classe Dewey.</td></tr>
 </table>`, 'Grille'),
-  text(box(`<h3>💭 Pour finir : je repense à mon heure</h3>
-<p>Au bas de ta fiche, réponds en une phrase :</p>
-<ul><li>Qu’est-ce qui t’a le plus aidé·e aujourd’hui ?</li><li>Qu’est-ce qui a été difficile ?</li><li>Quel livre as-tu envie de lire en premier ?</li></ul>`, '#fff6dd'), 'Retour'),
+  parcours,
 ]);
 
 /* ================= LIVRE ================= */
