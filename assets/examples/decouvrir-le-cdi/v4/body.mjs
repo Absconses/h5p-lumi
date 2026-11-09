@@ -180,7 +180,7 @@ ${avecAide('<p>Glisse chaque étiquette au bout de sa flèche.</p>')}`, 'Intro')
 /* ===== Roadmaps de genres (cartes du professeur documentaliste) ===== */
 // NOMAPS=1 : version publique sans les cartes (elles contiennent des couvertures réelles).
 const MAPS = [
-  ['enquête et policier', 'policier'], ['fantasy', 'fantasy'], ['fantastique', 'fantastique'], ['aventure', 'aventure'],
+  ['enquête et policier', 'policier'], ['fantasy', 'fantasy'], ['fantastique', 'fantastique'], ['science-fiction et dystopie', 'sf'], ['aventure', 'aventure'],
   ['romance', 'romance'], ['humour', 'humour'], ['société et tranches de vie', 'societe'], ['roman classique', 'classique'],
 ];
 // Une carte entière est illisible dans la colonne du livre : pour chaque genre, un diaporama
@@ -195,7 +195,7 @@ const roadmap = ([g, f]) => sub('H5P.ImageSlider 1.1', {
   aspectRatioMode: 'notFixed',
   a11y: { nextSlide: 'Image suivante', prevSlide: 'Image précédente', gotoSlide: 'Aller à l’image %slide' },
 }, 'Image Slider', `Carte ${g}`);
-const EMO = { policier: '🕵️', fantasy: '🐉', fantastique: '👻', aventure: '🧭', romance: '💗', humour: '😂', societe: '🏙️', classique: '🖋️' };
+const EMO = { policier: '🕵️', fantasy: '🐉', fantastique: '👻', sf: '🚀', aventure: '🧭', romance: '💗', humour: '😂', societe: '🏙️', classique: '🖋️' };
 const ch6bis = chapter('6 bis. 🗺️ Les cartes des genres', [
   text(`<h2 style="color:#1d3557">🗺️ Où en es-tu dans ton genre ?</h2>
 <p>Chaque genre a sa <strong>carte</strong>, du plus accessible (niveau 1, souvent des BD) au plus exigeant (niveau 4, les grands classiques).</p>
