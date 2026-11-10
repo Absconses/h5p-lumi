@@ -84,13 +84,13 @@ const ch1 = chapter('1. Où est le CDI ?', [
 const ch2 = chapter('2. À quoi sert le CDI ?', [
   text(`${banner('Étape 2', 'À quoi sert le CDI ?', 6)}
 ${decouvre('<p>Souviens-toi de la <strong>carte mentale</strong> que nous avons construite ensemble en classe. Elle montre les <strong>4 grandes missions</strong> du CDI.</p>')}`, 'Intro'),
-  image('carte-mentale-cdi.jpg', 'Carte mentale : le CDI permet de s’informer, d’apprendre, de produire et de vivre ensemble', 'Carte mentale'),
+  image('carte-mentale-cdi.jpg', 'Carte mentale : le CDI permet de s’informer, d’apprendre, de produire et de se détendre', 'Carte mentale'),
   text(avecAide('<p>Lis bien chaque proposition : certaines ont un piège.</p>'), 'Accompagné'),
   mc('Qu’est-ce qu’on peut faire au CDI ? <strong>Coche toutes les bonnes réponses.</strong>', [
     ['Lire un magazine ou un journal jeunesse', true, 'Oui : c’est s’informer.'],
     ['Faire une recherche pour un exposé', true, 'Oui : c’est apprendre.'],
     ['Emprunter un roman pour le lire chez soi', true, 'Oui : le CDI prête des livres.'],
-    ['Jouer à un jeu de société à l’heure du midi', true, 'Oui : c’est vivre ensemble et se détendre, dans le calme.'],
+    ['Jouer à un jeu de société à l’heure du midi', true, 'Oui : on vient se détendre, dans le calme.'],
     ['Préparer un exposé en groupe en parlant très fort', false, 'Travailler en groupe, oui ! Mais à voix basse, pour respecter ceux qui lisent.'],
     ['Manger son goûter en lisant un magazine', false, 'Lire un magazine, oui. Mais on ne mange pas au CDI, pour protéger les livres.'],
   ], 'Que faire au CDI ?'),
@@ -99,11 +99,11 @@ ${decouvre('<p>Souviens-toi de la <strong>carte mentale</strong> que nous avons 
     'Léa feuillette le dernier numéro d’un magazine d’actualité. Elle vient *s’informer*.',
     'Tom révise sa leçon à la table d’étude. Il vient *apprendre*.',
     'Inès crée une affiche sur Canva pour son exposé. Elle vient *produire*.',
-    'Noah joue à un jeu de société avec ses camarades le midi. Il vient *vivre ensemble et se détendre*.',
+    'Noah joue à un jeu de société avec ses camarades le midi. Il vient *se détendre*.',
     'Sarah consulte un documentaire sur les volcans. Elle vient *s’informer*.',
     'La classe accroche ses affiches sur la grille d’exposition. Elle vient *produire*.',
   ], 'Les 4 missions'),
-  text(retiens('<p>Au CDI, je peux <strong>m’informer</strong>, <strong>apprendre</strong>, <strong>produire</strong> et <strong>vivre ensemble / me détendre</strong>. C’est un lieu calme qui appartient à tous : je respecte les autres et les documents.</p>'), 'Je retiens'),
+  text(retiens('<p>Au CDI, je peux <strong>m’informer</strong>, <strong>apprendre</strong>, <strong>produire</strong> et <strong>me détendre</strong>. C’est un lieu calme qui appartient à tous : je respecte les autres et les documents.</p>'), 'Je retiens'),
 ]);
 
 /* ===== Ch.3 Chemin buissonnier : le voyage d'un livre (non noté) ===== */
@@ -162,11 +162,6 @@ ${avecAide('<p>Glisse chaque étiquette au bout de sa flèche.</p>')}`, 'Intro')
 <ul><li>Je me dis : la pastille rose, c’est le genre <strong>romance</strong>. Je vais donc au rayon des romances.</li>
 <li>Puis : HAN, ce sont les <strong>3 premières lettres du nom de l’autrice</strong>. Dans le rayon, les livres sont rangés par ordre alphabétique : je cherche à la lettre <strong>H</strong>.</li></ul>
 <p>Pour un <strong>documentaire</strong>, c’est pareil, mais la pastille est remplacée par un <strong>nombre</strong> (le sujet, étape 7).</p>`), 'Je découvre la cote'),
-  text(seul(''), 'Seul'),
-  blanks('Écris ce que tu trouveras sur le dos de ces livres.', [
-    'Le roman <em>Le Secret du phare</em>, de Claire Dubois, est un roman d’enquête. Sur son dos : une pastille *rouge:Regarde la couleur du genre enquête* et les lettres *DUB:Les 3 premières lettres du nom de l’autrice*.',
-    'Le documentaire <em>Tout sur les océans</em>, de Lucie Martin, est rangé en sciences. Sur son dos : un nombre de la classe *500* et les lettres *MAR*.',
-  ], 'Lire une cote'),
   dragText('<strong>Où ranger chaque livre ?</strong> Tout dépend de sa nature.', [
     '« Le Secret du phare » raconte une histoire inventée : c’est un *roman*. Il est rangé par *genre*, grâce à sa *pastille*.',
     '« Tout sur les océans » explique le monde réel : c’est un *documentaire*. Il est rangé par *sujet*, grâce à son numéro *Dewey*.',
@@ -205,7 +200,8 @@ const ch6bis = chapter('6 bis. 🌿 Les cartes des genres', [
 <p>Et si tu voyais tes lectures comme un <strong>voyage</strong> ?</p>
 <p>Chacune de ces cartes dessine un <strong>parcours de lecteur</strong> à travers un genre : on part des îles les plus accessibles (niveau 1, souvent des BD) pour aller, petit à petit, vers le continent des grands textes (niveau 4). Elles servent à deux choses : <strong>te situer</strong> (où en es-tu, toi, dans ce genre ?) et, <strong>si l’envie t’en prend</strong>, <strong>avancer</strong> d’une étape pour mieux connaître un genre que tu aimes.</p>
 <p>Personne ne t’oblige à aller jusqu’au bout : chaque île vaut le voyage. Prends ton temps, flâne d’une carte à l’autre, laisse-toi tenter par une couverture, même dans un genre que tu n’as jamais essayé.</p>
-<p>Sous chaque carte, les flèches font un <strong>zoom</strong> : niveaux 1 et 2, puis niveaux 3 et 4. Un titre te fait de l’œil ? Note-le : il pourrait bien devenir ta prochaine lecture.</p>`, 'Intro cartes'),
+<p>📚 Ces cartes t’attendent aussi <strong>en vrai, sur la table d’exposition du CDI</strong> : va les voir, feuillette les livres qui y sont posés, et repars avec celui qui te tente.</p>
+<p>Ici, sous chaque carte, les flèches font un <strong>zoom</strong> : niveaux 1 et 2, puis niveaux 3 et 4. Un titre te fait de l’œil ? Note-le : il pourrait bien devenir ta prochaine lecture.</p>`, 'Intro cartes'),
   ...MAPS.flatMap(([g, f]) => [text(`<h3>${EMO[f]} ${g[0].toUpperCase() + g.slice(1)}</h3>`, `Titre ${g}`), ...roadmap([g, f])]),
 ]);
 
@@ -218,8 +214,8 @@ ${accroche('Tu as aimé un livre ? Le plus beau, c’est de trouver le suivant.'
 <p style="padding-left:1em;border-left:3px solid #8aa;">En <strong>2150</strong>, la Terre est devenue trop chaude pour y vivre. Lina, douze ans, embarque à bord d’un immense <strong>vaisseau</strong> en route vers une nouvelle <strong>planète</strong>. Mais le <strong>robot</strong> qui pilote le navire se met à désobéir…</p>
 <p>Je me dis : « 2150 », c’est le <strong>futur</strong>. « Vaisseau » et « planète », c’est l’<strong>espace</strong>. « Robot », c’est une <strong>technologie</strong> qui n’existe pas encore. Trois indices vont dans le même sens : c’est de la <strong>science-fiction</strong>.</p>`), 'Je découvre'),
   text(seul('<p>À ton tour, sur une autre quatrième de couverture.</p>'), 'Seul'),
-  markWords('Clique sur les <strong>5 mots-indices</strong> qui montrent que c’est un <strong>roman d’enquête</strong>.',
-    '<p>Le jour de la fête du collège, le trophée de football *disparaît* de la vitrine. Personne n’a rien vu… sauf Malik, qui remarque un *indice* étrange : une trace de peinture bleue. Avec son amie Jade, il mène l’*enquête*. Chaque *suspect* a un alibi. Qui pourra résoudre ce *mystère* ?</p>', 'Indices enquête',
+  markWords('Clique sur les <strong>8 mots-indices</strong> qui montrent que c’est un <strong>roman d’enquête</strong>.',
+    '<p>Le jour de la fête du collège, le trophée de football *disparaît* de la vitrine. Personne n’a rien vu… sauf Malik, qui remarque un *indice* étrange : une *trace* de peinture bleue. Avec son amie Jade, il mène une *enquête*. Chaque *suspect* a un *alibi*. Qui pourra *résoudre* ce *mystère* ?</p>', 'Indices enquête',
     [
       { from: 0, to: 59, feedback: 'Cherche les mots qui parlent de vol, de crime, de détective.' },
       { from: 60, to: 99, feedback: 'Bien vu ! Il reste un ou deux indices à trouver.' },
@@ -259,14 +255,14 @@ ${accroche('Tu as aimé un livre ? Le plus beau, c’est de trouver le suivant.'
 const ch7 = chapter('7. ⭐ Les documentaires et la classification Dewey', [
   text(`${banner('Étape 7', 'Explorer le monde réel avec les documentaires', 7)}
 ${accroche('Un livre de recettes de cuisine n’invente pas d’histoire : il explique quelque chose de réel. C’est un documentaire.')}
-<p>Les documentaires ne sont pas rangés par genre, mais par <strong>sujet</strong>, grâce à un système inventé en 1876 par l’Américain <strong>Melvil Dewey</strong>. Il a partagé tous les savoirs en <strong>10 grandes classes</strong>, de 000 à 900.</p>`, 'Intro'),
-  image('dewey.jpg', 'Les 10 classes de la classification décimale de Dewey', 'Tableau Dewey'),
+<p>Les documentaires ne sont pas rangés par genre, mais par <strong>sujet</strong>, grâce à un système inventé en 1876 par l’Américain <strong>Melvil Dewey</strong>. Il a partagé tous les savoirs en <strong>10 grands domaines</strong>, numérotés de 000 à 900.</p>`, 'Intro'),
+  image('dewey.jpg', 'Les 10 domaines de la classification décimale de Dewey', 'Tableau Dewey'),
   text(decouvre(`<p>Regarde comment je range un livre de recettes de cuisine :</p>
 <ol><li>Je me demande : <strong>de quoi parle-t-il ?</strong> De cuisine, c’est-à-dire de savoir-faire pratiques.</li>
-<li>Je cherche la <strong>grande classe</strong> : les savoir-faire pratiques, ce sont les <strong>techniques</strong>. Donc <strong>600</strong>.</li>
+<li>Je cherche le <strong>domaine</strong> : les savoir-faire pratiques, ce sont les <strong>techniques</strong>. Donc <strong>600</strong>.</li>
 <li>Le nombre exact est plus <strong>précis</strong> : pour la cuisine, c’est <strong>641</strong>. Plus le nombre est long, plus le sujet est précis.</li></ol>`), 'Je découvre Dewey'),
   text(avecAide(''), 'Accompagné'),
-  dragText('<strong>Dans quelle classe Dewey ranger ces documentaires ?</strong> Aide-toi du tableau.', [
+  dragText('<strong>Dans quel domaine Dewey ranger ces documentaires ?</strong> Aide-toi du tableau.', [
     'Les grands peintres du XXe siècle → *700 Arts et loisirs*',
     'Apprendre à programmer avec Scratch → *000 Informatique, généralités*',
     'Les étoiles et les planètes → *500 Sciences*',
@@ -277,20 +273,15 @@ ${accroche('Un livre de recettes de cuisine n’invente pas d’histoire : il ex
     'Les grandes questions, qu’est-ce que le bonheur ? → *100 Philosophie et psychologie*',
     'La Révolution française → *900 Histoire et géographie*',
   ], 'Classer en Dewey'),
-  text(pouce('Tu hésites ? Ouvre la classe qui te semble la bonne.'), 'Coup de pouce Dewey'),
-  accordion(DEWEY.map(([n, t, ex]) => [`${n} — ${t}`, `<p>Exemples : ${ex}.</p>`]), 'Les 10 classes'),
+  text(pouce('Tu hésites ? Ouvre le domaine qui te semble le bon.'), 'Coup de pouce Dewey'),
+  accordion(DEWEY.map(([n, t, ex]) => [`${n} — ${t}`, `<p>Exemples : ${ex}.</p>`]), 'Les 10 domaines'),
   text(seul(''), 'Seul'),
   mc('Sur le dos d’un documentaire sur les volcans, tu lis : <strong>551.21 MON</strong>. Que veut dire <strong>MON</strong> ?', [
     ['Les trois premières lettres du nom de l’auteur', true, 'Oui : comme pour les romans. L’auteur s’appelle peut-être Monnier ou Montel.'],
     ['Les trois premières lettres du titre du livre', false, 'Non : le titre n’est pas dans la cote. Les lettres renvoient toujours à l’auteur.'],
     ['Les trois premières lettres du sujet, les montagnes', false, 'Tentant ! Mais le sujet est déjà donné par le nombre 551.21. Les lettres, elles, renvoient à l’auteur.'],
   ], 'Lire une cote de documentaire'),
-  blanks('Complète avec le bon mot ou le bon nombre.', [
-    'Les documentaires sont rangés par *sujet/thème* grâce à la classification *Dewey*.',
-    'Un livre sur les animaux de la savane porte un nombre de la classe *500*.',
-    'Un livre sur l’histoire du football porte un nombre de la classe *700:Le sport, c’est un loisir…*.',
-  ], 'Texte Dewey'),
-  text(rayon('<p>Choisis un sujet qui te passionne (le foot, les chats, l’espace, le dessin…). Cherche sa classe dans le tableau, puis va voir dans les rayons s’il y a des documentaires sur ce sujet. Retiens le nombre : il te servira pour la mission !</p>'), 'Rayons Dewey'),
+  text(rayon('<p>Choisis un sujet qui te passionne (le foot, les chats, l’espace, le dessin…). Cherche son domaine dans le tableau, puis va voir dans les rayons s’il y a des documentaires sur ce sujet. Retiens le nombre : il te servira pour la mission !</p>'), 'Rayons Dewey'),
   text(bonus('<p>Trouve dans les rayons le documentaire dont le <strong>nombre Dewey est le plus long</strong>. De quoi parle-t-il ? Pourquoi son nombre est-il si précis ?</p>'), 'Bonus Dewey'),
   text(retiens('<p>Romans → rangés par <strong>genre</strong> (pastille) puis par <strong>auteur</strong>. Documentaires → rangés par <strong>sujet</strong>, avec le <strong>nombre Dewey</strong> (000 à 900).</p>'), 'Je retiens'),
 ]);
@@ -326,7 +317,7 @@ const parcours = sub('H5P.DocumentationTool 1.8', {
     page('2. Je me situe', [
       dtext(process.env.NOMAPS
         ? '<p>Demande à ton professeur la <strong>carte de ton genre</strong> (du niveau 1 au niveau 4).</p>'
-        : '<p>Retourne voir la <strong>carte de ton genre</strong> (étape 6 bis), ou l’affiche près des rayons.</p>'),
+        : '<p>Retourne voir la <strong>carte de ton genre</strong> (étape 6 bis), ou va la voir sur la table d’exposition du CDI.</p>'),
       field('Sur la carte de mon genre, je me situe au niveau… parce que…', 'Niveau 2, parce que j’ai déjà lu…', '3'),
     ], '<p>Pas de bonne ou de mauvaise réponse : le niveau 1 n’est pas « pour les petits ». C’est juste le point de départ.</p>'),
     page('3. Je creuse', [
@@ -339,8 +330,8 @@ const parcours = sub('H5P.DocumentationTool 1.8', {
       dtext('<p>Trouve un <strong>documentaire</strong> sur une de tes passions.</p>'),
       field('Ma passion :', 'le foot, les chats, l’espace…'),
       field('Titre du documentaire :', '« … »'),
-      field('Son nombre Dewey et sa grande classe :', '796, classe 700 Arts, loisirs, sports'),
-    ], '<p>Cherche d’abord la grande classe dans le tableau Dewey (étape 7), puis va au rayon qui porte ce nombre. Tu ne sais pas quoi chercher ? Essaie le 500 (animaux, Terre, espace) ou le 700 (sports, dessin, musique).</p>'),
+      field('Son nombre Dewey et son domaine :', '796, domaine 700 Arts, loisirs, sports'),
+    ], '<p>Cherche d’abord le domaine dans le tableau Dewey (étape 7), puis va au rayon qui porte ce nombre. Tu ne sais pas quoi chercher ? Essaie le 500 (animaux, Terre, espace) ou le 700 (sports, dessin, musique).</p>'),
     page('5. J’emprunte', [
       field('Le livre que j’emprunte aujourd’hui (si j’en ai envie) :', '« … »'),
     ]),
@@ -368,7 +359,7 @@ ${accroche('Un bon lecteur ne lit pas au hasard : il suit ses envies, d’un liv
 <tr><th>Critère</th><th>Ce qu’on regarde</th></tr>
 <tr><td>1. Je me repère</td><td>Les cotes sont justes : on peut retrouver les livres dans les rayons.</td></tr>
 <tr><td>2. Je creuse</td><td>Le 2ᵉ livre prolonge vraiment le 1ᵉʳ, et je l’explique avec un indice.</td></tr>
-<tr><td>3. Je m’aventure</td><td>Le documentaire correspond à ma passion et à la bonne classe Dewey.</td></tr>
+<tr><td>3. Je m’aventure</td><td>Le documentaire correspond à ma passion et au bon domaine Dewey.</td></tr>
 </table>`, 'Grille'),
   parcours,
 ]);
