@@ -64,7 +64,7 @@ const cover = `<h2 style="text-align:center">🔎 Découvrir le CDI</h2>
 <p style="text-align:center">Le CDI, c’est un endroit pour se repérer… et pour découvrir <strong>ce que tu aimes lire</strong>.</p>
 <p style="text-align:center"><strong>🎯 Ta mission, à la fin de cette heure :</strong> repartir avec <strong>un roman qui te tente</strong> et <strong>un documentaire sur une de tes passions</strong>.</p>
 <p style="text-align:center">⭐ étape indispensable pour la mission (si tu es en retard, fais-la en priorité) · 🌿 chemin buissonnier</p>
-<p style="text-align:center"><em>EMI · 6e · environ 1 heure · 9 étapes</em></p>`;
+<p style="text-align:center"><em>EMI · 6e · environ 1 heure · 10 étapes</em></p>`;
 
 /* ===== Ch.1 Où est le CDI ? ===== */
 const ch1 = chapter('1. Où est le CDI ?', [
@@ -366,10 +366,53 @@ const ch9 = chapter('9. ⭐ Ma mission', [
   parcours,
 ]);
 
+/* ===== Ch.10 Outro : les droits du lecteur (Pennac, ill. Quentin Blake) ===== */
+// Image sous droits (Quentin Blake) : version privée seulement ; la version publique (NOMAPS) garde le texte.
+const DROITS = [
+  [9.8, 26.5, '1. Le droit de ne pas lire', 'Tu as le droit de préférer autre chose aujourd’hui. On ne devient pas lecteur par obligation… mais la porte du CDI reste toujours ouverte.'],
+  [36, 26.5, '2. Le droit de sauter des pages', 'Une description trop longue ? Tu peux passer à la suite. Ce n’est pas tricher.'],
+  [12.7, 58, '3. Le droit de ne pas finir un livre', 'Un livre ne te plaît pas ? Tu peux le rendre et en choisir un autre : des centaines t’attendent au CDI.'],
+  [36, 58, '4. Le droit de relire', 'Relire un livre qu’on aime, c’est retrouver un ami. Et on découvre souvent des détails qu’on n’avait pas vus.'],
+  [12.7, 87, '5. Le droit de lire n’importe quoi', 'BD, manga, magazine, histoire qui fait peur… toutes les lectures comptent. C’est en lisant ce qu’on aime qu’on prend goût à lire.'],
+  [37, 84, '6. Le droit au bovarysme', 'Le mot vient d’Emma Bovary, une héroïne qui vivait ses lectures comme sa propre vie. C’est le droit de se reconnaître dans un personnage et de vibrer avec lui : « C’est tout à fait moi ! »'],
+  [62.5, 19, '7. Le droit de lire n’importe où', 'Dans ton lit, dans le bus, sous un arbre, au CDI… un livre se lit partout.'],
+  [86, 19, '8. Le droit de grappiller', 'Ouvrir un livre au hasard, lire un passage, piocher un chapitre : c’est grappiller, comme on picore des grains de raisin.'],
+  [67, 48, '9. Le droit de lire à voix haute', 'Lire à voix haute, pour soi ou pour un petit frère, c’est faire entendre la musique des mots.'],
+  [89, 48, '10. Le droit de nous taire', 'Tu n’es pas obligé·e de raconter ce que tu as lu ni ce que tu en as pensé. Ta lecture t’appartient.'],
+  [74, 79.5, 'Et un seul devoir…', 'Ne jamais se moquer de ceux qui ne lisent pas. Chacun avance à son rythme, comme sur les cartes des genres.'],
+];
+const droitsImage = sub('H5P.ImageHotspots 1.10', {
+  image: file('droits-lecteur.jpg'),
+  backgroundImageAltText: 'Les dix droits du lecteur, de Daniel Pennac, illustrés par Quentin Blake',
+  iconType: 'icon', icon: 'plus', color: '#c0392b',
+  hotspots: DROITS.map(([x, y, h, t]) => ({ position: { x, y, legacyPositioning: false }, alwaysFullscreen: false, header: h,
+    content: [sub('H5P.Text 1.1', { text: `<p>${t}</p>` }, 'Text', h)] })),
+  hotspotNumberLabel: 'Droit n° #num', closeButtonLabel: 'Fermer', containsAudioVideoLabel: 'Contient un son ou une vidéo',
+}, 'Image Hotspots', 'Les dix droits du lecteur');
+const onzieme = sub('H5P.Questionnaire 1.3', {
+  questionnaireElements: [{ library: sub('H5P.OpenEndedQuestion 1.0', {
+    question: 'Et toi, quel <strong>11ᵉ droit du lecteur</strong> inventerais-tu ? Commence par « Le droit de… », puis explique-le en une phrase.',
+    placeholderText: 'Le droit de… parce que…', inputRows: '3' }, 'Open Ended Question', '11e droit'), requiredField: true }],
+  successScreenOptions: { enableSuccessScreen: true, successMessage: 'Merci ! Ton 11ᵉ droit rejoint la collection de la classe. À bientôt au CDI, et bonne lecture !' },
+  uiElements: { buttonLabels: { prevLabel: 'Retour', continueLabel: 'Continuer', nextLabel: 'Suivant', submitLabel: 'Envoyer' },
+    accessibility: { requiredTextExitLabel: 'Fermer le message', progressBarText: 'Question %current sur %max' },
+    requiredMessage: 'Écris ton droit avant d’envoyer.', requiredText: 'obligatoire', submitScreenTitle: 'Ton droit est écrit !', submitScreenSubtitle: 'Clique sur Envoyer.' },
+}, 'Questionnaire', 'Mon 11e droit du lecteur');
+const ch10 = chapter('10. 🌿 Les droits du lecteur', [
+  text(`<h2 style="color:#2d6a4f">🌿 Pour finir · Les droits du lecteur</h2>
+${accroche('Tu as trouvé ton roman, ton documentaire… Mais au fait, est-ce qu’on est obligé de tout lire, jusqu’au bout, sans sauter une page ?')}
+<p>L’écrivain <strong>Daniel Pennac</strong> a répondu en écrivant <strong>les dix droits du lecteur</strong>. ${process.env.NOMAPS ? 'Les voici.' : 'Clique sur les <strong>+</strong> pour découvrir ce que veut dire chacun.'}</p>`, 'Intro droits'),
+  ...(process.env.NOMAPS
+    ? [text(`<ol>${DROITS.slice(0, 10).map(([, , h, t]) => `<li><strong>${h.replace(/^\d+\. /, '')}</strong> : ${t}</li>`).join('')}</ol><p><strong>Et un seul devoir</strong> : ${DROITS[10][3]}</p>`, 'Les dix droits')]
+    : [droitsImage]),
+  text(seul('<p>Dernier défi : à ton tour d’écrire la loi.</p>'), 'Seul'),
+  onzieme,
+]);
+
 /* ================= LIVRE ================= */
 const book = clone(tpl);
 book.showCoverPage = true;
 book.bookCover = { coverDescription: cover, coverMedium: image('carte-mentale-cdi.jpg', 'Le CDI, un espace informationnel', 'Couverture') };
-book.chapters = [ch1, ch2, ch3, ch4, ch5, ch6, ...(process.env.NOMAPS ? [] : [ch6bis]), ch7, ch8, ch9];
+book.chapters = [ch1, ch2, ch3, ch4, ch5, ch6, ...(process.env.NOMAPS ? [] : [ch6bis]), ch7, ch8, ch9, ch10];
 fs.writeFileSync(OUT, JSON.stringify(book));
 console.log('OK', book.chapters.length, 'chapitres');
