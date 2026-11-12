@@ -292,7 +292,7 @@ ${accroche('Un livre de recettes de cuisine n’invente pas d’histoire : il ex
 <p>Les documentaires ne sont pas rangés par genre, mais par <strong>sujet</strong>, grâce à un système inventé en 1876 par l’Américain <strong>Melvil Dewey</strong>. Il a partagé tous les savoirs en <strong>10 grands domaines</strong>, numérotés de 000 à 900.</p>`, 'Intro'),
   image('dewey.jpg', 'Les 10 domaines de la classification décimale de Dewey', 'Tableau Dewey'),
   text(decouvre(`<p>Le tableau ci-dessus résume les 10 domaines. Pour aller plus vite, voici le <strong>mur des domaines</strong> : tape <strong>cuisine</strong> dans la case de recherche : dans quel domaine tombe un livre de recettes ?</p>`), 'Je découvre Dewey'),
-  sub('H5P.IFrameEmbed 1.0', { source: MUR, width: '1000', height: '1100', minWidth: '280', resizeSupported: true }, 'Iframe Embedder', 'Le mur des domaines Dewey'),
+  sub('H5P.IFrameEmbed 1.0', { source: MUR, width: '1000', height: '1500', minWidth: '280', resizeSupported: true }, 'Iframe Embedder', 'Le mur des domaines Dewey'),
   text(`<p style="font-size:0.9em">Le mur ne s’affiche pas ? <a href="${MUR}" target="_blank" rel="noopener">Ouvrir le mur des domaines en grand</a>.</p>
 <p>Tu as trouvé ? <strong>600, les techniques</strong> : cuisiner, c’est un savoir-faire pratique. Le nombre exact est plus <strong>précis</strong> : pour la cuisine, c’est <strong>641</strong>. Plus le nombre est long, plus le sujet est précis.</p>
 <p>Essaie maintenant avec <strong>ta passion</strong> : foot, chat, volcan, dessin… Tu pourrais être surpris·e : les chats sauvages sont en 500 (sciences), mais ton chat à la maison est en 600 (animaux de compagnie) !</p>`, 'Réponse cuisine'),
@@ -370,17 +370,17 @@ const ch9 = chapter('9. ⭐ Ma mission', [
 /* ===== Ch.10 Outro : les droits du lecteur (Pennac, ill. Quentin Blake) ===== */
 // Image sous droits (Quentin Blake) : version privée seulement ; la version publique (NOMAPS) garde le texte.
 const DROITS = [
-  [9.8, 26.5, '1. Le droit de ne pas lire', 'Tu as le droit de préférer autre chose aujourd’hui. On ne devient pas lecteur par obligation… mais la porte du CDI reste toujours ouverte.'],
-  [36, 26.5, '2. Le droit de sauter des pages', 'Une description trop longue ? Tu peux passer à la suite. Ce n’est pas tricher.'],
-  [12.7, 58, '3. Le droit de ne pas finir un livre', 'Un livre ne te plaît pas ? Tu peux le rendre et en choisir un autre : des centaines t’attendent au CDI.'],
-  [36, 58, '4. Le droit de relire', 'Relire un livre qu’on aime, c’est retrouver un ami. Et on découvre souvent des détails qu’on n’avait pas vus.'],
-  [12.7, 87, '5. Le droit de lire n’importe quoi', 'BD, manga, magazine, histoire qui fait peur… toutes les lectures comptent. C’est en lisant ce qu’on aime qu’on prend goût à lire.'],
-  [37, 84, '6. Le droit au bovarysme', 'Le mot vient d’Emma Bovary, une héroïne qui vivait ses lectures comme sa propre vie. C’est le droit de se reconnaître dans un personnage et de vibrer avec lui : « C’est tout à fait moi ! »'],
-  [62.5, 19, '7. Le droit de lire n’importe où', 'Dans ton lit, dans le bus, sous un arbre, au CDI… un livre se lit partout.'],
-  [86, 19, '8. Le droit de grappiller', 'Ouvrir un livre au hasard, lire un passage, piocher un chapitre : c’est grappiller, comme on picore des grains de raisin.'],
-  [67, 48, '9. Le droit de lire à voix haute', 'Lire à voix haute, pour soi ou pour un petit frère, c’est faire entendre la musique des mots.'],
-  [89, 48, '10. Le droit de nous taire', 'Tu n’es pas obligé·e de raconter ce que tu as lu ni ce que tu en as pensé. Ta lecture t’appartient.'],
-  [74, 79.5, 'Et un seul devoir…', 'Ne jamais se moquer de ceux qui ne lisent pas. Chacun avance à son rythme, comme sur les cartes des genres.'],
+  [22.1, 39.2, '1. Le droit de ne pas lire', 'Tu as le droit de préférer autre chose aujourd’hui. On ne devient pas lecteur par obligation… mais la porte du CDI reste toujours ouverte.'],
+  [48.7, 39.2, '2. Le droit de sauter des pages', 'Une description trop longue ? Tu peux passer à la suite. Ce n’est pas tricher.'],
+  [26.4, 68.2, '3. Le droit de ne pas finir un livre', 'Un livre ne te plaît pas ? Tu peux le rendre et en choisir un autre : des centaines t’attendent au CDI.'],
+  [47, 68.2, '4. Le droit de relire', 'Relire un livre qu’on aime, c’est retrouver un ami. Et on découvre souvent des détails qu’on n’avait pas vus.'],
+  [28, 96.9, '5. Le droit de lire n’importe quoi', 'BD, manga, magazine, histoire qui fait peur… toutes les lectures comptent. C’est en lisant ce qu’on aime qu’on prend goût à lire.'],
+  [49, 96.9, '6. Le droit au bovarysme', 'Le mot vient d’Emma Bovary, une héroïne qui vivait ses lectures comme sa propre vie. C’est le droit de se reconnaître dans un personnage et de vibrer avec lui : « C’est tout à fait moi ! »'],
+  [52.5, 31.6, '7. Le droit de lire n’importe où', 'Dans ton lit, dans le bus, sous un arbre, au CDI… un livre se lit partout.'],
+  [79.2, 31.6, '8. Le droit de grappiller', 'Ouvrir un livre au hasard, lire un passage, piocher un chapitre : c’est grappiller, comme on picore des grains de raisin.'],
+  [52.6, 62.2, '9. Le droit de lire à voix haute', 'Lire à voix haute, pour soi ou pour un petit frère, c’est faire entendre la musique des mots.'],
+  [78.1, 62.2, '10. Le droit de nous taire', 'Tu n’es pas obligé·e de raconter ce que tu as lu ni ce que tu en as pensé. Ta lecture t’appartient.'],
+  [52.7, 73, 'Et un seul devoir…', 'Ne jamais se moquer de ceux qui ne lisent pas. Chacun avance à son rythme, comme sur les cartes des genres.'],
 ];
 const droitsImage = sub('H5P.ImageHotspots 1.10', {
   image: file('droits-lecteur.jpg'),
