@@ -290,7 +290,8 @@ const ch7 = chapter('7. ⭐ Les documentaires et la classification Dewey', [
   text(`${banner('Étape 7', 'Explorer le monde réel avec les documentaires', 7)}
 ${accroche('Un livre de recettes de cuisine n’invente pas d’histoire : il explique quelque chose de réel. C’est un documentaire.')}
 <p>Les documentaires ne sont pas rangés par genre, mais par <strong>sujet</strong>, grâce à un système inventé en 1876 par l’Américain <strong>Melvil Dewey</strong>. Il a partagé tous les savoirs en <strong>10 grands domaines</strong>, numérotés de 000 à 900.</p>`, 'Intro'),
-  text(decouvre(`<p>Voici le <strong>mur des 10 domaines</strong>. Tape <strong>cuisine</strong> dans la case de recherche : dans quel domaine tombe un livre de recettes ?</p>`), 'Je découvre Dewey'),
+  image('dewey.jpg', 'Les 10 domaines de la classification décimale de Dewey', 'Tableau Dewey'),
+  text(decouvre(`<p>Le tableau ci-dessus résume les 10 domaines. Pour aller plus vite, voici le <strong>mur des domaines</strong> : tape <strong>cuisine</strong> dans la case de recherche : dans quel domaine tombe un livre de recettes ?</p>`), 'Je découvre Dewey'),
   sub('H5P.IFrameEmbed 1.0', { source: MUR, width: '1000', height: '1100', minWidth: '280', resizeSupported: true }, 'Iframe Embedder', 'Le mur des domaines Dewey'),
   text(`<p style="font-size:0.9em">Le mur ne s’affiche pas ? <a href="${MUR}" target="_blank" rel="noopener">Ouvrir le mur des domaines en grand</a>.</p>
 <p>Tu as trouvé ? <strong>600, les techniques</strong> : cuisiner, c’est un savoir-faire pratique. Le nombre exact est plus <strong>précis</strong> : pour la cuisine, c’est <strong>641</strong>. Plus le nombre est long, plus le sujet est précis.</p>
@@ -307,7 +308,7 @@ ${accroche('Un livre de recettes de cuisine n’invente pas d’histoire : il ex
     'Les grandes questions, qu’est-ce que le bonheur ? → *100 Philosophie et psychologie*',
     'La Révolution française → *900 Histoire et géographie*',
   ], 'Classer en Dewey'),
-  text(pouce('Tu hésites ? Remonte taper le sujet dans le mur des domaines.'), 'Coup de pouce Dewey'),
+  text(pouce('Tu hésites ? Remonte voir le tableau, ou tape le sujet dans le mur des domaines.'), 'Coup de pouce Dewey'),
   text(seul(''), 'Seul'),
   mc('Sur le dos d’un documentaire sur les volcans, tu lis : <strong>551.21 MON</strong>. Que veut dire <strong>MON</strong> ?', [
     ['Les trois premières lettres du nom de l’auteur', true, 'Oui : comme pour les romans. L’auteur s’appelle peut-être Monnier ou Montel.'],
