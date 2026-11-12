@@ -62,8 +62,8 @@ const dragOnImage = (imgName, labels, title, intro) => {
 /* ================= COUVERTURE ================= */
 const cover = `<h2 style="text-align:center">🔎 Découvrir le CDI</h2>
 <p style="text-align:center">Le CDI, c’est un endroit pour se repérer… et pour découvrir <strong>ce que tu aimes lire</strong>.</p>
-<p style="text-align:center"><strong>🎯 Ta mission, à la fin de cette heure :</strong> tracer <strong>ton parcours de lecteur</strong>. Tu trouveras un livre que tu aimes, tu te situeras sur la carte de ton genre, tu choisiras le livre suivant, et un documentaire sur une de tes passions.</p>
-<p style="text-align:center">⭐ étape indispensable pour la mission (si tu es en retard, fais-la en priorité) · 🌿 chemin buissonnier · ⚡ défi bonus</p>
+<p style="text-align:center"><strong>🎯 Ta mission, à la fin de cette heure :</strong> repartir avec <strong>un roman qui te tente</strong> et <strong>un documentaire sur une de tes passions</strong>.</p>
+<p style="text-align:center">⭐ étape indispensable pour la mission (si tu es en retard, fais-la en priorité) · 🌿 chemin buissonnier</p>
 <p style="text-align:center"><em>EMI · 6e · environ 1 heure · 9 étapes</em></p>`;
 
 /* ===== Ch.1 Où est le CDI ? ===== */
@@ -157,11 +157,20 @@ ${avecAide('<p>Glisse chaque étiquette au bout de sa flèche.</p>')}`, 'Intro')
     { label: 'Couverture', from: [100, 724], to: [591, 460], tip: 'C’est tout ce qui entoure le livre.' },
     { label: 'Dos', from: [300, 724], to: [130, 634], tip: 'C’est la seule partie visible quand le livre est rangé.' },
   ], 'Parties du livre'),
-  text(decouvre(`<p>Regarde comment je lis la <strong>cote</strong>, l’« adresse » du livre collée sur le <strong>dos</strong>.</p>
-<p>Sur le dos du roman <em>L’été où je suis devenue jolie</em>, de Jenny Han, je vois une <strong>pastille rose</strong> et les lettres <strong>HAN</strong>.</p>
-<ul><li>Je me dis : la pastille rose, c’est le genre <strong>romance</strong>. Je vais donc au rayon des romances.</li>
-<li>Puis : HAN, ce sont les <strong>3 premières lettres du nom de l’autrice</strong>. Dans le rayon, les livres sont rangés par ordre alphabétique : je cherche à la lettre <strong>H</strong>.</li></ul>
-<p>Pour un <strong>documentaire</strong>, c’est pareil, mais la pastille est remplacée par un <strong>nombre</strong> (le sujet, étape 7).</p>`), 'Je découvre la cote'),
+  text(decouvre(`<p>Quand un livre est rangé, on ne voit plus que son <strong>dos</strong>. Pourtant, il porte son « adresse » : la <strong>cote</strong>.</p>
+<p><strong>Fais glisser le curseur</strong> sous l’image, étape par étape, et suis mon raisonnement pour retrouver le roman de <strong>Jenny Han</strong>.</p>`), 'Je découvre la cote'),
+  sub('H5P.Agamotto 1.6', {
+    title: '',
+    items: [
+      ['cote-etagere-1.jpg', 'Le rayon', 'Le dos des livres', '<p>Dans un rayon, je ne vois que le <strong>dos</strong> des livres. En bas de chaque dos, une petite étiquette : la <strong>cote</strong>. Elle a deux parties.</p>'],
+      ['cote-etagere-2.jpg', 'La pastille', 'Les pastilles', '<p><strong>1. La pastille de couleur</strong> donne le <strong>genre</strong>. Ici, elles sont toutes roses : je suis au rayon <strong>romance</strong>.</p>'],
+      ['cote-etagere-3.jpg', 'Les lettres', 'Les lettres HAN', '<p><strong>2. Les 3 lettres</strong> sont le début du <strong>nom de l’auteur</strong>. Jenny <strong>Han</strong> → <strong>HAN</strong>.</p>'],
+      ['cote-etagere-4.jpg', 'L’ordre', 'L’ordre alphabétique', '<p>Dans le rayon, les livres suivent l’<strong>ordre alphabétique</strong> de ces lettres : ANG, BEN, COL, DUP, <strong>HAN</strong>, KIN… Je trouve mon livre sans tout regarder.</p>'],
+    ].map(([img, label, alt, d]) => ({ image: image(img, `Étagère de romances : ${alt.toLowerCase()}`, alt), labelText: label, description: d })),
+    behaviour: { startImage: 1, snap: true, ticks: true, labels: true, transparencyReplacementColor: '#000000', imagesDescriptionsRatio: 70 },
+    a11y: { image: 'Image', imageSlider: 'Curseur des images', mute: 'Couper le son', unmute: 'Remettre le son', buttonFullscreenEnter: 'Plein écran', buttonFullscreenExit: 'Quitter le plein écran' },
+  }, 'Agamotto', 'La cote pas à pas'),
+  text('<p>Pour un <strong>documentaire</strong>, c’est pareil, mais la pastille est remplacée par un <strong>nombre</strong> : le sujet du livre (étape 7).</p>', 'Cote documentaire'),
   dragText('<strong>Où ranger chaque livre ?</strong> Tout dépend de sa nature.', [
     '« Le Secret du phare » raconte une histoire inventée : c’est un *roman*. Il est rangé par *genre*, grâce à sa *pastille*.',
     '« Tout sur les océans » explique le monde réel : c’est un *documentaire*. Il est rangé par *sujet*, grâce à son numéro *Dewey*.',
@@ -178,12 +187,24 @@ const MAPS = [
   ['enquête et policier', 'policier'], ['fantasy', 'fantasy'], ['fantastique', 'fantastique'], ['science-fiction et dystopie', 'sf'], ['aventure', 'aventure'],
   ['romance', 'romance'], ['mythes et récits historiques', 'mythes'], ['humour', 'humour'], ['société et tranches de vie', 'societe'], ['roman classique', 'classique'],
 ];
-// Une carte entière est illisible dans la colonne du livre : pour chaque genre, un diaporama
-// carte entière → moitié gauche (niveaux 1-2) → moitié droite (niveaux 3-4), à pleine largeur.
-// La carte entière en Image (proportions justes), puis un diaporama des deux moitiés zoomées
-// (niveaux 1-2, niveaux 3-4). Les deux moitiés ont le même format : pas de vide sous le diaporama.
+// Chaque carte devient un « trouve ta place » : 4 zones (une par niveau), toutes justes.
+// Pas de mauvaise réponse : l'élève se situe, le retour l'invite à avancer s'il en a envie.
+// Puis le zoom (deux moitiés de même format) pour lire les titres.
+const NIV = [
+  'Tu pars des premières îles, souvent celles des BD et des images : c’est un très bon point de départ. Quand tu en auras envie, jette un œil aux romans du niveau 2.',
+  'Tu as déjà fait tes premiers pas dans les romans de ce genre. Prochaine escale possible : un titre du niveau 3.',
+  'Tu lis déjà des histoires plus longues et plus complexes. Le continent du niveau 4 n’est plus très loin.',
+  'Tu as atteint le continent des grands textes ! Tu pourrais guider un camarade sur cette carte.',
+];
+// zones [x, y, l, h] en % ; la carte des mythes est en 4 quadrants, les autres en 4 bandes verticales.
+const ZONES = {
+  mythes: [[0, 0, 50, 56], [50, 0, 50, 56], [0, 56, 58, 44], [58, 56, 42, 44]],
+  defaut: [[0, 0, 25, 100], [25, 0, 25, 100], [50, 0, 25, 100], [75, 0, 25, 100]],
+};
 const roadmap = ([g, f]) => [
-  image(`roadmap-${f}.jpg`, `Carte du genre ${g}, du plus accessible au moins accessible`, `Carte ${g}`),
+  findHotspot(`roadmap-${f}.jpg`, `Où en es-tu dans ce genre ? Clique sur l’île où tu te situes.`,
+    (ZONES[f] || ZONES.defaut).map(([x, y, w, h], i) => ({ ok: true, x, y, w, h, fb: `${f === 'mythes' ? 'Étape' : 'Niveau'} ${i + 1}. ${NIV[i]}` })),
+    'Clique sur une des îles de la carte.', `Me situer : ${g}`),
   sub('H5P.ImageSlider 1.1', {
     // Liste à un seul champ : chaque élément EST la bibliothèque ImageSlide (pas { imageSlide: … }).
     imageSlides: [
@@ -198,10 +219,9 @@ const EMO = { policier: '🕵️', fantasy: '🐉', fantastique: '👻', sf: '�
 const ch6bis = chapter('6 bis. 🌿 Les cartes des genres', [
   text(`<h2 style="color:#2d6a4f">🌿 Chemin buissonnier · Les cartes des genres</h2><p style="color:#555555"><em>⏱ le temps que tu veux · rien n’est noté</em></p>
 <p>Et si tu voyais tes lectures comme un <strong>voyage</strong> ?</p>
-<p>Chacune de ces cartes dessine un <strong>parcours de lecteur</strong> à travers un genre : on part des îles les plus accessibles (niveau 1, souvent des BD) pour aller, petit à petit, vers le continent des grands textes (niveau 4). Elles servent à deux choses : <strong>te situer</strong> (où en es-tu, toi, dans ce genre ?) et, <strong>si l’envie t’en prend</strong>, <strong>avancer</strong> d’une étape pour mieux connaître un genre que tu aimes.</p>
-<p>Personne ne t’oblige à aller jusqu’au bout : chaque île vaut le voyage. Prends ton temps, flâne d’une carte à l’autre, laisse-toi tenter par une couverture, même dans un genre que tu n’as jamais essayé.</p>
-<p>📚 Ces cartes t’attendent aussi <strong>en vrai, sur la table d’exposition du CDI</strong> : va les voir, feuillette les livres qui y sont posés, et repars avec celui qui te tente.</p>
-<p>Ici, sous chaque carte, les flèches font un <strong>zoom</strong> : niveaux 1 et 2, puis niveaux 3 et 4. Un titre te fait de l’œil ? Note-le : il pourrait bien devenir ta prochaine lecture.</p>`, 'Intro cartes'),
+<p>Chacune de ces cartes dessine un <strong>parcours de lecteur</strong> à travers un genre : des îles les plus accessibles (niveau 1, souvent des BD) jusqu’au continent des grands textes (niveau 4).</p>
+<p><strong>Choisis une ou deux cartes de genres que tu aimes</strong>, et clique sur l’île où tu te situes. Il n’y a <strong>pas de mauvaise réponse</strong> : le niveau 1 n’est pas « pour les petits », c’est un point de départ. Si l’envie t’en prend, la carte te montre où aller ensuite.</p>
+<p>Sous chaque carte, les flèches font un <strong>zoom</strong> pour lire les titres. Et ces cartes t’attendent aussi <strong>en vrai, sur la table d’exposition du CDI</strong>.</p>`, 'Intro cartes'),
   ...MAPS.flatMap(([g, f]) => [text(`<h3>${EMO[f]} ${g[0].toUpperCase() + g.slice(1)}</h3>`, `Titre ${g}`), ...roadmap([g, f])]),
 ]);
 
@@ -210,9 +230,24 @@ const ch6 = chapter('6. ⭐ Trouver ses genres préférés', [
   text(`${banner('Étape 6', 'Reconnaître les genres de romans', 10)}
 ${accroche('Tu as aimé un livre ? Le plus beau, c’est de trouver le suivant.')}
 <p>Au CDI, les romans sont classés par <strong>genre</strong>. Savoir reconnaître un genre, c’est le premier pas pour trouver <strong>les livres qui te ressemblent</strong>.</p>`, 'Intro'),
-  text(decouvre(`<p>Regarde comment je devine le genre d’un livre en lisant sa <strong>quatrième de couverture</strong> :</p>
-<p style="padding-left:1em;border-left:3px solid #8aa;">En <strong>2150</strong>, la Terre est devenue trop chaude pour y vivre. Lina, douze ans, embarque à bord d’un immense <strong>vaisseau</strong> en route vers une nouvelle <strong>planète</strong>. Mais le <strong>robot</strong> qui pilote le navire se met à désobéir…</p>
-<p>Je me dis : « 2150 », c’est le <strong>futur</strong>. « Vaisseau » et « planète », c’est l’<strong>espace</strong>. « Robot », c’est une <strong>technologie</strong> qui n’existe pas encore. Trois indices vont dans le même sens : c’est de la <strong>science-fiction</strong>.</p>`), 'Je découvre'),
+  text(decouvre(`<p>Voici la <strong>quatrième de couverture</strong> d’un roman. Lis-la, puis enquête avec moi : <strong>devine d’abord</strong> ce que chaque indice t’apprend, puis <strong>retourne la carte</strong> pour vérifier.</p>
+<p style="padding-left:1em;border-left:3px solid #8aa;">En <strong>2150</strong>, la Terre est devenue trop chaude pour y vivre. Lina, douze ans, embarque à bord d’un immense <strong>vaisseau</strong> en route vers une nouvelle <strong>planète</strong>. Mais le <strong>robot</strong> qui pilote le navire se met à désobéir…</p>`), 'Je découvre'),
+  sub('H5P.Dialogcards 1.9', {
+    title: '', mode: 'normal', description: '<p>Devine, puis clique sur <strong>Retourner</strong>.</p>',
+    dialogs: [
+      ['Indice 1 : « En 2150 »<br>Quand se passe l’histoire ?', 'Dans le <strong>futur</strong> !'],
+      ['Indice 2 : « vaisseau », « planète »<br>Où se passe l’histoire ?', 'Dans l’<strong>espace</strong>, loin de la Terre.'],
+      ['Indice 3 : « le robot qui pilote »<br>Ce robot existe-t-il aujourd’hui ?', 'Non : c’est une <strong>technologie</strong> qui n’existe pas encore.'],
+      ['Futur + espace + technologie…<br>Alors, quel genre ?', 'De la <strong>science-fiction</strong> ! Trois indices vont dans le même sens.'],
+    ].map(([q, a]) => ({ text: `<p style="text-align:center">${q}</p>`, answer: `<p style="text-align:center">${a}</p>`, tips: {} })),
+    behaviour: { enableRetry: true, disableBackwardsNavigation: false, scaleTextNotCard: false, randomCards: false, maxProficiency: 5, quickProgression: false },
+    answer: 'Retourner', next: 'Suivante', prev: 'Précédente', retry: 'Recommencer', correctAnswer: 'J’avais trouvé', incorrectAnswer: 'Je n’avais pas trouvé',
+    round: 'Tour @round', cardsLeft: 'Cartes restantes : @number', nextRound: 'Passer au tour @round', startOver: 'Recommencer', showSummary: 'Suivant', summary: 'Bilan',
+    summaryCardsRight: 'Cartes trouvées :', summaryCardsWrong: 'Cartes manquées :', summaryCardsNotShown: 'Cartes non vues :', summaryOverallScore: 'Score', summaryCardsCompleted: 'Cartes apprises :',
+    summaryCompletedRounds: 'Tours terminés :', summaryAllDone: 'Bravo !', progressText: 'Carte @card sur @total', cardFrontLabel: 'Recto', cardBackLabel: 'Verso', tipButtonLabel: 'Indice',
+    audioNotSupported: 'Ton navigateur ne lit pas ce son',
+    confirmStartingOver: { header: 'Recommencer ?', body: 'Tu vas revenir à la première carte.', cancelLabel: 'Annuler', confirmLabel: 'Recommencer' },
+  }, 'Dialog Cards', 'Enquête sur une quatrième'),
   text(seul('<p>À ton tour, sur une autre quatrième de couverture.</p>'), 'Seul'),
   markWords('Clique sur les <strong>8 mots-indices</strong> qui montrent que c’est un <strong>roman d’enquête</strong>.',
     '<p>Le jour de la fête du collège, le trophée de football *disparaît* de la vitrine. Personne n’a rien vu… sauf Malik, qui remarque un *indice* étrange : une *trace* de peinture bleue. Avec son amie Jade, il mène une *enquête*. Chaque *suspect* a un *alibi*. Qui pourra *résoudre* ce *mystère* ?</p>', 'Indices enquête',
@@ -244,23 +279,22 @@ ${accroche('Tu as aimé un livre ? Le plus beau, c’est de trouver le suivant.'
     opts.map(g => [g, g === ok, g === ok ? fb.ok : fb[g]]), `Couverture ${i + 1}`, { media: img, alt })),
   text(pouce('Tu hésites entre deux genres ? Ouvre ces fiches.'), 'Coup de pouce genres'),
   accordion(GENRES.map(([g, c, d]) => [g, `<p>On y trouve souvent : <strong>${d}</strong>.</p>`]), 'Les 9 genres'),
-  text(rayon('<p>Lève-toi et va observer les <strong>pastilles</strong> sur le dos des romans. Reviens ensuite remplir l’exercice.</p>'), 'Rayons pastilles'),
-  dragText('<strong>Quelle est la couleur de la pastille ?</strong> Glisse la couleur que tu as vue dans les rayons.',
+  dragText('<strong>Quelle est la couleur de la pastille ?</strong> Souviens-toi des rayons du CDI.',
     GENRES.map(([g, c]) => `${g} → pastille *${c}*`), 'Couleurs des genres'),
-  text(bonus('<p>Trouve dans les rayons un roman dont <strong>tu hésites à deviner le genre</strong>. Compare ta réponse avec sa pastille : qu’est-ce qui t’a trompé·e ?</p>'), 'Bonus genres'),
   text(retiens('<p>Pour reconnaître un genre, j’observe <strong>la pastille</strong>, <strong>l’illustration</strong>, <strong>le titre</strong>, et je lis <strong>la quatrième de couverture</strong> pour y repérer des <strong>mots-indices</strong>.</p>'), 'Je retiens'),
 ]);
 
 /* ===== Ch.7 Dewey ⭐ ===== */
+const MUR = `https://h5p-offline-player.vercel.app/embed?src=https://raw.githubusercontent.com/Absconses/h5p-lumi/main/partage/decouvrir-le-cdi/mur-dewey.h5p`;
 const ch7 = chapter('7. ⭐ Les documentaires et la classification Dewey', [
   text(`${banner('Étape 7', 'Explorer le monde réel avec les documentaires', 7)}
 ${accroche('Un livre de recettes de cuisine n’invente pas d’histoire : il explique quelque chose de réel. C’est un documentaire.')}
 <p>Les documentaires ne sont pas rangés par genre, mais par <strong>sujet</strong>, grâce à un système inventé en 1876 par l’Américain <strong>Melvil Dewey</strong>. Il a partagé tous les savoirs en <strong>10 grands domaines</strong>, numérotés de 000 à 900.</p>`, 'Intro'),
-  image('dewey.jpg', 'Les 10 domaines de la classification décimale de Dewey', 'Tableau Dewey'),
-  text(decouvre(`<p>Regarde comment je range un livre de recettes de cuisine :</p>
-<ol><li>Je me demande : <strong>de quoi parle-t-il ?</strong> De cuisine, c’est-à-dire de savoir-faire pratiques.</li>
-<li>Je cherche le <strong>domaine</strong> : les savoir-faire pratiques, ce sont les <strong>techniques</strong>. Donc <strong>600</strong>.</li>
-<li>Le nombre exact est plus <strong>précis</strong> : pour la cuisine, c’est <strong>641</strong>. Plus le nombre est long, plus le sujet est précis.</li></ol>`), 'Je découvre Dewey'),
+  text(decouvre(`<p>Voici le <strong>mur des 10 domaines</strong>. Tape <strong>cuisine</strong> dans la case de recherche : dans quel domaine tombe un livre de recettes ?</p>`), 'Je découvre Dewey'),
+  sub('H5P.IFrameEmbed 1.0', { source: MUR, width: '1000', height: '1100', minWidth: '280', resizeSupported: true }, 'Iframe Embedder', 'Le mur des domaines Dewey'),
+  text(`<p style="font-size:0.9em">Le mur ne s’affiche pas ? <a href="${MUR}" target="_blank" rel="noopener">Ouvrir le mur des domaines en grand</a>.</p>
+<p>Tu as trouvé ? <strong>600, les techniques</strong> : cuisiner, c’est un savoir-faire pratique. Le nombre exact est plus <strong>précis</strong> : pour la cuisine, c’est <strong>641</strong>. Plus le nombre est long, plus le sujet est précis.</p>
+<p>Essaie maintenant avec <strong>ta passion</strong> : foot, chat, volcan, dessin… Tu pourrais être surpris·e : les chats sauvages sont en 500 (sciences), mais ton chat à la maison est en 600 (animaux de compagnie) !</p>`, 'Réponse cuisine'),
   text(avecAide(''), 'Accompagné'),
   dragText('<strong>Dans quel domaine Dewey ranger ces documentaires ?</strong> Aide-toi du tableau.', [
     'Les grands peintres du XXe siècle → *700 Arts et loisirs*',
@@ -273,16 +307,13 @@ ${accroche('Un livre de recettes de cuisine n’invente pas d’histoire : il ex
     'Les grandes questions, qu’est-ce que le bonheur ? → *100 Philosophie et psychologie*',
     'La Révolution française → *900 Histoire et géographie*',
   ], 'Classer en Dewey'),
-  text(pouce('Tu hésites ? Ouvre le domaine qui te semble le bon.'), 'Coup de pouce Dewey'),
-  accordion(DEWEY.map(([n, t, ex]) => [`${n} — ${t}`, `<p>Exemples : ${ex}.</p>`]), 'Les 10 domaines'),
+  text(pouce('Tu hésites ? Remonte taper le sujet dans le mur des domaines.'), 'Coup de pouce Dewey'),
   text(seul(''), 'Seul'),
   mc('Sur le dos d’un documentaire sur les volcans, tu lis : <strong>551.21 MON</strong>. Que veut dire <strong>MON</strong> ?', [
     ['Les trois premières lettres du nom de l’auteur', true, 'Oui : comme pour les romans. L’auteur s’appelle peut-être Monnier ou Montel.'],
     ['Les trois premières lettres du titre du livre', false, 'Non : le titre n’est pas dans la cote. Les lettres renvoient toujours à l’auteur.'],
     ['Les trois premières lettres du sujet, les montagnes', false, 'Tentant ! Mais le sujet est déjà donné par le nombre 551.21. Les lettres, elles, renvoient à l’auteur.'],
   ], 'Lire une cote de documentaire'),
-  text(rayon('<p>Choisis un sujet qui te passionne (le foot, les chats, l’espace, le dessin…). Cherche son domaine dans le tableau, puis va voir dans les rayons s’il y a des documentaires sur ce sujet. Retiens le nombre : il te servira pour la mission !</p>'), 'Rayons Dewey'),
-  text(bonus('<p>Trouve dans les rayons le documentaire dont le <strong>nombre Dewey est le plus long</strong>. De quoi parle-t-il ? Pourquoi son nombre est-il si précis ?</p>'), 'Bonus Dewey'),
   text(retiens('<p>Romans → rangés par <strong>genre</strong> (pastille) puis par <strong>auteur</strong>. Documentaires → rangés par <strong>sujet</strong>, avec le <strong>nombre Dewey</strong> (000 à 900).</p>'), 'Je retiens'),
 ]);
 
@@ -305,62 +336,33 @@ const field = (task, ph, rows = '1') => sub('H5P.TextInputField 1.2', { taskDesc
 const dtext = (html) => sub('H5P.Text 1.1', { text: html }, 'Text', 'Texte');
 const page = (title, elements, helpText) => sub('H5P.StandardPage 1.5', { elementList: elements, helpTextLabel: 'Besoin d’aide ?', ...(helpText ? { helpText } : {}) }, 'Standard page', title);
 const parcours = sub('H5P.DocumentationTool 1.8', {
-  taskDescription: 'Mon parcours de lecteur',
+  taskDescription: 'Ma mission : un roman, un documentaire',
   pagesList: [
-    page('1. Je me repère', [
-      dtext('<p>Dans les rayons des romans, trouve un livre d’un <strong>genre que tu aimes</strong> (ou qui te tente).</p>'),
+    page('1. Mon roman', [
+      dtext('<p>Dans les rayons, trouve un roman d’un <strong>genre que tu aimes</strong> (ou qui te tente).</p>'),
       field('Prénom, nom et classe :', 'Léa Martin, 6e B'),
       field('Titre et auteur du roman :', '« … », de …'),
-      field('Son genre et la couleur de sa pastille :', 'Enquête, pastille rouge'),
-      field('Sa cote complète :', 'pastille + 3 lettres'),
-    ], '<p>La cote est collée sur le dos du livre. Pour un roman : la pastille de couleur et les 3 premières lettres du nom de l’auteur.</p>'),
-    page('2. Je me situe', [
-      dtext(process.env.NOMAPS
-        ? '<p>Demande à ton professeur la <strong>carte de ton genre</strong> (du niveau 1 au niveau 4).</p>'
-        : '<p>Retourne voir la <strong>carte de ton genre</strong> (étape 6 bis), ou va la voir sur la table d’exposition du CDI.</p>'),
-      field('Sur la carte de mon genre, je me situe au niveau… parce que…', 'Niveau 2, parce que j’ai déjà lu…', '3'),
-    ], '<p>Pas de bonne ou de mauvaise réponse : le niveau 1 n’est pas « pour les petits ». C’est juste le point de départ.</p>'),
-    page('3. Je creuse', [
-      dtext('<p>Trouve un <strong>deuxième livre</strong> qui ressemble au premier : le livre suivant sur la carte, le même auteur, ou le même genre. Va le chercher dans les rayons.</p>'),
-      field('Titre et auteur :', '« … », de …'),
       field('Sa cote :', 'pastille + 3 lettres'),
-      field('Il ressemble au premier parce que… (cite un indice de sa quatrième de couverture)', 'Comme dans le premier, il y a… La quatrième de couverture parle de…', '3'),
-    ], '<p>Lis la quatrième de couverture : c’est là que se trouvent les mots-indices.</p>'),
-    page('4. Je m’aventure', [
+      field('Et après ? Le prochain livre que j’ai envie de lire dans ce genre :', 'le livre suivant sur la carte, le même auteur…'),
+    ], '<p>La cote est collée en bas du dos : la pastille de couleur et les 3 premières lettres du nom de l’auteur.</p>'),
+    page('2. Mon documentaire', [
       dtext('<p>Trouve un <strong>documentaire</strong> sur une de tes passions.</p>'),
       field('Ma passion :', 'le foot, les chats, l’espace…'),
-      field('Titre du documentaire :', '« … »'),
-      field('Son nombre Dewey et son domaine :', '796, domaine 700 Arts, loisirs, sports'),
-    ], '<p>Cherche d’abord le domaine dans le tableau Dewey (étape 7), puis va au rayon qui porte ce nombre. Tu ne sais pas quoi chercher ? Essaie le 500 (animaux, Terre, espace) ou le 700 (sports, dessin, musique).</p>'),
-    page('5. J’emprunte', [
-      field('Le livre que j’emprunte aujourd’hui (si j’en ai envie) :', '« … »'),
-    ]),
-    page('6. Je repense à mon heure', [
-      field('Ce qui m’a le plus aidé·e aujourd’hui :', '', '3'),
-      field('Ce qui a été difficile :', '', '3'),
-      field('Le livre que j’ai le plus envie de lire :', '', '1'),
-    ]),
+      field('Titre du documentaire et son nombre Dewey :', '« … », 796'),
+    ], '<p>Tape ta passion dans le mur des domaines (étape 7) : il te donne le domaine, puis va au rayon qui porte ce nombre.</p>'),
     sub('H5P.DocumentExportPage 1.5', {
-      description: '<p>Bravo ! Clique sur <strong>Créer mon document</strong> pour voir ton parcours, puis <strong>Exporter</strong> pour le télécharger et le rendre à ton professeur.</p>',
-      createDocumentLabel: 'Créer mon document', submitTextLabel: 'Envoyer', submitSuccessTextLabel: 'Ton parcours a été envoyé !',
+      description: '<p>Bravo ! Clique sur <strong>Créer mon document</strong> pour voir ta fiche, puis <strong>Exporter</strong> pour le télécharger et le rendre à ton professeur.</p>',
+      createDocumentLabel: 'Créer mon document', submitTextLabel: 'Envoyer', submitSuccessTextLabel: 'Ta fiche a été envoyée !',
       selectAllTextLabel: 'Tout sélectionner', exportTextLabel: 'Exporter', helpTextLabel: 'Besoin d’aide ?',
       requiresInputErrorMessage: 'Des champs sont encore vides sur ces pages : @pages',
     }, 'Document export page', 'Exporter'),
   ],
   i10n: { previousLabel: 'Précédent', nextLabel: 'Suivant', closeLabel: 'Fermer' },
-}, 'Documentation Tool', 'Mon parcours de lecteur');
+}, 'Documentation Tool', 'Ma mission');
 
-const ch9 = chapter('9. ⭐ Ma mission : mon parcours de lecteur', [
-  text(`<h2 style="color:#1d3557">🎯 Ma mission · Mon parcours de lecteur</h2><p style="color:#555555"><em>⏱ environ 15 minutes · dans les rayons</em></p>
-${accroche('Un bon lecteur ne lit pas au hasard : il suit ses envies, d’un livre à l’autre. À toi de tracer ton propre chemin dans le CDI.')}
-<p>Pars dans les rayons avec ta tablette ou ton ordinateur. Tu rempliras ton parcours page par page, <strong>au fil de tes découvertes</strong>.</p>`, 'Intro'),
-  text(`<h3>Comment ton parcours sera regardé</h3>
-<table border="1" cellpadding="6" style="border-collapse:collapse;width:100%">
-<tr><th>Critère</th><th>Ce qu’on regarde</th></tr>
-<tr><td>1. Je me repère</td><td>Les cotes sont justes : on peut retrouver les livres dans les rayons.</td></tr>
-<tr><td>2. Je creuse</td><td>Le 2ᵉ livre prolonge vraiment le 1ᵉʳ, et je l’explique avec un indice.</td></tr>
-<tr><td>3. Je m’aventure</td><td>Le documentaire correspond à ma passion et au bon domaine Dewey.</td></tr>
-</table>`, 'Grille'),
+const ch9 = chapter('9. ⭐ Ma mission', [
+  text(`<h2 style="color:#1d3557">🎯 Ma mission · Un roman, un documentaire</h2><p style="color:#555555"><em>⏱ environ 10 minutes · dans les rayons</em></p>
+<p>Pars dans les rayons et reviens avec <strong>un roman qui te tente</strong> et <strong>un documentaire sur ta passion</strong>. Note-les ci-dessous, puis exporte ta fiche.</p>`, 'Intro'),
   parcours,
 ]);
 
