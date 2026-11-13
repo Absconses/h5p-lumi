@@ -1,4 +1,4 @@
-// Livre interactif « Breaking News from Salem, 1692 » v2 (anglais, 3e advanced) : brief, script, enregistrement à la maison.
+// Livre interactif « Breaking News from Salem, 1692 » v3 (anglais, 3e advanced) : brief, boîte à outils (script écrit à la main), tournage vidéo.
 // de reportage en groupes de 3 (Reporter / Witness / Historian).
 // Paramètres = défauts anglais des semantics.json + nos valeurs (pas de clonage des gabarits français).
 // Usage : node build.mjs <gabarit-interactivebook-reporter extrait> <content.json de sortie> <dossier media>
@@ -54,7 +54,7 @@ const line = (r, dir, words) => `<p>${who(r)} ${dir ? `<em>(${dir})</em> ` : ''}
 const ph = (items) => `<ul>${items.map(i => `<li>${i}</li>`).join('')}</ul>`;
 
 const cover = `<h2 style="text-align:center">📺 Breaking News from Salem, 1692</h2>
-<p style="text-align:center">Your brief · your script · your recording</p>`;
+<p style="text-align:center">Your brief · your toolkit · your video</p>`;
 
 /* ===== 1. The brief ===== */
 const roleCell = (r, icon, task, levelUp) => `<td style="vertical-align:top;padding:0.5em 0.8em;border-top:5px solid ${COL[r]};background-color:#fafafa">
@@ -62,7 +62,7 @@ const roleCell = (r, icon, task, levelUp) => `<td style="vertical-align:top;padd
 <p><strong>Level up</strong></p>${ph(levelUp)}</td>`;
 const ch1 = chapter('1. The brief', [
   text(`${head(1, 'The brief', 3, 'then start writing')}
-<p>In groups of three, write a <strong>2-to-3-minute TV news report</strong> on the <strong>Salem Witch Trials</strong>, broadcast “live” from Salem in 1692, with a historian joining the programme <strong>from today</strong>. You write it in class, then you <strong>record it at home</strong>.</p>
+<p>In groups of three, write a <strong>2-to-3-minute TV news report</strong> on the <strong>Salem Witch Trials</strong>, broadcast “live” from Salem in 1692, with a historian joining the programme <strong>from today</strong>. You write the script <strong>by hand</strong>, then you <strong>film it at home</strong>.</p>
 <table style="width:100%;border-collapse:separate;border-spacing:6px"><tr>
 ${roleCell('REPORTER', '🎤', 'Asks questions, explains what is happening, uses clear and dramatic language.', [
     'Hook the audience in your very first line.',
@@ -85,8 +85,8 @@ ${box(`<p><strong>What makes a strong report</strong></p>${ph([
     '<strong>Interaction</strong>: a real conversation, not three speeches. Every answer gets a reaction or a follow-up.',
     '<strong>Accuracy</strong>: the witness sounds like 1692, the historian’s facts are checked.',
     '<strong>Language</strong>: varied tenses, linking words, vocabulary from the word bank.',
-    '<strong>Delivery</strong>: clear, paced, expressive. About 300 to 400 words for the whole group.'])}
-<p><strong>Now</strong>: agree on roles and the witness’s identity (2 min), sketch the five parts (5 min), then write. The reporter drafts the questions first, so the answers fit.</p>`)}`, 'Brief'),
+    '<strong>Delivery</strong>: clear, paced, expressive, eyes on the camera. About 300 to 400 words for the whole group.'])}
+<p><strong>Now</strong>: agree on roles and the witness’s identity (2 min), sketch the five parts (5 min), then write on paper, with the toolkit (step 2) open next to you. The reporter drafts the questions first, so the answers fit.</p>`)}`, 'Brief'),
 ]);
 
 /* ===== 2. Write your script ===== */
@@ -104,10 +104,11 @@ const toolkit = sub('H5P.Accordion 1.0', {
   panels: [
     ['🎬 Script format in 30 seconds', `${ph([
       'Speaker’s name in CAPITALS + colon: <code>REPORTER:</code>',
-      'Stage directions <em>(in brackets, present simple)</em>: actions, tone, pauses. They are never read aloud.',
+      'Stage directions <em>(in brackets, present simple)</em>: actions, looks, tone, pauses. They are never read aloud.',
       'Short turns: one to three sentences. A new speaker = a new line.',
       'Every answer triggers something: a reaction (“That must have been terrifying.”) or a follow-up question.',
-      'Open questions (What…? Why…? How…?) get stories; yes/no questions get… “yes”.'])}`],
+      'Open questions (What…? Why…? How…?) get stories; yes/no questions get… “yes”.',
+      '<strong>On paper</strong>: names in the margin, skip a line between turns, stage directions in another colour, number the turns. You will thank yourselves when you film.'])}`],
     ['📺 Need a model? An excerpt on another topic (London, 1666)', `<div style="border:1px solid #c9ced8;border-radius:6px;padding:0.3em 1em;background-color:#ffffff">
 ${MODEL2.map(([r, d, w]) => line(r, d, w)).join('\n')}</div>
 <p><em>Notice: the hook, the sensory details, the follow-up question, and the historian’s cause-and-consequence answer.</em></p>`],
@@ -138,84 +139,76 @@ ${MODEL2.map(([r, d, w]) => line(r, d, w)).join('\n')}</div>
   ].map(([t, html]) => ({ title: t, content: text(html, t) })),
 }, 'Accordion', 'Toolkit');
 
-const field = (task, ph_, rows = '1') => sub('H5P.TextInputField 1.2', { taskDescription: task, placeholderText: ph_, inputFieldSize: rows, requiredField: false }, 'Text Input Field', 'Field');
-const dtext = (html) => sub('H5P.Text 1.1', { text: html }, 'Text', 'Text');
-const page = (title, elements, helpText) => sub('H5P.StandardPage 1.5', { elementList: elements, helpTextLabel: 'Help', ...(helpText ? { helpText } : {}) }, 'Standard page', title);
-const scriptTool = sub('H5P.DocumentationTool 1.8', {
-  taskDescription: 'Our news report script',
-  pagesList: [
-    page('Our team', [
-      field('Reporter:', 'name'), field('Witness: name, and who he or she is in 1692:', 'e.g. a servant in the Parris household'),
-      field('Historian:', 'name'), field('Channel and title of the report:', 'e.g. Massachusetts Bay News: “A Village Turns on Itself”'),
-    ], '<p>The witness’s identity drives the whole interview. Choose someone close to the events.</p>'),
-    page('1-2. Opening and scene', [
-      field('REPORTER: hook, who / where / when, then the scene:', 'REPORTER: (to camera, urgent) …', '10'),
-    ], '<p>See “Reporter: language” in the toolkit.</p>'),
-    page('3. The witness', [
-      field('Interview with the witness (at least 3 questions, with follow-ups and reactions):', 'REPORTER: (turns to …) …?\nWITNESS: (…) …', '10'),
-    ], '<p>Narrative tenses, sensory details, a clear point of view. The witness doesn’t know the ending.</p>'),
-    page('4. The historian', [
-      field('Interview with the historian (context, facts, why women were targeted):', 'REPORTER: Let’s bring in our historian. …?\nHISTORIAN: …', '10'),
-    ], '<p>Cause and consequence, checked facts, nuance.</p>'),
-    page('5. Closing', [
-      field('REPORTER: wrap-up and sign-off:', 'REPORTER: (to camera) …', '3'),
-    ]),
-    sub('H5P.DocumentExportPage 1.5', {
-      description: '<p>Click <strong>Create document</strong>, then <strong>Export</strong> to download your script (Word). Share it with your group: you will need it to record at home.</p>',
-      createDocumentLabel: 'Create document', exportTextLabel: 'Export', selectAllTextLabel: 'Select all',
-    }, 'Document export page', 'Export'),
-  ],
-}, 'Documentation Tool', 'Our script');
-
-const ch2 = chapter('2. Write your script', [
-  text(`${head(2, 'Write your script', '30–40', 'in your group')}
-<p>Write straight into the frame below, part by part, and export it at the end. Stuck? Open the toolkit underneath: it is there when you need it, not before.</p>`, 'Intro'),
-  scriptTool,
-  text('<h3>🧰 Toolkit</h3>', 'Toolkit title'),
+/* Le script s'écrit à la main (retour de Pierre, 2026-11-13 11:37) : plus de trame en ligne, le chapitre 2 = la boîte à outils. */
+const ch2 = chapter('2. Your toolkit', [
+  text(`${head(2, 'Your toolkit', '30–40', 'while you write, in your group')}
+<p>You write your script <strong>by hand</strong>. Keep this page open next to you and open a box <strong>when you need it</strong>: the format, a model, the language for your role, the Salem word bank.</p>`, 'Intro'),
   toolkit,
 ]);
 
-/* ===== 3. Record at home ===== */
-const ch3 = chapter('3. Record at home', [
-  text(`${head(3, 'Record at home', 30, 'a few days later')}
-<p>Choose the solution that suits your group. <strong>Audio only is perfectly fine</strong>: you don’t have to show your face.</p>`, 'Intro'),
+/* ===== 3. Film your report (à la maison ou en classe) : vidéo ===== */
+const ch3 = chapter('3. Film your report', [
+  text(`${head(3, 'Film your report at home', 30)}
+<p>Your report is a <strong>video</strong>: the audience sees and hears you. A phone is all you need.</p>`, 'Intro'),
   sub('H5P.Accordion 1.0', {
     hTag: 'h3',
     panels: [
-      ['🎧 Option A · Audio only (easiest)', `${ph([
-        '<strong>Right here</strong>: the recorder at the bottom of this page works in your browser. Record, listen, then <em>Download</em> the file.',
-        '<strong>Your phone</strong>: the built-in voice recorder app (Voice Memos on iPhone, Recorder on Android).',
-        '<strong>Vocaroo</strong> (vocaroo.com): free, no account. Record, then copy the link or download the MP3.',
-        '<strong>Audacity</strong> (free, on a computer): to cut mistakes and put several recordings together.'])}`],
-      ['🎬 Option B · Video', `${ph([
-        'Film with a phone, <strong>in landscape</strong>, at eye level, with the light in front of you (a window, not behind you).',
-        'Set the scene: a plain wall for the studio, a darker room or a candle for 1692, a book or a laptop for the historian.',
-        'Edit with what you already have: <strong>Clipchamp</strong> (built into Windows, sign in with a Microsoft account), <strong>iMovie</strong> (iPhone, iPad, Mac), or the editor in your phone’s gallery to trim.',
-        'Add a title card for your channel and the date: “Salem, Massachusetts, 1692”.'])}`],
-      ['🏠 Not in the same place? Record separately', `${ph([
-        'Each person records <strong>his or her own lines</strong>, one file per turn, with the same app, in a quiet room.',
-        'Name each file with its number in the script: <code>03-witness.m4a</code>, <code>04-reporter.m4a</code>…',
-        'Send all files to one person (the reporter, for example), who puts them in order in Audacity, Clipchamp or iMovie.',
-        'Leave a short pause between turns, and it sounds like a real conversation.'])}`],
-      ['🔔 Optional · Sound atmosphere', `${ph([
-        'Free sound effects: <strong>Pixabay</strong> (pixabay.com/sound-effects), for example a church bell, a crowd, wind, a door.',
-        'Keep them very quiet under the voices, and only at the start or between parts.'])}`],
-      ['✅ Recording tips', `${ph([
-        'Quiet room, door closed, no TV. A room with curtains, a bed or a sofa gives less echo than a kitchen.',
-        'Hold the phone 15 to 20 cm from your mouth, slightly to the side.',
-        'Do a 10-second test and listen to it before recording everything.',
-        'Put your script in big letters on a screen just behind the phone: a home-made teleprompter.',
+      ['🎥 What to film and edit with', `${ph([
+        '<strong>Filming</strong>: a phone or a tablet, with its normal camera app. Use the back camera if someone else is filming (better quality).',
+        '<strong>Canva</strong> (canva.com, with your school account if you have one): edit, add titles and a news banner, and even change your background without a green screen. See the two boxes below.',
+        '<strong>Clipchamp</strong> (built into Windows) or <strong>iMovie</strong> (iPhone, iPad, Mac): to cut and put your clips together.',
+        '<strong>Your phone’s gallery</strong>: enough to trim the beginning and the end of a clip.'])}`],
+      ['🎨 Using Canva (edit, titles, news banner)', `${ph([
+        'Create a new <strong>Video</strong> design (landscape, 16:9).',
+        'Upload the clips you filmed (<strong>Uploads</strong>), or record directly with <strong>Record yourself</strong>.',
+        'Place the clips in order on the timeline at the bottom. Trim the beginning and the end of each one.',
+        'Add what makes it look like TV news: a title page for your channel, a <strong>“BREAKING NEWS” banner</strong> at the bottom, name captions (“[Name], witness”, “Dr …, historian”), “LIVE · Salem, 1692”.',
+        'Open <strong>Audio</strong> to add a short news jingle at the start. Keep music off while people speak.',
+        'Working from different homes? Share the design with your group: everyone adds his or her own clips to the same project.',
+        'When it is ready: <strong>Share → Download</strong> (MP4), or share the link, as your teacher asks.'])}
+<p><em>Menu names can change a little between the app and the website.</em></p>`],
+      ['🪄 No green screen needed: Canva’s background remover', `<p>Canva can <strong>cut you out of your video</strong> and put you in front of any background. You don’t need a green screen.</p>${ph([
+        'Film each person in front of a <strong>plain wall</strong>, with good light, wearing colours that are different from the wall. One clip per speaker and per turn works best (keep the clips short).',
+        'In Canva, click the clip, then <strong>Edit → Background Remover</strong> (BG Remover). The background disappears.',
+        'Add a background <strong>behind</strong> the clip: a photo, a painting or an <strong>animated video</strong> from Canva’s library. For example: a newsroom for the reporter, a dark wooden village or a courtroom for the witness, a library for the historian.',
+        'Resize and move each person: you can put the reporter and the guest <strong>side by side</strong> on the same screen, like a live link-up, even if you filmed in different places.',
+        'Add the “LIVE · Salem, 1692” label and the name captions on top.',
+        'Keep it believable: no modern objects in the 1692 background, and the same light direction for everyone if you can.'])}
+<p><em>The background remover is part of Canva for Education and Canva Pro. If you don’t see it, log in with your school account.</em></p>`],
+      ['🎬 Framing, light and sound', `${ph([
+        'Film in <strong>landscape</strong> (phone horizontal), like a TV screen.',
+        'Camera at <strong>eye level</strong> and steady: lean the phone on books or use a tripod. No hand-held shaking.',
+        'Head and shoulders in the frame, a little space above the head.',
+        '<strong>Light in front of you</strong> (face a window). Never stand with a window behind you.',
+        'Sound matters more than the picture: quiet place, stand 1 to 1.5 m from the phone, speak up. Earphones with a microphone work well as a hand-held reporter’s mic.',
+        'Do a 10-second test and watch it before filming everything.'])}`],
+      ['🎭 Setting the scene', `${ph([
+        '<strong>Reporter</strong>: a plain wall or outdoors, something to hold as a microphone, a serious look.',
+        '<strong>Witness</strong>: 1692. A shawl, a dark coat, a plain shirt, a hat; a wooden door, a tree, a dark corner or a candle-like lamp. No logos, no phones, no posters in the frame.',
+        '<strong>Historian</strong>: today. Books, a desk, a map or a laptop behind you.',
+        'Different places or backgrounds for each guest make it clear that the historian is not in 1692.',
+        'No suitable place? Film in front of a plain wall and add the background in Canva (see “No green screen needed”).',
+        'Simple props are enough. Acting and language matter more than costumes.'])}`],
+      ['🏠 Together or separately?', `${ph([
+        '<strong>Together</strong>: meet at someone’s home. Ask a brother, a sister or a parent to film, or lean the phone on a pile of books. Film it in one take, like a live broadcast: two takes maximum, then keep the best one.',
+        '<strong>Separately</strong>: each person films <strong>his or her own lines</strong>, one clip per turn, phone in landscape, same distance from the camera.',
+        'Look slightly to the side of the camera when you answer, as if the reporter were standing there. The reporter looks into the camera for the opening and the closing.',
+        'Name each clip with its number in the script: <code>03-witness.mp4</code>, <code>04-reporter.mp4</code>…',
+        'Send the clips to one person, or add them all to a shared Canva design, and put them in order.'])}`],
+      ['✅ On camera', `${ph([
+        '<strong>Know your lines</strong>: don’t read your paper on screen. Write key words in big letters on a sheet held next to the camera.',
+        'The reporter looks <strong>into the lens</strong> for the opening and the closing, and at the guest during the interview.',
         'Speak more slowly than you think. Stress the key words. Pause before big news.',
+        'Act: the reporter is urgent, the witness frightened, the historian calm. Follow your stage directions.',
+        'Start filming 2 seconds before the first word and stop 2 seconds after the last one: it makes editing much easier.',
         'A mistake? Pause, go back to the start of the sentence, carry on. You can cut it later.'])}`],
-      ['📤 Before you send it', `${ph([
+      ['📤 Before you hand it in', `${ph([
         'Length: 2 to 3 minutes.',
-        'Everyone can be heard clearly. The five parts are there.',
-        'File name: <code>Salem_Group-names.mp3</code> (or .m4a / .mp4).',
-        'Send it the way your teacher tells you. Don’t post it publicly online.'])}`],
+        'Landscape, everyone can be seen and heard clearly, the five parts are there.',
+        'File name: <code>Salem_Group-names.mp4</code>.',
+        'Hand it in the way your teacher tells you. <strong>Don’t post it on social media or anywhere public</strong>: your classmates’ faces are in it.'])}`],
     ].map(([t, html]) => ({ title: t, content: text(html, t) })),
-  }, 'Accordion', 'Recording options'),
-  text('<h3>🎙️ Record here</h3><p>Allow the microphone, record, listen, then download your file.</p>', 'Record'),
-  sub('H5P.AudioRecorder 1.0', { title: 'Breaking News from Salem' }, 'Audio Recorder', 'Recorder'),
+  }, 'Accordion', 'Filming'),
 ]);
 
 /* ================= LIVRE ================= */
