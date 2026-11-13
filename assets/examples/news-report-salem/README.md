@@ -3,8 +3,8 @@
 **v2 (build.mjs, 2026-11-13)** après retour de Pierre (« trop faible, trop de temps sur l'évident ») :
 3 chapitres seulement. 1. Brief (consigne + « level up » par rôle + critères), 2. Write your script
 (trame Documentation Tool d'abord, boîte à outils B1-B2 repliée dessous : format, modèle Londres 1666,
-langue par rôle, vocabulaire Salem), 3. Record at home (audio seul / vidéo / enregistrer séparément,
-outils Vocaroo, mémo vocal, Audacity, Clipchamp, iMovie, sons Pixabay, conseils, enregistreur intégré).
+langue par rôle, vocabulaire Salem), 3. Record at home or in class, audio uniquement (en classe / à la maison ensemble ou séparément,
+outils Vocaroo, mémo vocal, Audacity, sons Pixabay, conseils, enregistreur intégré).
 Aucun exercice noté. La v1 ci-dessous reste dans build-v1.mjs.
 
 ## v1 (build-v1.mjs)

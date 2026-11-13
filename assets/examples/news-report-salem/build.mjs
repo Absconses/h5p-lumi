@@ -62,7 +62,7 @@ const roleCell = (r, icon, task, levelUp) => `<td style="vertical-align:top;padd
 <p><strong>Level up</strong></p>${ph(levelUp)}</td>`;
 const ch1 = chapter('1. The brief', [
   text(`${head(1, 'The brief', 3, 'then start writing')}
-<p>In groups of three, write a <strong>2-to-3-minute TV news report</strong> on the <strong>Salem Witch Trials</strong>, broadcast “live” from Salem in 1692, with a historian joining the programme <strong>from today</strong>. You write it in class, then you <strong>record it at home</strong>.</p>
+<p>In groups of three, write a <strong>2-to-3-minute news report</strong> on the <strong>Salem Witch Trials</strong>, broadcast “live” from Salem in 1692, with a historian joining the programme <strong>from today</strong>. You write it in class, then you <strong>record it (audio only), at home or in class</strong>.</p>
 <table style="width:100%;border-collapse:separate;border-spacing:6px"><tr>
 ${roleCell('REPORTER', '🎤', 'Asks questions, explains what is happening, uses clear and dramatic language.', [
     'Hook the audience in your very first line.',
@@ -91,7 +91,7 @@ ${box(`<p><strong>What makes a strong report</strong></p>${ph([
 
 /* ===== 2. Write your script ===== */
 const MODEL2 = [
-  ['REPORTER', 'to camera, urgent', 'Good evening. Tonight, London is burning, and nobody seems able to stop it. I’m Tom Baker, live from the north bank of the Thames.'],
+  ['REPORTER', 'urgent', 'Good evening. Tonight, London is burning, and nobody seems able to stop it. I’m Tom Baker, live from the north bank of the Thames.'],
   ['REPORTER', 'turns to the witness', 'Anne Harris lives two doors from the bakery where it all began. Anne, what woke you?'],
   ['WITNESS', 'still shaking', 'The smell first: smoke, thick and sweet, like burning sugar. Then the shouting. By the time I reached the window, the whole lane was orange.'],
   ['REPORTER', '', 'And you didn’t try to save the house?'],
@@ -104,7 +104,7 @@ const toolkit = sub('H5P.Accordion 1.0', {
   panels: [
     ['🎬 Script format in 30 seconds', `${ph([
       'Speaker’s name in CAPITALS + colon: <code>REPORTER:</code>',
-      'Stage directions <em>(in brackets, present simple)</em>: actions, tone, pauses. They are never read aloud.',
+      'Stage directions <em>(in brackets, present simple)</em>: tone, pauses, sounds. Your report is audio only, so they are about the <strong>voice</strong>. They are never read aloud.',
       'Short turns: one to three sentences. A new speaker = a new line.',
       'Every answer triggers something: a reaction (“That must have been terrifying.”) or a follow-up question.',
       'Open questions (What…? Why…? How…?) get stories; yes/no questions get… “yes”.'])}`],
@@ -149,7 +149,7 @@ const scriptTool = sub('H5P.DocumentationTool 1.8', {
       field('Historian:', 'name'), field('Channel and title of the report:', 'e.g. Massachusetts Bay News: “A Village Turns on Itself”'),
     ], '<p>The witness’s identity drives the whole interview. Choose someone close to the events.</p>'),
     page('1-2. Opening and scene', [
-      field('REPORTER: hook, who / where / when, then the scene:', 'REPORTER: (to camera, urgent) …', '10'),
+      field('REPORTER: hook, who / where / when, then the scene:', 'REPORTER: (urgent) …', '10'),
     ], '<p>See “Reporter: language” in the toolkit.</p>'),
     page('3. The witness', [
       field('Interview with the witness (at least 3 questions, with follow-ups and reactions):', 'REPORTER: (turns to …) …?\nWITNESS: (…) …', '10'),
@@ -158,10 +158,10 @@ const scriptTool = sub('H5P.DocumentationTool 1.8', {
       field('Interview with the historian (context, facts, why women were targeted):', 'REPORTER: Let’s bring in our historian. …?\nHISTORIAN: …', '10'),
     ], '<p>Cause and consequence, checked facts, nuance.</p>'),
     page('5. Closing', [
-      field('REPORTER: wrap-up and sign-off:', 'REPORTER: (to camera) …', '3'),
+      field('REPORTER: wrap-up and sign-off:', 'REPORTER: (slowly, serious) …', '3'),
     ]),
     sub('H5P.DocumentExportPage 1.5', {
-      description: '<p>Click <strong>Create document</strong>, then <strong>Export</strong> to download your script (Word). Share it with your group: you will need it to record at home.</p>',
+      description: '<p>Click <strong>Create document</strong>, then <strong>Export</strong> to download your script (Word). Share it with your group: you will need it to record.</p>',
       createDocumentLabel: 'Create document', exportTextLabel: 'Export', selectAllTextLabel: 'Select all',
     }, 'Document export page', 'Export'),
   ],
@@ -175,42 +175,45 @@ const ch2 = chapter('2. Write your script', [
   toolkit,
 ]);
 
-/* ===== 3. Record at home ===== */
-const ch3 = chapter('3. Record at home', [
-  text(`${head(3, 'Record at home', 30, 'a few days later')}
-<p>Choose the solution that suits your group. <strong>Audio only is perfectly fine</strong>: you don’t have to show your face.</p>`, 'Intro'),
+/* ===== 3. Record (at home or in class) : audio uniquement ===== */
+const ch3 = chapter('3. Record at home or in class', [
+  text(`${head(3, 'Record at home or in class', 30)}
+<p>Your report is <strong>audio only</strong>: no video, no faces, just your voices. That means your voice has to do all the work: tone, pace, pauses, emotion.</p>`, 'Intro'),
   sub('H5P.Accordion 1.0', {
     hTag: 'h3',
     panels: [
-      ['🎧 Option A · Audio only (easiest)', `${ph([
-        '<strong>Right here</strong>: the recorder at the bottom of this page works in your browser. Record, listen, then <em>Download</em> the file.',
+      ['🎧 What to record with', `${ph([
+        '<strong>Right here</strong>: the recorder at the bottom of this page works in your browser (computer, tablet or phone). Record, listen, then <em>Download</em> the file.',
         '<strong>Your phone</strong>: the built-in voice recorder app (Voice Memos on iPhone, Recorder on Android).',
         '<strong>Vocaroo</strong> (vocaroo.com): free, no account. Record, then copy the link or download the MP3.',
         '<strong>Audacity</strong> (free, on a computer): to cut mistakes and put several recordings together.'])}`],
-      ['🎬 Option B · Video', `${ph([
-        'Film with a phone, <strong>in landscape</strong>, at eye level, with the light in front of you (a window, not behind you).',
-        'Set the scene: a plain wall for the studio, a darker room or a candle for 1692, a book or a laptop for the historian.',
-        'Edit with what you already have: <strong>Clipchamp</strong> (built into Windows, sign in with a Microsoft account), <strong>iMovie</strong> (iPhone, iPad, Mac), or the editor in your phone’s gallery to trim.',
-        'Add a title card for your channel and the date: “Salem, Massachusetts, 1692”.'])}`],
-      ['🏠 Not in the same place? Record separately', `${ph([
-        'Each person records <strong>his or her own lines</strong>, one file per turn, with the same app, in a quiet room.',
+      ['🏫 Recording in class', `${ph([
+        'Find the quietest spot you can: a corner, the corridor or another room if your teacher agrees.',
+        'Sit close together around <strong>one device</strong>, placed on a pencil case or a jumper (not directly on the table: it picks up every knock).',
+        'Everyone stays 15 to 20 cm from the microphone. Lean in when it is your turn.',
+        'If you have earphones with a microphone, pass them from speaker to speaker.',
+        'Record in <strong>one take</strong>, like a live broadcast. Two takes maximum, then keep the best one.'])}`],
+      ['🏠 Recording at home', `${ph([
+        '<strong>Together</strong>: meet at someone’s home and record as in class, in one take.',
+        '<strong>Separately</strong>: each person records <strong>his or her own lines</strong>, one file per turn, with the same app, in a quiet room.',
         'Name each file with its number in the script: <code>03-witness.m4a</code>, <code>04-reporter.m4a</code>…',
-        'Send all files to one person (the reporter, for example), who puts them in order in Audacity, Clipchamp or iMovie.',
+        'Send all the files to one person (the reporter, for example), who puts them in order in Audacity.',
         'Leave a short pause between turns, and it sounds like a real conversation.'])}`],
       ['🔔 Optional · Sound atmosphere', `${ph([
-        'Free sound effects: <strong>Pixabay</strong> (pixabay.com/sound-effects), for example a church bell, a crowd, wind, a door.',
+        'With no pictures, sounds set the scene. Free sound effects: <strong>Pixabay</strong> (pixabay.com/sound-effects), for example a church bell, a crowd, wind, a door.',
+        'You can also make them yourselves: knock on a table for the judge, whisper for the crowd.',
         'Keep them very quiet under the voices, and only at the start or between parts.'])}`],
       ['✅ Recording tips', `${ph([
-        'Quiet room, door closed, no TV. A room with curtains, a bed or a sofa gives less echo than a kitchen.',
-        'Hold the phone 15 to 20 cm from your mouth, slightly to the side.',
+        'Door closed, no background noise. A room with curtains, a bed or a sofa gives less echo than a kitchen or an empty classroom.',
         'Do a 10-second test and listen to it before recording everything.',
-        'Put your script in big letters on a screen just behind the phone: a home-made teleprompter.',
         'Speak more slowly than you think. Stress the key words. Pause before big news.',
-        'A mistake? Pause, go back to the start of the sentence, carry on. You can cut it later.'])}`],
-      ['📤 Before you send it', `${ph([
+        'Nobody can see you, so <strong>act with your voice</strong>: the reporter sounds urgent, the witness frightened, the historian calm.',
+        'Say who is speaking: “Joining me now is…”. Listeners cannot see who is who.',
+        'A mistake? Pause, go back to the start of the sentence, carry on. You can cut it later, or simply keep going.'])}`],
+      ['📤 Before you hand it in', `${ph([
         'Length: 2 to 3 minutes.',
         'Everyone can be heard clearly. The five parts are there.',
-        'File name: <code>Salem_Group-names.mp3</code> (or .m4a / .mp4).',
+        'File name: <code>Salem_Group-names.mp3</code> (or .m4a / .wav).',
         'Send it the way your teacher tells you. Don’t post it publicly online.'])}`],
     ].map(([t, html]) => ({ title: t, content: text(html, t) })),
   }, 'Accordion', 'Recording options'),
