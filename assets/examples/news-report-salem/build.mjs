@@ -62,7 +62,7 @@ const roleCell = (r, icon, task, levelUp) => `<td style="vertical-align:top;padd
 <p><strong>Level up</strong></p>${ph(levelUp)}</td>`;
 const ch1 = chapter('1. The brief', [
   text(`${head(1, 'The brief', 3, 'then start writing')}
-<p>In groups of three, write a <strong>2-to-3-minute TV news report</strong> on the <strong>Salem Witch Trials</strong>, broadcast “live” from Salem in 1692, with a historian joining the programme <strong>from today</strong>. You write the script <strong>by hand</strong> in class, then you <strong>film it at home</strong>.</p>
+<p>In groups of three, write a <strong>2-to-3-minute TV news report</strong> on the <strong>Salem Witch Trials</strong>, broadcast “live” from Salem in 1692, with a historian joining the programme <strong>from today</strong>. You write the script <strong>by hand</strong>, then you <strong>film it at home</strong>.</p>
 <table style="width:100%;border-collapse:separate;border-spacing:6px"><tr>
 ${roleCell('REPORTER', '🎤', 'Asks questions, explains what is happening, uses clear and dramatic language.', [
     'Hook the audience in your very first line.',
