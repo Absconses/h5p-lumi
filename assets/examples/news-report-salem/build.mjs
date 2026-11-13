@@ -155,7 +155,7 @@ const ch3 = chapter('3. Film your report', [
     panels: [
       ['🎥 What to film and edit with', `${ph([
         '<strong>Filming</strong>: a phone or a tablet, with its normal camera app. Use the back camera if someone else is filming (better quality).',
-        '<strong>Canva</strong> (canva.com, with your school account if you have one): record, edit, add titles and a news banner. See the box below.',
+        '<strong>Canva</strong> (canva.com, with your school account if you have one): edit, add titles and a news banner, and even change your background without a green screen. See the two boxes below.',
         '<strong>Clipchamp</strong> (built into Windows) or <strong>iMovie</strong> (iPhone, iPad, Mac): to cut and put your clips together.',
         '<strong>Your phone’s gallery</strong>: enough to trim the beginning and the end of a clip.'])}`],
       ['🎨 Using Canva (edit, titles, news banner)', `${ph([
@@ -167,6 +167,14 @@ const ch3 = chapter('3. Film your report', [
         'Working from different homes? Share the design with your group: everyone adds his or her own clips to the same project.',
         'When it is ready: <strong>Share → Download</strong> (MP4), or share the link, as your teacher asks.'])}
 <p><em>Menu names can change a little between the app and the website.</em></p>`],
+      ['🪄 No green screen needed: Canva’s background remover', `<p>Canva can <strong>cut you out of your video</strong> and put you in front of any background. You don’t need a green screen.</p>${ph([
+        'Film each person in front of a <strong>plain wall</strong>, with good light, wearing colours that are different from the wall. One clip per speaker and per turn works best (keep the clips short).',
+        'In Canva, click the clip, then <strong>Edit → Background Remover</strong> (BG Remover). The background disappears.',
+        'Add a background <strong>behind</strong> the clip: a photo, a painting or an <strong>animated video</strong> from Canva’s library. For example: a newsroom for the reporter, a dark wooden village or a courtroom for the witness, a library for the historian.',
+        'Resize and move each person: you can put the reporter and the guest <strong>side by side</strong> on the same screen, like a live link-up, even if you filmed in different places.',
+        'Add the “LIVE · Salem, 1692” label and the name captions on top.',
+        'Keep it believable: no modern objects in the 1692 background, and the same light direction for everyone if you can.'])}
+<p><em>The background remover is part of Canva for Education and Canva Pro. If you don’t see it, log in with your school account.</em></p>`],
       ['🎬 Framing, light and sound', `${ph([
         'Film in <strong>landscape</strong> (phone horizontal), like a TV screen.',
         'Camera at <strong>eye level</strong> and steady: lean the phone on books or use a tripod. No hand-held shaking.',
@@ -179,6 +187,7 @@ const ch3 = chapter('3. Film your report', [
         '<strong>Witness</strong>: 1692. A shawl, a dark coat, a plain shirt, a hat; a wooden door, a tree, a dark corner or a candle-like lamp. No logos, no phones, no posters in the frame.',
         '<strong>Historian</strong>: today. Books, a desk, a map or a laptop behind you.',
         'Different places or backgrounds for each guest make it clear that the historian is not in 1692.',
+        'No suitable place? Film in front of a plain wall and add the background in Canva (see “No green screen needed”).',
         'Simple props are enough. Acting and language matter more than costumes.'])}`],
       ['🏫 Filming in class', `${ph([
         'Find the quietest spot you can: a corner, the corridor or the playground if your teacher agrees.',
