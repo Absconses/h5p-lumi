@@ -1,4 +1,4 @@
-// Livre interactif « Breaking News from Salem, 1692 » (anglais, collège) : lancement d'une activité
+// Livre interactif « Breaking News from Salem, 1692 » v2 (anglais, 3e advanced) : brief, script, enregistrement à la maison.
 // de reportage en groupes de 3 (Reporter / Witness / Historian).
 // Paramètres = défauts anglais des semantics.json + nos valeurs (pas de clonage des gabarits français).
 // Usage : node build.mjs <gabarit-interactivebook-reporter extrait> <content.json de sortie> <dossier media>
@@ -48,204 +48,96 @@ const COL = { REPORTER: '#2f6fba', WITNESS: '#c8601a', HISTORIAN: '#2e8b57' };
 const who = (r) => `<strong style="color:${COL[r]}">${r}:</strong>`;
 const line = (r, dir, words) => `<p>${who(r)} ${dir ? `<em>(${dir})</em> ` : ''}${words}</p>`;
 
-/* ---------- activités ---------- */
-const scs = (intro, items, title) => sub('H5P.SingleChoiceSet 1.11', {
-  choices: items.map(([q, ...answers]) => ({ subContentId: guid(), question: `<p>${q}</p>`, answers: answers.map(a => `<p>${a}</p>`) })),
-  overallFeedback: [
-    { from: 0, to: 59, feedback: 'Read the “Remember” box below, then try again.' },
-    { from: 60, to: 99, feedback: 'Good! Look at your mistakes and try again.' },
-    { from: 100, to: 100, feedback: 'Perfect! You know who says what.' },
-  ],
-  behavior: { autoContinue: true, timeoutCorrect: 1500, timeoutWrong: 2500, soundEffectsEnabled: false, enableRetry: true, enableSolutionsButton: true, passPercentage: 100 },
-}, 'Single Choice Set', title);
-
-const dragText = (task, lines, title) => sub('H5P.DragText 1.10', {
-  taskDescription: `<p>${task}</p>`, textField: lines.join('\n'),
-  overallFeedback: [
-    { from: 0, to: 59, feedback: 'Read the “Remember” box below and try again.' },
-    { from: 60, to: 99, feedback: 'Nearly there! Look at the red answers and try again.' },
-    { from: 100, to: 100, feedback: 'Perfect!' },
-  ],
-  behaviour: { enableRetry: true, enableSolutionsButton: true, instantFeedback: false },
-}, 'Drag the Words', title);
-
-const blanks = (task, lines, title) => sub('H5P.Blanks 1.14', {
-  text: `<p>${task}</p>`, questions: lines.map(l => `<p>${l}</p>`),
-  overallFeedback: [
-    { from: 0, to: 59, feedback: 'Look at the answer: is it a place, a time, a person, a feeling, a reason? Try again.' },
-    { from: 60, to: 99, feedback: 'Nearly there! Check the red boxes.' },
-    { from: 100, to: 100, feedback: 'Great! You can ask open questions.' },
-  ],
-  behaviour: { caseSensitive: false, acceptSpellingErrors: true, enableSolutionsButton: true, enableRetry: true, autoCheck: false },
-}, 'Fill in the Blanks', title);
-
-const mc = (question, answers, title) => sub('H5P.MultiChoice 1.16', {
-  question: `<p>${question}</p>`,
-  answers: answers.map(([t, ok, fb]) => ({ text: `<div>${t}</div>`, correct: ok, tipsAndFeedback: { tip: '', chosenFeedback: `<div>${fb}</div>`, notChosenFeedback: '' } })),
-  behaviour: { type: answers.filter(a => a[1]).length > 1 ? 'multi' : 'single', singlePoint: false, randomAnswers: true, enableRetry: true, enableSolutionsButton: true },
-  overallFeedback: [
-    { from: 0, to: 99, feedback: 'Read the comments under your answers, then try again.' },
-    { from: 100, to: 100, feedback: 'Well done: you found the three problems!' },
-  ],
-}, 'Multiple Choice', title);
-
-const accordion = (panels, title) => sub('H5P.Accordion 1.0', {
-  panels: panels.map(([t, html]) => ({ title: t, content: text(html, t) })), hTag: 'h3',
-}, 'Accordion', title);
-
-/* ================= COUVERTURE ================= */
-const cover = `<h2 style="text-align:center">📺 Breaking News from Salem, 1692</h2>
-<p style="text-align:center">Before you write your news report in groups, learn <strong>how a news report works</strong> and pick up <strong>the tools you need</strong>.</p>`;
-
-/* ===== 1. Your mission ===== */
-const roleBox = (r, icon, items) => `<div style="border-left:6px solid ${COL[r]};padding:0.3em 1em;margin:0.6em 0;background-color:#fafafa">
-<p><strong style="color:${COL[r]}">${icon} ${r[0] + r.slice(1).toLowerCase()}</strong></p><ul>${items.map(i => `<li>${i}</li>`).join('')}</ul></div>`;
-const ch1 = chapter('1. Your mission', [
-  text(`${head(1, 'Your mission', 3)}
-<p>Work in <strong>groups of three</strong>. Prepare and perform a <strong>short news report about the Salem Witch Trials</strong>. Each student has a role:</p>
-${roleBox('REPORTER', '🎤', ['Ask questions.', 'Explain what is happening.', 'Use clear and dramatic language.'])}
-${roleBox('WITNESS', '👁️', ['Describe what you saw or heard.', 'Speak as someone living in Salem in 1692.', 'Mention fear, accusations, and the court.'])}
-${roleBox('HISTORIAN', '📚', ['Explain the historical context.', 'Add facts and clarify the bigger picture.', 'Comment on why women were targeted.'])}
-${box(`<p><strong>Before you start writing, follow these steps:</strong></p>
-<ol><li>Read a model news report (on another topic).</li><li>Find the 5 parts of a news report.</li><li>Learn how to write a script.</li><li>Learn to ask good questions.</li><li>Open your toolbox of useful phrases.</li><li>Write, rehearse and record your report.</li></ol>`)}`, 'Mission'),
-]);
-
-/* ===== 2. Model ===== */
-const MODEL = [
-  ['REPORTER', 'looks at the camera, serious voice', 'Good evening. This is Tom Baker for Channel 1666 News, live from London. Tonight, the city is on fire!'],
-  ['REPORTER', 'points behind him', 'Behind me, you can see the flames. The fire started early this morning in a small bakery in Pudding Lane. Now it is moving fast, from street to street.'],
-  ['REPORTER', 'turns to the witness', 'I’m here with Anne Harris. She lives in Pudding Lane. Anne, what did you see this morning?'],
-  ['WITNESS', 'coughs, scared', 'At one o’clock, I heard someone shout “Fire! Fire!” I opened my window and I saw orange flames everywhere.'],
-  ['REPORTER', '', 'How did you feel?'],
-  ['WITNESS', 'shaking', 'I was terrified! I took my children and we ran to the river. We lost everything.'],
-  ['REPORTER', 'walks to the historian', 'Thank you, Anne. Stay safe. A historian joins us from today. Why did the fire spread so fast?'],
-  ['HISTORIAN', 'calm voice', 'In 1666, most houses in London were made of wood, and they were very close together. The summer was very dry, and a strong wind was blowing from the east.'],
-  ['REPORTER', '', 'How bad was it?'],
-  ['HISTORIAN', '', 'Very bad. The fire burned for four days. It destroyed more than 13,000 houses and the old St Paul’s Cathedral. Today, we know that it changed London: after the fire, people built new houses with bricks and stone.'],
-  ['REPORTER', 'looks at the camera', 'A terrible night for London. Thousands of families have lost their homes. This was Tom Baker, live from London, for Channel 1666 News. Back to the studio!'],
-];
-const ch2 = chapter('2. A model: London is on fire!', [
-  text(`${head(2, 'A model: London is on fire! (1666)', 8)}
-<p>This news report is <strong>not about Salem</strong>: it is about the <strong>Great Fire of London</strong> in 1666. Read it, or perform it with two classmates. Look at <strong>who speaks</strong> and <strong>how the script is written</strong>.</p>`, 'Intro'),
-  image('model-fire.jpg', 'A “live” news report from London on 2 September 1666 (painting of the Great Fire of London, c. 1675)', CR_FIRE),
-  text(`<div style="border:1px solid #c9ced8;border-radius:6px;padding:0.4em 1.2em;background-color:#ffffff">
-<p style="color:#555555"><em>Channel 1666 News · Sunday 2 September 1666</em></p>
-${MODEL.map(([r, d, w]) => line(r, d, w)).join('\n')}</div>`, 'Model script'),
-  text(yourTurn('<p>Read these new lines. <strong>Who says each one?</strong></p>'), 'Your turn'),
-  scs('', [
-    ['“Good morning! This is Sara Lee, live from Paris.”', 'the reporter', 'the witness', 'the historian'],
-    ['“I heard a terrible noise, and I ran outside.”', 'the witness', 'the historian', 'the reporter'],
-    ['“In the 1600s, most people could not read or write.”', 'the historian', 'the reporter', 'the witness'],
-    ['“Can you tell us what happened next?”', 'the reporter', 'the historian', 'the witness'],
-    ['“I was so scared that I could not sleep.”', 'the witness', 'the reporter', 'the historian'],
-    ['“Today, we know that this event changed the country.”', 'the historian', 'the witness', 'the reporter'],
-    ['“That’s all for tonight. Back to you in the studio!”', 'the reporter', 'the witness', 'the historian'],
-  ], 'Who says it?'),
-  text(remember(`<ul>
-<li><strong style="color:${COL.REPORTER}">The reporter</strong> opens and closes the report, explains what is happening <em>now</em> (“the fire <strong>is moving</strong>”) and asks the questions.</li>
-<li><strong style="color:${COL.WITNESS}">The witness</strong> says “I”, tells what he or she <strong>saw, heard and felt</strong>, in the past simple (“I <strong>saw</strong>”, “I <strong>was</strong> terrified”). The witness lives in the past and does not know the future.</li>
-<li><strong style="color:${COL.HISTORIAN}">The historian</strong> comes from <strong>today</strong>. He or she gives facts, dates and numbers, explains <strong>why</strong> (“because…”) and the bigger picture (“Today, we know that…”).</li></ul>`), 'Remember'),
-]);
-
-/* ===== 3. Structure ===== */
-const ch3 = chapter('3. The 5 parts of a news report', [
-  text(`${head(3, 'The 5 parts of a news report', 4)}
-<p>Every news report follows the same <strong>running order</strong>. Here are lines from the model, but they are mixed up. <strong>Drag the name of each part</strong> next to its line.</p>`, 'Intro'),
-  dragText('Drag the names of the parts: <strong>Opening</strong>, <strong>The scene</strong>, <strong>The witness</strong>, <strong>The historian</strong>, <strong>Closing</strong>.', [
-    '“In 1666, most houses in London were made of wood.” → *The historian*',
-    '“Good evening. This is Tom Baker, live from London.” → *Opening*',
-    '“I opened my window and I saw orange flames everywhere.” → *The witness*',
-    '“This was Tom Baker, live from London. Back to the studio!” → *Closing*',
-    '“Behind me, you can see the flames. Now it is moving fast.” → *The scene*',
-  ], 'Running order'),
-  text(remember(`<p>A news report has <strong>5 parts</strong>, always in this order. The reporter speaks <strong>first and last</strong>.</p>`), 'Remember'),
-  image('rundown.jpg', 'The running order: 1 Opening, 2 The scene, 3 The witness, 4 The historian, 5 Closing'),
-  text(`<p>⏱ A short news report lasts <strong>2 to 3 minutes</strong>: that is about <strong>300 words</strong> for the whole group. Ask your teacher how long yours must be.</p>`, 'Length'),
-]);
-
-/* ===== 4. Script ===== */
-const BAD = `<div style="border:1px dashed #b33;border-radius:6px;padding:0.4em 1.2em;background-color:#fff8f8">
-<p style="color:#b33"><em>First draft of a news report (with problems!)</em></p>
-<p>Good evening, live from London. The fire is very big.<br>Anne, did you see the fire?<br>Yes.<br>Anne looks scared.<br>Did you leave your house?<br>Yes.<br>Today we know that the houses were made of wood.<br>Bye!</p></div>`;
-const ch4 = chapter('4. How to write a script', [
-  text(`${head(4, 'How to write a script', 6)}
-<p>A group wrote this first draft about the Great Fire. Compare it with the model in step 2.</p>${BAD}`, 'Bad draft'),
-  mc('This draft has <strong>three big problems</strong>. Find them.', [
-    ['We cannot tell who is speaking, because there are no names.', true, 'Yes! Write the speaker’s name before each line: REPORTER:, WITNESS:, HISTORIAN:.'],
-    ['“Anne looks scared” is an action, but it looks like words to say.', true, 'Yes! It is a stage direction: put it in brackets, (scared), and don’t read it aloud.'],
-    ['The questions get “Yes” answers, so the witness says nothing.', true, 'Yes! These are closed questions. Ask “What did you see?”, not “Did you see the fire?” (step 5).'],
-    ['The historian can’t be in this report: he did not live in 1666.', false, 'No: the historian comes from today, like a time-travelling guest. That is normal in this kind of report.'],
-    ['The draft is far too long for a news report of two minutes.', false, 'No: it is too short! A two-minute report needs about 300 words.'],
-    ['“Good evening” is too polite: real reporters never say hello.', false, 'No: reporters always greet the audience in the opening: “Good evening”, “Hello and welcome”.'],
-  ], 'Spot the problems'),
-  text(remember(`<p><strong>The 4 rules of a script</strong></p>
-<ol>
-<li><strong>Names</strong>: write the speaker’s name in CAPITALS, then a colon. <code>REPORTER:</code></li>
-<li><strong>Stage directions</strong>: put actions and feelings <em>(in brackets and italics)</em>, in the present simple. They tell you <strong>what to do</strong> or <strong>how to speak</strong>. You <strong>don’t read them aloud</strong>.</li>
-<li><strong>Turns</strong>: a new speaker = a new line. Keep each turn short: 1 to 3 sentences.</li>
-<li><strong>Links</strong>: a question → an answer → a reaction (“Thank you, Anne.”, “That’s terrible!”). Then the next question.</li>
-</ol>
-<p><strong>Useful stage directions</strong>: (looks at the camera) · (points behind him / her) · (turns to the witness) · (whispers) · (shouts) · (pauses) · (shakes his / her head) · (cries) · (nervous) · (angry) · (calm voice) · (shows a document)</p>`), 'Rules'),
-]);
-
-/* ===== 5. Questions ===== */
-const ch5 = chapter('5. Asking good questions', [
-  text(`${head(5, 'Asking good questions', 6)}
-<p>The interview is the heart of your news report. Compare:</p>
-<table style="width:100%;border-collapse:collapse"><tr>
-<td style="width:50%;vertical-align:top;padding:0.4em 0.8em;background-color:#fff8f8"><p>${who('REPORTER')} Did you see the fire?</p><p>${who('WITNESS')} Yes.</p></td>
-<td style="width:50%;vertical-align:top;padding:0.4em 0.8em;background-color:#f3fbf5"><p>${who('REPORTER')} What did you see?</p><p>${who('WITNESS')} I saw orange flames everywhere, and people were running in the street.</p></td>
-</tr></table>
-<p>The second question gets a much better answer. Why? Sort these questions.</p>`, 'Intro'),
-  dragText('Is it an <strong>open</strong> question (long answer) or a <strong>closed</strong> question (“Yes” or “No”)?', [
-    'Were you at home? *closed*',
-    'What did you hear? *open*',
-    'Did your family escape? *closed*',
-    'How did you feel? *open*',
-    'Was it dangerous? *closed*',
-    'Why did people panic? *open*',
-    'Is it true? *closed*',
-    'Where did you go? *open*',
-  ], 'Open or closed?'),
-  text(remember(`<ul><li>An <strong>open question</strong> starts with a question word: <strong>What, Where, When, Who, Why, How</strong>. It gets a long, interesting answer.</li>
-<li>A <strong>closed question</strong> starts with <em>Did / Was / Is / Are / Can…</em> and gets “Yes” or “No”. You can use one to check a fact, then add: “<strong>Can you tell us more?</strong>” or “<strong>Why?</strong>”.</li></ul>`), 'Remember'),
-  text(yourTurn('<p>Read the witness’s answer and write the <strong>question word</strong> the reporter used.</p>'), 'Your turn'),
-  blanks('Write the question word.', [
-    '*Where* did you go? — We ran to the river.',
-    '*How* did you feel? — I was terrified.',
-    '*Why* did the fire spread so fast? — Because the houses were made of wood.',
-    '*When/What time* did it start? — At one o’clock in the morning.',
-    '*Who* shouted “Fire!”? — My neighbour, Mr Smith.',
-    '*What* did you hear? — I heard people screaming.',
-  ], 'Question words'),
-]);
-
-/* ===== 6. Toolbox ===== */
+/* ================= V2 (2026-11-13) : 3e advanced, lancement express =================
+   Retour de Pierre : trop faible, trop de temps sur l'évident. But : lancer très vite l'écriture du script,
+   donner des solutions concrètes pour enregistrer à la maison. Plus d'exercices notés : les aides sont repliées. */
 const ph = (items) => `<ul>${items.map(i => `<li>${i}</li>`).join('')}</ul>`;
-const ch6 = chapter('6. Your toolbox', [
-  text(`${head(6, 'Your toolbox: words and phrases', 5, 'open the box for your role')}
-<p>Open the box for <strong>your role</strong>. Use these phrases when you write. The words in [brackets] are for you to complete.</p>`, 'Intro'),
-  accordion([
-    ['🎤 Reporter: phrases', `<p><strong>Open the report</strong></p>${ph(['Good evening. This is [name] for [channel] News, live from Salem, Massachusetts.', 'Breaking news tonight: …', 'We are here in [place], where …'])}
-<p><strong>Explain what is happening (present continuous)</strong></p>${ph(['Right now, people are …', 'Behind me, you can see …', 'The whole village is talking about …'])}
-<p><strong>Dramatic words</strong>: shocking · terrifying · unbelievable · chaos · panic · fear · a nightmare · a town in shock</p>
-<p><strong>Introduce your guests</strong></p>${ph(['I’m here with [name], who lives in Salem.', 'Let’s ask a historian. Why …?'])}
-<p><strong>React</strong></p>${ph(['Thank you, [name].', 'That’s terrible!', 'Really? What happened next?', 'Can you tell us more?'])}
-<p><strong>Close the report</strong></p>${ph(['So, a dark day for Salem …', 'This was [name], live from Salem, for [channel] News. Back to the studio!'])}`],
-    ['👁️ Witness: phrases', `<p><strong>Tell what happened (past simple)</strong></p>${ph(['I saw … / I heard … / I was …', 'My neighbour said that …', 'First, … Then, … Suddenly, … After that, …'])}
-<p><strong>Say how you felt</strong></p>${ph(['I was scared / terrified / shocked / angry / sad.', 'I couldn’t believe it!', 'Now I am afraid of … / I am afraid that …'])}
-<p><strong>Speak as someone from 1692</strong></p>${ph(['Talk about your village, your church, your family, your neighbours.', 'You don’t know what happens later: only the historian knows!'])}`],
-    ['📚 Historian: phrases', `<p><strong>Give the context</strong></p>${ph(['In 1692, … / At that time, …', 'Most people in Salem believed that …'])}
-<p><strong>Give facts and numbers</strong></p>${ph(['More than [number] people were …', 'It started in [month] and ended in [month].'])}
-<p><strong>Explain why</strong></p>${ph(['… because …', '… so …', 'One reason is that … Another reason is that …', 'As a result, …'])}
-<p><strong>Give the bigger picture and your comment</strong></p>${ph(['Today, we know that …', 'Many historians think that …', 'This shows that …'])}
-<p><strong>Questions to research</strong> (find the answers in your lessons and documents): When and where did it happen? How many people were accused? What happened to them? Who accused them? Why were most of the accused women? How did it end?</p>`],
-    ['📖 Word bank: the Salem Witch Trials', `${ph(['a witch (witches) · witchcraft · the Devil', 'to accuse someone of … · an accusation · the accused', 'a trial · the court · a judge · evidence', 'guilty ≠ innocent · to confess · to deny', 'to be arrested · prison (jail) · to be hanged', 'a Puritan · a rumour · to blame · a neighbour', 'fear · afraid · panic · hysteria'])}`],
-    ['🗣️ Performing: your voice', `${ph(['Speak <strong>slowly</strong> and <strong>loudly</strong>.', 'Look at the camera (or the class), not only at your paper.', 'Make a short pause before important news.', 'Show emotions with your voice and your face (follow your stage directions).', 'Listen to the others and react: you are a team!'])}`],
-  ], 'Toolbox'),
+
+const cover = `<h2 style="text-align:center">📺 Breaking News from Salem, 1692</h2>
+<p style="text-align:center">Your brief · your script · your recording</p>`;
+
+/* ===== 1. The brief ===== */
+const roleCell = (r, icon, task, levelUp) => `<td style="vertical-align:top;padding:0.5em 0.8em;border-top:5px solid ${COL[r]};background-color:#fafafa">
+<p><strong style="color:${COL[r]}">${icon} ${r[0] + r.slice(1).toLowerCase()}</strong></p><p><em>${task}</em></p>
+<p><strong>Level up</strong></p>${ph(levelUp)}</td>`;
+const ch1 = chapter('1. The brief', [
+  text(`${head(1, 'The brief', 3, 'then start writing')}
+<p>In groups of three, write a <strong>2-to-3-minute TV news report</strong> on the <strong>Salem Witch Trials</strong>, broadcast “live” from Salem in 1692, with a historian joining the programme <strong>from today</strong>. You write it in class, then you <strong>record it at home</strong>.</p>
+<table style="width:100%;border-collapse:separate;border-spacing:6px"><tr>
+${roleCell('REPORTER', '🎤', 'Asks questions, explains what is happening, uses clear and dramatic language.', [
+    'Hook the audience in your very first line.',
+    'Signpost: “Joining me now is…”, “Let’s hear from…”.',
+    'Push with follow-up questions: “What makes you so sure?”',
+    'End on a punchy one-line wrap-up.'])}
+${roleCell('WITNESS', '👁️', 'Describes what he or she saw or heard, as someone living in Salem in 1692: fear, accusations, the court.', [
+    'Pick a point of view: accuser, neighbour of an accused, servant, relative…',
+    'Use sensory details: what you saw, heard, smelt.',
+    'Show emotion through what you say, don’t just name it.',
+    'You don’t know how the story ends.'])}
+${roleCell('HISTORIAN', '📚', 'Explains the context, adds facts, clarifies the bigger picture, comments on why women were targeted.', [
+    'Precise facts: dates, numbers, names.',
+    'Cause and consequence, not a list.',
+    'Nuance: “Historians generally agree…”, “One theory suggests…”.',
+    'Give a clear, argued answer on why women were targeted.'])}
+</tr></table>
+${box(`<p><strong>What makes a strong report</strong></p>${ph([
+    '<strong>Structure</strong>: opening → the scene → the witness → the historian → closing. The reporter speaks first and last.',
+    '<strong>Interaction</strong>: a real conversation, not three speeches. Every answer gets a reaction or a follow-up.',
+    '<strong>Accuracy</strong>: the witness sounds like 1692, the historian’s facts are checked.',
+    '<strong>Language</strong>: varied tenses, linking words, vocabulary from the word bank.',
+    '<strong>Delivery</strong>: clear, paced, expressive. About 300 to 400 words for the whole group.'])}
+<p><strong>Now</strong>: agree on roles and the witness’s identity (2 min), sketch the five parts (5 min), then write. The reporter drafts the questions first, so the answers fit.</p>`)}`, 'Brief'),
 ]);
 
-/* ===== 7. Write and rehearse ===== */
+/* ===== 2. Write your script ===== */
+const MODEL2 = [
+  ['REPORTER', 'to camera, urgent', 'Good evening. Tonight, London is burning, and nobody seems able to stop it. I’m Tom Baker, live from the north bank of the Thames.'],
+  ['REPORTER', 'turns to the witness', 'Anne Harris lives two doors from the bakery where it all began. Anne, what woke you?'],
+  ['WITNESS', 'still shaking', 'The smell first: smoke, thick and sweet, like burning sugar. Then the shouting. By the time I reached the window, the whole lane was orange.'],
+  ['REPORTER', '', 'And you didn’t try to save the house?'],
+  ['WITNESS', 'shakes her head', 'Save it? The flames were jumping from roof to roof faster than we could run.'],
+  ['REPORTER', '', 'Our historian joins us from the twenty-first century. Why was this fire so hard to fight?'],
+  ['HISTORIAN', 'calmly', 'Three things came together: timber houses packed tightly along narrow streets, a long dry summer, and a strong east wind. And as the Lord Mayor hesitated to pull down houses to create firebreaks, the fire gained precious hours.'],
+];
+const toolkit = sub('H5P.Accordion 1.0', {
+  hTag: 'h3',
+  panels: [
+    ['🎬 Script format in 30 seconds', `${ph([
+      'Speaker’s name in CAPITALS + colon: <code>REPORTER:</code>',
+      'Stage directions <em>(in brackets, present simple)</em>: actions, tone, pauses. They are never read aloud.',
+      'Short turns: one to three sentences. A new speaker = a new line.',
+      'Every answer triggers something: a reaction (“That must have been terrifying.”) or a follow-up question.',
+      'Open questions (What…? Why…? How…?) get stories; yes/no questions get… “yes”.'])}`],
+    ['📺 Need a model? An excerpt on another topic (London, 1666)', `<div style="border:1px solid #c9ced8;border-radius:6px;padding:0.3em 1em;background-color:#ffffff">
+${MODEL2.map(([r, d, w]) => line(r, d, w)).join('\n')}</div>
+<p><em>Notice: the hook, the sensory details, the follow-up question, and the historian’s cause-and-consequence answer.</em></p>`],
+    ['🎤 Reporter: language', `${ph([
+      '<strong>Hooks</strong>: “Tonight, a quiet village has turned against itself.” · “Fear has a name in Salem tonight…”',
+      '<strong>Live narration</strong>: “As I speak, …” · “Crowds have been gathering since dawn.” · “Behind me, …”',
+      '<strong>Handing over</strong>: “Joining me now is…” · “Let’s bring in our historian.” · “Over to you, …”',
+      '<strong>Follow-ups</strong>: “What makes you so sure?” · “How did people react?” · “Did anyone dare to speak up?”',
+      '<strong>Wrap-up</strong>: “A village divided, a court under pressure, and no end in sight. This is …, live from Salem.”'])}`],
+    ['👁️ Witness: language', `${ph([
+      '<strong>Narrative tenses</strong>: “I was walking home when I heard…” · “By then, they had already arrested…”',
+      '<strong>Reported speech</strong>: “She claimed that she had seen…” · “They told us not to…”',
+      '<strong>Feelings and doubts</strong>: “I can’t stop thinking about…” · “I’m afraid that if I speak, they’ll accuse me too.” · “I never thought my own neighbour would…”',
+      '<strong>1692 world</strong>: the meeting house, the minister, the magistrates, the jail, your farm, the Devil, sin.'])}`],
+    ['📚 Historian: language', `${ph([
+      '<strong>Context</strong>: “To understand this, we need to go back to…” · “At the time, most people in Massachusetts believed that…”',
+      '<strong>Facts</strong>: “Between [month] and [month] 1692, more than [number] people were accused.” · “[Number] were executed.”',
+      '<strong>Cause and consequence</strong>: “This was partly due to…” · “As a result, …” · “What made things worse was…”',
+      '<strong>Nuance</strong>: “Historians generally agree that…” · “One theory suggests…” · “It’s worth remembering that…”',
+      '<strong>Bigger picture</strong>: “Looking back, Salem shows how…” · “Today, the term ‘witch hunt’ means…”'])}
+<p><strong>Check before you write</strong>: How many people were accused, and how many executed? Who were the judges? What was “spectral evidence”? Why were most of the accused women? How and when did it end?</p>`],
+    ['📖 Salem word bank', `${ph([
+      'witchcraft · a witch hunt · the Devil · to bewitch · to be possessed / afflicted',
+      'to accuse sb of sth · an accusation · the accused · an accuser · to point the finger at',
+      'a trial · the court · a judge / magistrate · evidence · spectral evidence · a testimony',
+      'guilty ≠ innocent · to confess · to deny · to plead · a sentence · to be hanged',
+      'a Puritan · a minister · a scapegoat · a rumour · hysteria · mass panic · suspicion · a grudge'])}`],
+  ].map(([t, html]) => ({ title: t, content: text(html, t) })),
+}, 'Accordion', 'Toolkit');
+
 const field = (task, ph_, rows = '1') => sub('H5P.TextInputField 1.2', { taskDescription: task, placeholderText: ph_, inputFieldSize: rows, requiredField: false }, 'Text Input Field', 'Field');
 const dtext = (html) => sub('H5P.Text 1.1', { text: html }, 'Text', 'Text');
 const page = (title, elements, helpText) => sub('H5P.StandardPage 1.5', { elementList: elements, helpTextLabel: 'Help', ...(helpText ? { helpText } : {}) }, 'Standard page', title);
@@ -253,71 +145,85 @@ const scriptTool = sub('H5P.DocumentationTool 1.8', {
   taskDescription: 'Our news report script',
   pagesList: [
     page('Our team', [
-      dtext('<p>Who plays which role?</p>'),
-      field('Reporter (name):', 'Lucas'), field('Witness (name, and who he or she is in 1692):', 'Emma, a farmer’s wife from Salem Village'),
-      field('Historian (name):', 'Inès'), field('Name of our news channel:', 'Channel 1692 News'),
-    ], '<p>Choose a witness who can speak about fear, accusations and the court: a neighbour, a farmer, a servant, someone who went to a trial…</p>'),
+      field('Reporter:', 'name'), field('Witness: name, and who he or she is in 1692:', 'e.g. a servant in the Parris household'),
+      field('Historian:', 'name'), field('Channel and title of the report:', 'e.g. Massachusetts Bay News: “A Village Turns on Itself”'),
+    ], '<p>The witness’s identity drives the whole interview. Choose someone close to the events.</p>'),
     page('1-2. Opening and scene', [
-      dtext('<p><strong>REPORTER</strong>: greet the audience, say who you are, where and when you are. Then explain what is happening, with dramatic words. Add stage directions in (brackets).</p>'),
-      field('Opening:', 'REPORTER: (looks at the camera) Good evening. This is …', '3'),
-      field('The scene:', 'REPORTER: (points behind him / her) Right now, …', '3'),
-    ], '<p>Look at the “Reporter” box in step 6.</p>'),
+      field('REPORTER: hook, who / where / when, then the scene:', 'REPORTER: (to camera, urgent) …', '10'),
+    ], '<p>See “Reporter: language” in the toolkit.</p>'),
     page('3. The witness', [
-      dtext('<p>The reporter writes the questions <strong>first</strong> (open questions!), then the witness writes the answers: what he or she saw, heard and felt.</p>'),
-      field('Question 1 and answer:', 'REPORTER: (turns to the witness) …?\nWITNESS: (…) I saw …', '3'),
-      field('Question 2 and answer:', 'REPORTER: How …?\nWITNESS: …', '3'),
-      field('Question 3 and answer:', 'REPORTER: …?\nWITNESS: …', '3'),
-    ], '<p>Remember: the witness says “I”, uses the past simple and does not know the future.</p>'),
+      field('Interview with the witness (at least 3 questions, with follow-ups and reactions):', 'REPORTER: (turns to …) …?\nWITNESS: (…) …', '10'),
+    ], '<p>Narrative tenses, sensory details, a clear point of view. The witness doesn’t know the ending.</p>'),
     page('4. The historian', [
-      dtext('<p>The reporter asks, the historian explains the context, gives facts and comments on why women were targeted.</p>'),
-      field('Question 1 and answer (context and facts):', 'REPORTER: Can you explain …?\nHISTORIAN: In 1692, …', '3'),
-      field('Question 2 and answer (why were women targeted?):', 'REPORTER: Why …?\nHISTORIAN: Many historians think that …', '3'),
-    ], '<p>Use “because”, “so”, “one reason is that…” and “Today, we know that…”.</p>'),
+      field('Interview with the historian (context, facts, why women were targeted):', 'REPORTER: Let’s bring in our historian. …?\nHISTORIAN: …', '10'),
+    ], '<p>Cause and consequence, checked facts, nuance.</p>'),
     page('5. Closing', [
-      dtext('<p><strong>REPORTER</strong>: sum up in one sentence, then sign off.</p>'),
-      field('Closing:', 'REPORTER: (looks at the camera) So, … This was …, live from Salem …', '3'),
+      field('REPORTER: wrap-up and sign-off:', 'REPORTER: (to camera) …', '3'),
     ]),
     sub('H5P.DocumentExportPage 1.5', {
-      description: '<p>Your script is ready! Click <strong>Create document</strong>, then <strong>Export</strong> to download it (Word). Print it or share it with your group to rehearse.</p>',
+      description: '<p>Click <strong>Create document</strong>, then <strong>Export</strong> to download your script (Word). Share it with your group: you will need it to record at home.</p>',
       createDocumentLabel: 'Create document', exportTextLabel: 'Export', selectAllTextLabel: 'Select all',
     }, 'Document export page', 'Export'),
   ],
 }, 'Documentation Tool', 'Our script');
 
-const recorder = sub('H5P.AudioRecorder 1.0', { title: 'Record your rehearsal' }, 'Audio Recorder', 'Rehearsal');
-
-const ch7 = chapter('7. Write and rehearse', [
-  text(`${head(7, 'Write and rehearse', '40', 'in your group')}
-<p><strong>How to work as a team</strong> (suggested times; your teacher decides):</p>
-<ol>
-<li><strong>Choose your roles</strong> and your witness’s identity. (2 min)</li>
-<li><strong>Plan together</strong> with the 5 parts: what will each person say? (5 min)</li>
-<li><strong>The reporter writes the questions first</strong>, then gives them to the witness and the historian, who write their answers. (15 min)</li>
-<li><strong>Read the script aloud together.</strong> Add stage directions and reactions. (5 min)</li>
-<li><strong>Rehearse twice</strong>, record yourselves and listen. Time it with a stopwatch: 2 to 3 minutes. (10 min)</li>
-</ol>
-<p>✍️ Write your script below, page by page. When it is finished, export it.</p>`, 'Teamwork'),
+const ch2 = chapter('2. Write your script', [
+  text(`${head(2, 'Write your script', '30–40', 'in your group')}
+<p>Write straight into the frame below, part by part, and export it at the end. Stuck? Open the toolkit underneath: it is there when you need it, not before.</p>`, 'Intro'),
   scriptTool,
-  text(`<h3>🎙️ Record a rehearsal</h3><p>Click to record your news report, then listen. Can you understand every word? Is it too fast? Then try again!</p>`, 'Record'),
-  recorder,
-  text(box(`<p><strong>✅ Checklist before you perform</strong></p>
-<ul>
-<li>Our report has the 5 parts, in order.</li>
-<li>Each line starts with a NAME:, and stage directions are in (brackets).</li>
-<li>The reporter asks open questions and reacts to the answers.</li>
-<li>The witness speaks as someone from 1692: fear, accusations, the court.</li>
-<li>The historian gives facts and explains why women were targeted.</li>
-<li>We speak slowly and loudly, and we look at the audience.</li>
-<li>Our report lasts 2 to 3 minutes.</li>
-</ul>`, '#e8f6ee'), 'Checklist'),
+  text('<h3>🧰 Toolkit</h3>', 'Toolkit title'),
+  toolkit,
+]);
+
+/* ===== 3. Record at home ===== */
+const ch3 = chapter('3. Record at home', [
+  text(`${head(3, 'Record at home', 30, 'a few days later')}
+<p>Choose the solution that suits your group. <strong>Audio only is perfectly fine</strong>: you don’t have to show your face.</p>`, 'Intro'),
+  sub('H5P.Accordion 1.0', {
+    hTag: 'h3',
+    panels: [
+      ['🎧 Option A · Audio only (easiest)', `${ph([
+        '<strong>Right here</strong>: the recorder at the bottom of this page works in your browser. Record, listen, then <em>Download</em> the file.',
+        '<strong>Your phone</strong>: the built-in voice recorder app (Voice Memos on iPhone, Recorder on Android).',
+        '<strong>Vocaroo</strong> (vocaroo.com): free, no account. Record, then copy the link or download the MP3.',
+        '<strong>Audacity</strong> (free, on a computer): to cut mistakes and put several recordings together.'])}`],
+      ['🎬 Option B · Video', `${ph([
+        'Film with a phone, <strong>in landscape</strong>, at eye level, with the light in front of you (a window, not behind you).',
+        'Set the scene: a plain wall for the studio, a darker room or a candle for 1692, a book or a laptop for the historian.',
+        'Edit with what you already have: <strong>Clipchamp</strong> (built into Windows, sign in with a Microsoft account), <strong>iMovie</strong> (iPhone, iPad, Mac), or the editor in your phone’s gallery to trim.',
+        'Add a title card for your channel and the date: “Salem, Massachusetts, 1692”.'])}`],
+      ['🏠 Not in the same place? Record separately', `${ph([
+        'Each person records <strong>his or her own lines</strong>, one file per turn, with the same app, in a quiet room.',
+        'Name each file with its number in the script: <code>03-witness.m4a</code>, <code>04-reporter.m4a</code>…',
+        'Send all files to one person (the reporter, for example), who puts them in order in Audacity, Clipchamp or iMovie.',
+        'Leave a short pause between turns, and it sounds like a real conversation.'])}`],
+      ['🔔 Optional · Sound atmosphere', `${ph([
+        'Free sound effects: <strong>Pixabay</strong> (pixabay.com/sound-effects), for example a church bell, a crowd, wind, a door.',
+        'Keep them very quiet under the voices, and only at the start or between parts.'])}`],
+      ['✅ Recording tips', `${ph([
+        'Quiet room, door closed, no TV. A room with curtains, a bed or a sofa gives less echo than a kitchen.',
+        'Hold the phone 15 to 20 cm from your mouth, slightly to the side.',
+        'Do a 10-second test and listen to it before recording everything.',
+        'Put your script in big letters on a screen just behind the phone: a home-made teleprompter.',
+        'Speak more slowly than you think. Stress the key words. Pause before big news.',
+        'A mistake? Pause, go back to the start of the sentence, carry on. You can cut it later.'])}`],
+      ['📤 Before you send it', `${ph([
+        'Length: 2 to 3 minutes.',
+        'Everyone can be heard clearly. The five parts are there.',
+        'File name: <code>Salem_Group-names.mp3</code> (or .m4a / .mp4).',
+        'Send it the way your teacher tells you. Don’t post it publicly online.'])}`],
+    ].map(([t, html]) => ({ title: t, content: text(html, t) })),
+  }, 'Accordion', 'Recording options'),
+  text('<h3>🎙️ Record here</h3><p>Allow the microphone, record, listen, then download your file.</p>', 'Record'),
+  sub('H5P.AudioRecorder 1.0', { title: 'Breaking News from Salem' }, 'Audio Recorder', 'Recorder'),
 ]);
 
 /* ================= LIVRE ================= */
 const book = merge(defaults('H5P.InteractiveBook 1.11'), {
   showCoverPage: true,
   bookCover: { coverDescription: cover, coverMedium: image('cover-salem.jpg', 'Breaking news: the Salem Witch Trials, 1692 (painting by T. H. Matteson, 1855)', CR_JACOBS) },
-  chapters: [ch1, ch2, ch3, ch4, ch5, ch6, ch7],
-  behaviour: { defaultTableOfContents: true, progressIndicators: true, progressAuto: true, displaySummary: true },
+  chapters: [ch1, ch2, ch3],
+  behaviour: { defaultTableOfContents: true, progressIndicators: true, progressAuto: true, displaySummary: false },
 });
 fs.writeFileSync(OUT, JSON.stringify(book));
 console.log('OK', book.chapters.length, 'chapters');
