@@ -186,7 +186,16 @@ const ch3 = chapter('3. Record at home or in class', [
         '<strong>Right here</strong>: the recorder at the bottom of this page works in your browser (computer, tablet or phone). Record, listen, then <em>Download</em> the file.',
         '<strong>Your phone</strong>: the built-in voice recorder app (Voice Memos on iPhone, Recorder on Android).',
         '<strong>Vocaroo</strong> (vocaroo.com): free, no account. Record, then copy the link or download the MP3.',
+        '<strong>Canva</strong> (canva.com, with your school account if you have one): see the box below.',
         '<strong>Audacity</strong> (free, on a computer): to cut mistakes and put several recordings together.'])}`],
+      ['🎨 Using Canva (record and edit in one place)', `${ph([
+        'Create a new <strong>Video</strong> design. You only need one page: a title card with your channel’s name and “Salem, 1692” (no faces, no filming).',
+        'Record your voices: <strong>Uploads → Record yourself</strong>, switch the camera off and keep the microphone on. Or upload audio files recorded on your phones.',
+        'Place the recordings in order on the timeline at the bottom. Trim the beginning and the end of each one.',
+        'Open <strong>Audio</strong> in the side panel to add a sound effect or a short news jingle. Lower its volume so it stays under the voices.',
+        'Working from different homes? Share the design with your group: everyone adds his or her own recordings to the same project.',
+        'When it is ready: <strong>Share → Download</strong>, or share the link, as your teacher asks.'])}
+<p><em>Menu names can change a little between the app and the website.</em></p>`],
       ['🏫 Recording in class', `${ph([
         'Find the quietest spot you can: a corner, the corridor or another room if your teacher agrees.',
         'Sit close together around <strong>one device</strong>, placed on a pencil case or a jumper (not directly on the table: it picks up every knock).',
@@ -197,7 +206,7 @@ const ch3 = chapter('3. Record at home or in class', [
         '<strong>Together</strong>: meet at someone’s home and record as in class, in one take.',
         '<strong>Separately</strong>: each person records <strong>his or her own lines</strong>, one file per turn, with the same app, in a quiet room.',
         'Name each file with its number in the script: <code>03-witness.m4a</code>, <code>04-reporter.m4a</code>…',
-        'Send all the files to one person (the reporter, for example), who puts them in order in Audacity.',
+        'Send all the files to one person (the reporter, for example), who puts them in order in Audacity or Canva.',
         'Leave a short pause between turns, and it sounds like a real conversation.'])}`],
       ['🔔 Optional · Sound atmosphere', `${ph([
         'With no pictures, sounds set the scene. Free sound effects: <strong>Pixabay</strong> (pixabay.com/sound-effects), for example a church bell, a crowd, wind, a door.',
@@ -213,7 +222,7 @@ const ch3 = chapter('3. Record at home or in class', [
       ['📤 Before you hand it in', `${ph([
         'Length: 2 to 3 minutes.',
         'Everyone can be heard clearly. The five parts are there.',
-        'File name: <code>Salem_Group-names.mp3</code> (or .m4a / .wav).',
+        'File name: <code>Salem_Group-names.mp3</code> (or .m4a / .wav, or .mp4 from Canva).',
         'Send it the way your teacher tells you. Don’t post it publicly online.'])}`],
     ].map(([t, html]) => ({ title: t, content: text(html, t) })),
   }, 'Accordion', 'Recording options'),
