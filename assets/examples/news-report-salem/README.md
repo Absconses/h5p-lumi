@@ -1,13 +1,13 @@
 # Breaking News from Salem, 1692 (anglais, 3e advanced)
 
 **v3 (build.mjs, 2026-11-13)** après trois retours de Pierre : classe de 3e advanced (trop de temps
-sur l'évident en v1), le script s'écrit **à la main**, le rendu est une **vidéo** filmée à la maison ou
-en classe. 3 chapitres, aucun exercice noté, aucune trame en ligne :
+sur l'évident en v1), le script s'écrit **à la main**, le rendu est une **vidéo** filmée à la maison
+(pas en classe). 3 chapitres, aucun exercice noté, aucune trame en ligne :
 1. The brief (consigne + « level up » par rôle + critères) ;
 2. Your toolkit (accordéon à ouvrir pendant l'écriture : format en 30 s, modèle Londres 1666, langue
    B1-B2 par rôle, vocabulaire Salem) ;
 3. Film your report (outils : téléphone, Canva, Clipchamp, iMovie ; cadrage, lumière, son ; décor par
-   rôle ; en classe / à la maison ensemble ou séparément ; jeu face caméra ; rendu, pas de publication).
+   rôle ; ensemble ou séparément ; jeu face caméra ; rendu, pas de publication).
 La v1 ci-dessous reste dans build-v1.mjs.
 
 ## v1 (build-v1.mjs)

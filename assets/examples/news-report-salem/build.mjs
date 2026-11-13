@@ -62,7 +62,7 @@ const roleCell = (r, icon, task, levelUp) => `<td style="vertical-align:top;padd
 <p><strong>Level up</strong></p>${ph(levelUp)}</td>`;
 const ch1 = chapter('1. The brief', [
   text(`${head(1, 'The brief', 3, 'then start writing')}
-<p>In groups of three, write a <strong>2-to-3-minute TV news report</strong> on the <strong>Salem Witch Trials</strong>, broadcast “live” from Salem in 1692, with a historian joining the programme <strong>from today</strong>. You write the script <strong>by hand</strong> in class, then you <strong>film it</strong>, at home or in class.</p>
+<p>In groups of three, write a <strong>2-to-3-minute TV news report</strong> on the <strong>Salem Witch Trials</strong>, broadcast “live” from Salem in 1692, with a historian joining the programme <strong>from today</strong>. You write the script <strong>by hand</strong> in class, then you <strong>film it at home</strong>.</p>
 <table style="width:100%;border-collapse:separate;border-spacing:6px"><tr>
 ${roleCell('REPORTER', '🎤', 'Asks questions, explains what is happening, uses clear and dramatic language.', [
     'Hook the audience in your very first line.',
@@ -148,7 +148,7 @@ const ch2 = chapter('2. Your toolkit', [
 
 /* ===== 3. Film your report (à la maison ou en classe) : vidéo ===== */
 const ch3 = chapter('3. Film your report', [
-  text(`${head(3, 'Film your report, at home or in class', 30)}
+  text(`${head(3, 'Film your report at home', 30)}
 <p>Your report is a <strong>video</strong>: the audience sees and hears you. A phone is all you need.</p>`, 'Intro'),
   sub('H5P.Accordion 1.0', {
     hTag: 'h3',
@@ -189,13 +189,8 @@ const ch3 = chapter('3. Film your report', [
         'Different places or backgrounds for each guest make it clear that the historian is not in 1692.',
         'No suitable place? Film in front of a plain wall and add the background in Canva (see “No green screen needed”).',
         'Simple props are enough. Acting and language matter more than costumes.'])}`],
-      ['🏫 Filming in class', `${ph([
-        'Find the quietest spot you can: a corner, the corridor or the playground if your teacher agrees.',
-        'Three of you on screen? Ask someone from another group to film, or lean the device on a pile of books.',
-        'Film it in <strong>one take</strong>, like a live broadcast. Two takes maximum, then keep the best one.',
-        'Check the background before you start: no classmates walking through the shot.'])}`],
-      ['🏠 Filming at home', `${ph([
-        '<strong>Together</strong>: meet at someone’s home and film as in class.',
+      ['🏠 Together or separately?', `${ph([
+        '<strong>Together</strong>: meet at someone’s home. Ask a brother, a sister or a parent to film, or lean the phone on a pile of books. Film it in one take, like a live broadcast: two takes maximum, then keep the best one.',
         '<strong>Separately</strong>: each person films <strong>his or her own lines</strong>, one clip per turn, phone in landscape, same distance from the camera.',
         'Look slightly to the side of the camera when you answer, as if the reporter were standing there. The reporter looks into the camera for the opening and the closing.',
         'Name each clip with its number in the script: <code>03-witness.mp4</code>, <code>04-reporter.mp4</code>…',
