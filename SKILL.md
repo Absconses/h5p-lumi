@@ -8,7 +8,7 @@ description: >-
   catalogue H5P. À partir
   d'un brief (sujet, public, objectif), ce skill part du fond (ce que l'élève
   doit comprendre et faire) pour choisir la forme, recherche de VRAIES images
-  libres de droits (Wikimedia Commons), rédige un contenu adapté au public
+  libres de droits (Wikimedia Commons, Openverse et autres banques autorisées), rédige un contenu adapté au public
   (programmes Eduscol par défaut), produit un JSON conforme au type de contenu,
   le VALIDE, puis assemble un fichier .h5p importable dans Lumi. Utilise ce
   skill dès qu'on te demande de créer une activité H5P, une frise interactive ou
@@ -105,8 +105,22 @@ Tu n'es donc jamais bloqué par un type « non prévu ».
 Pourquoi : une URL inventée = une image cassée dans la frise. On part donc toujours de
 sources **réelles et libres**.
 
+Les banques autorisées, leurs licences et les règles de crédit sont dans
+`references/banques-images.md` : **le lire avant de choisir une image**. En résumé :
+Wikimedia Commons et Openverse d'abord (licence indiquée image par image) ; Unsplash, Pexels
+et Pixabay ensuite, à la main, pour les photos d'ambiance.
+
 ```powershell
 .\scripts\Find-WikimediaImages.ps1 -Query "Tim Berners-Lee","ARPANET logical map" -Validate
+.\scripts\Find-OpenverseImages.ps1 -Query "school newspaper","radio studio" -Validate
+```
+
+**Jamais la même image dans deux modules.** Avant de retenir une image, vérifier qu'elle
+n'est pas déjà utilisée ailleurs, et varier aussi les sujets :
+
+```powershell
+python scripts\registre-images.py <dossier des modules>                      # liste les doublons
+python scripts\registre-images.py <dossier des modules> --verifier image.jpg # ce fichier est-il déjà pris ?
 ```
 
 - Donne des termes de recherche en **anglais** (Commons est surtout indexé en anglais).
@@ -171,7 +185,13 @@ sources **réelles et libres**.
 
 - Ne jamais choisir un type avant d'avoir fait l'étape 0. Une majorité de QCM / Vrai-Faux
   doit être justifiée par le contenu (confusions à démêler, diagnostic rapide).
-- Ne jamais inventer d'URL d'image : toujours passer par `Find-WikimediaImages.ps1` + `-Validate`.
+- Ne jamais inventer d'URL d'image : toujours passer par `Find-WikimediaImages.ps1` ou
+  `Find-OpenverseImages.ps1` (+ `-Validate`), ou par une page réelle d'une banque autorisée
+  (`references/banques-images.md`).
+- Écarter les licences `NC` et `ND`, et les personnes reconnaissables, dès qu'un module peut être vendu.
+- Ne jamais reprendre une image déjà utilisée dans un autre module : `registre-images.py` doit
+  sortir sans doublon avant d'empaqueter.
+- Toujours créditer l'image, même quand la licence ne l'exige pas.
 - Toujours valider le JSON avant d'empaqueter.
 - Signaler honnêtement toute approximation (date incertaine, image illustrative non
   contemporaine, etc.) dans le récapitulatif.
@@ -180,6 +200,9 @@ sources **réelles et libres**.
 ## Fichiers du skill
 
 - `scripts/Find-WikimediaImages.ps1` — recherche + validation d'images libres (Wikimedia).
+- `scripts/Find-OpenverseImages.ps1` — recherche + validation d'images sous licence ouverte via Openverse (Flickr, Wikimedia, musées…), sans clé ; écarte NC et ND par défaut, et les images déjà au registre (`-Registre`).
+- `scripts/registre-images.py` — registre des images utilisées : repère les images reprises d'un module à l'autre (`--ecrire`, `--verifier`).
+- `references/banques-images.md` — banques autorisées, licences, crédit, règle « une image = un module ».
 - `scripts/Test-H5PJson.ps1` — validation syntaxe + règles par type.
 - `scripts/Build-H5PPackage.ps1` — assemblage du `.h5p` à partir d'un gabarit (option `-Media` pour images/sons embarqués).
 - `scripts/New-H5PShareLink.ps1` — lien cliquable vers **h5p-offline-player** pour un `.h5p` rangé dans `partage/` (dépôt public) : `-Path partage\x.h5p [-Test]`. Voir `references/partage-offline-player.md`.
