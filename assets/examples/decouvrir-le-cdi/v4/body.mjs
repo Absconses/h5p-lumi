@@ -166,7 +166,8 @@ ${avecAide('<p>Glisse chaque étiquette au bout de sa flèche.</p>')}`, 'Intro')
       ['cote-etagere-2.jpg', 'La pastille', 'Les pastilles', '<p><strong>1. La pastille de couleur</strong> donne le <strong>genre</strong>. Ici, elles sont toutes roses : je suis au rayon <strong>romance</strong>.</p>'],
       ['cote-etagere-3.jpg', 'Les lettres', 'Les lettres HAN', '<p><strong>2. Les 3 lettres</strong> sont le début du <strong>nom de l’auteur</strong>. Jenny <strong>Han</strong> → <strong>HAN</strong>.</p>'],
       ['cote-etagere-4.jpg', 'L’ordre', 'L’ordre alphabétique', '<p>Dans le rayon, les livres suivent l’<strong>ordre alphabétique</strong> de ces lettres : ANG, BEN, COL, DUP, <strong>HAN</strong>, KIN… Je trouve mon livre sans tout regarder.</p>'],
-    ].map(([img, label, alt, d]) => ({ image: image(img, `Étagère de romances : ${alt.toLowerCase()}`, alt), labelText: label, description: d })),
+    // Le texte est incrusté dans chaque image (spines.mjs) : les descriptions d’Agamotto débordaient sur la suite (Digiquiz).
+    ].map(([img, label, alt, d]) => ({ image: image(img, `Étagère de romances : ${alt.toLowerCase()}. ${d.replace(/<[^>]+>/g, '')}`, alt), labelText: label, description: '' })),
     behaviour: { startImage: 1, snap: true, ticks: true, labels: true, transparencyReplacementColor: '#000000', imagesDescriptionsRatio: 70 },
     a11y: { image: 'Image', imageSlider: 'Curseur des images', mute: 'Couper le son', unmute: 'Remettre le son', buttonFullscreenEnter: 'Plein écran', buttonFullscreenExit: 'Quitter le plein écran' },
   }, 'Agamotto', 'La cote pas à pas'),
