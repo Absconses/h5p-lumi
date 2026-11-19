@@ -140,9 +140,9 @@ ${avecAide('<p>Souviens-toi de ce que nous avons fait ensemble au comptoir du CD
   tf('Je peux emporter un livre chez moi sans le faire enregistrer, si je le rapporte vite.', false,
     'Exact : un prêt doit toujours être enregistré, sinon le livre est considéré comme perdu.',
     'Non : sans enregistrement, personne ne sait où est le livre. On le fait toujours enregistrer.', 'Prêt enregistré'),
-  tf('Mon cousin veut lire mon livre du CDI : je peux le lui prêter, puisqu’il est enregistré à mon nom.', false,
-    'Exact : le livre est enregistré à ton nom, c’est toi qui en es responsable jusqu’au retour.',
-    'Non : c’est justement parce qu’il est à ton nom que tu en es responsable. Si ton cousin est au collège, il peut l’emprunter lui-même.', 'Prêter à son cousin'),
+  tf('Je peux emprunter un livre pour un ami.', false,
+    'Exact : on emprunte seulement à son propre nom. Ton ami peut venir l’emprunter lui-même.',
+    'Non : on emprunte seulement à son propre nom. Ton ami peut venir l’emprunter lui-même.', 'Emprunter pour un ami'),
 ]);
 
 /* ===== Ch.5 Lire un livre comme un détective ⭐ ===== */
@@ -226,28 +226,28 @@ const ch6bis = chapter('6 bis. 🌿 Les cartes des genres', [
 ]);
 
 /* ===== Ch.6 Les genres ⭐ ===== */
+// Positions des mots-indices sur la 4e dessinée par quatrieme.py
+const Q4 = JSON.parse(fs.readFileSync(new URL('./quatrieme.json', import.meta.url), 'utf8'));
 const ch6 = chapter('6. ⭐ Trouver ses genres préférés', [
   text(`${banner('Étape 6', 'Reconnaître les genres de romans', 10)}
 ${accroche('Tu as aimé un livre ? Le plus beau, c’est de trouver le suivant.')}
 <p>Au CDI, les romans sont classés par <strong>genre</strong>. Savoir reconnaître un genre, c’est le premier pas pour trouver <strong>les livres qui te ressemblent</strong>.</p>`, 'Intro'),
-  text(decouvre(`<p>Voici la <strong>quatrième de couverture</strong> d’un roman. Lis-la, puis enquête avec moi : <strong>devine d’abord</strong> ce que chaque indice t’apprend, puis <strong>retourne la carte</strong> pour vérifier.</p>
-<p style="padding-left:1em;border-left:3px solid #8aa;">En <strong>2150</strong>, la Terre est devenue trop chaude pour y vivre. Lina, douze ans, embarque à bord d’un immense <strong>vaisseau</strong> en route vers une nouvelle <strong>planète</strong>. Mais le <strong>robot</strong> qui pilote le navire se met à désobéir…</p>`), 'Je découvre'),
-  sub('H5P.Dialogcards 1.9', {
-    title: '', mode: 'normal', description: '<p>Devine, puis clique sur <strong>Retourner</strong>.</p>',
-    dialogs: [
-      ['Indice 1 : « En 2150 »<br>Quand se passe l’histoire ?', 'Dans le <strong>futur</strong> !'],
-      ['Indice 2 : « vaisseau », « planète »<br>Où se passe l’histoire ?', 'Dans l’<strong>espace</strong>, loin de la Terre.'],
-      ['Indice 3 : « le robot qui pilote »<br>Ce robot existe-t-il aujourd’hui ?', 'Non : c’est une <strong>technologie</strong> qui n’existe pas encore.'],
-      ['Futur + espace + technologie…<br>Alors, quel genre ?', 'De la <strong>science-fiction</strong> ! Trois indices vont dans le même sens.'],
-    ].map(([q, a]) => ({ text: `<p style="text-align:center">${q}</p>`, answer: `<p style="text-align:center">${a}</p>`, tips: {} })),
-    behaviour: { enableRetry: true, disableBackwardsNavigation: false, scaleTextNotCard: false, randomCards: false, maxProficiency: 5, quickProgression: false },
-    answer: 'Retourner', next: 'Suivante', prev: 'Précédente', retry: 'Recommencer', correctAnswer: 'J’avais trouvé', incorrectAnswer: 'Je n’avais pas trouvé',
-    round: 'Tour @round', cardsLeft: 'Cartes restantes : @number', nextRound: 'Passer au tour @round', startOver: 'Recommencer', showSummary: 'Suivant', summary: 'Bilan',
-    summaryCardsRight: 'Cartes trouvées :', summaryCardsWrong: 'Cartes manquées :', summaryCardsNotShown: 'Cartes non vues :', summaryOverallScore: 'Score', summaryCardsCompleted: 'Cartes apprises :',
-    summaryCompletedRounds: 'Tours terminés :', summaryAllDone: 'Bravo !', progressText: 'Carte @card sur @total', cardFrontLabel: 'Recto', cardBackLabel: 'Verso', tipButtonLabel: 'Indice',
-    audioNotSupported: 'Ton navigateur ne lit pas ce son',
-    confirmStartingOver: { header: 'Recommencer ?', body: 'Tu vas revenir à la première carte.', cancelLabel: 'Annuler', confirmLabel: 'Recommencer' },
-  }, 'Dialog Cards', 'Enquête sur une quatrième'),
+  text(decouvre(`<p>Voici la <strong>quatrième de couverture</strong> d’un roman (le dos du livre). Lis-la, puis enquête avec moi.</p>
+<p>Les mots <strong>surlignés en jaune</strong> sont des <strong>indices</strong>. Pour chacun, <strong>devine d’abord</strong> ce qu’il t’apprend, puis clique sur le <strong>?</strong> pour vérifier. Termine par le <strong>?</strong> du tampon « Genre ».</p>`), 'Je découvre'),
+  sub('H5P.ImageHotspots 1.10', {
+    image: file('quatrieme-kepler.jpg'),
+    backgroundImageAltText: 'Quatrième de couverture du roman « Cap sur Kepler » : En 2150, la Terre est devenue trop chaude pour y vivre. Lina, douze ans, embarque à bord d’un immense vaisseau en route vers une nouvelle planète. Mais le robot qui pilote le navire se met à désobéir…',
+    iconType: 'icon', icon: 'question', color: '#e76f51',
+    hotspots: [
+      ['date', 'Indice 1 : « En 2150 »', 'Quand se passe l’histoire ? En 2150, c’est dans plus de cent ans : l’histoire se passe dans le <strong>futur</strong>.'],
+      ['vaisseau', 'Indice 2 : « vaisseau »', 'Ici, un vaisseau ne navigue pas sur la mer : c’est un <strong>vaisseau spatial</strong>, qui voyage dans l’espace.'],
+      ['planete', 'Indice 3 : « planète »', 'Lina quitte la Terre pour une autre planète : l’histoire se passe dans l’<strong>espace</strong>.'],
+      ['robot', 'Indice 4 : « robot »', 'Un robot qui pilote un vaisseau géant et qui désobéit : c’est une <strong>technologie qui n’existe pas encore</strong>.'],
+      ['genre', 'Alors, quel genre ?', 'Futur + espace + technologie : tous les indices vont dans le même sens. C’est de la <strong>science-fiction</strong> ! Un seul indice ne suffit pas : c’est quand <strong>plusieurs indices</strong> se rejoignent qu’on peut être sûr du genre.'],
+    ].map(([k, h, t]) => ({ position: { x: Q4[k][0], y: Q4[k][1], legacyPositioning: false }, alwaysFullscreen: false, header: h,
+      content: [sub('H5P.Text 1.1', { text: `<p>${t}</p>` }, 'Text', h)] })),
+    hotspotNumberLabel: 'Indice n° #num', closeButtonLabel: 'Fermer', containsAudioVideoLabel: 'Contient un son ou une vidéo',
+  }, 'Image Hotspots', 'Enquête sur une quatrième'),
   text(seul('<p>À ton tour, sur une autre quatrième de couverture.</p>'), 'Seul'),
   markWords('Clique sur les <strong>8 mots-indices</strong> qui montrent que c’est un <strong>roman d’enquête</strong>.',
     '<p>Le jour de la fête du collège, le trophée de football *disparaît* de la vitrine. Personne n’a rien vu… sauf Malik, qui remarque un *indice* étrange : une *trace* de peinture bleue. Avec son amie Jade, il mène une *enquête*. Chaque *suspect* a un *alibi*. Qui pourra *résoudre* ce *mystère* ?</p>', 'Indices enquête',
