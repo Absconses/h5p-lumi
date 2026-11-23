@@ -64,7 +64,7 @@ const cover = `<h2 style="text-align:center">🔎 Découvrir le CDI</h2>
 <p style="text-align:center">Le CDI, c’est un endroit pour se repérer… et pour découvrir <strong>ce que tu aimes lire</strong>.</p>
 <p style="text-align:center"><strong>🎯 Ta mission, à la fin de cette heure :</strong> repartir avec <strong>un roman qui te tente</strong> et <strong>un documentaire sur une de tes passions</strong>.</p>
 <p style="text-align:center">⭐ étape indispensable pour la mission (si tu es en retard, fais-la en priorité) · 🌿 chemin buissonnier</p>
-<p style="text-align:center"><em>EMI · 6e · environ 1 heure · 10 étapes</em></p>`;
+<p style="text-align:center"><em>EMI · 6e · environ 1 heure · 11 étapes</em></p>`;
 
 /* ===== Ch.1 Où est le CDI ? ===== */
 const ch1 = chapter('1. Où est le CDI ?', [
@@ -106,12 +106,82 @@ ${decouvre('<p>Souviens-toi de la <strong>carte mentale</strong> que nous avons 
   text(retiens('<p>Au CDI, je peux <strong>m’informer</strong>, <strong>apprendre</strong>, <strong>produire</strong> et <strong>me détendre</strong>. C’est un lieu calme qui appartient à tous : je respecte les autres et les documents.</p>'), 'Je retiens'),
 ]);
 
-/* ===== Ch.3 Chemin buissonnier : le voyage d'un livre (non noté) ===== */
+/* ===== Ch.3 Tout ce qu'on trouve au CDI ⭐ (images : familles.py) ===== */
+const FAMG = JSON.parse(fs.readFileSync(new URL('./familles.json', import.meta.url), 'utf8'));
+const TYPES = [
+  ['roman', 0, 'Une <strong>longue histoire inventée</strong>, racontée en chapitres. Exemple : <em>Harry Potter</em>.'],
+  ['théâtre', 0, 'Un texte écrit pour être <strong>joué sur une scène</strong> : des dialogues, avec le nom du personnage avant chaque réplique. Exemple : les pièces de Molière.'],
+  ['conte', 0, 'Une <strong>histoire courte et merveilleuse</strong>, qui commence souvent par « Il était une fois… », avec des fées, des loups ou des rois. Exemple : <em>Le Petit Chaperon rouge</em>.'],
+  ['poésie', 0, 'Des textes écrits <strong>en vers</strong>, qui jouent avec les sons, les rimes et les images. On les trouve dans des <strong>recueils</strong>. Exemple : les poèmes de Jacques Prévert.'],
+  ['BD', 1, 'Une histoire racontée <strong>en images</strong>, dans des <strong>cases</strong>, avec des <strong>bulles</strong> pour les paroles. Exemple : <em>Astérix</em>.'],
+  ['manga', 1, 'Une <strong>BD japonaise</strong>, souvent en noir et blanc, qui se lit <strong>de droite à gauche</strong>. Exemple : <em>One Piece</em>.'],
+  ['roman graphique', 1, 'Une <strong>BD plus longue</strong>, souvent pour raconter une histoire forte ou une vie, avec un dessin plus libre. Exemple : <em>Jane, le renard et moi</em>.'],
+  ['livre documentaire', 2, 'Un livre qui <strong>explique le monde réel</strong> sur un sujet : les volcans, les chats, la Rome antique… Il a souvent un sommaire, des photos et un index.'],
+  ['magazine', 2, 'Il <strong>paraît régulièrement</strong> : chaque semaine ou chaque mois, un nouveau <strong>numéro</strong>, avec des articles courts sur l’actualité et des sujets variés. Exemple : <em>Okapi</em>.'],
+  ['dictionnaire', 2, 'Il donne le <strong>sens des mots</strong>, rangés par <strong>ordre alphabétique</strong>. On ne le lit pas en entier : on y <strong>cherche</strong> un mot. Exemple : <em>Le Robert junior</em>.'],
+  ['jeu de société', 3, 'Pour <strong>jouer à plusieurs</strong>, dans le calme, souvent à l’heure du midi. Exemple : <em>Dixit</em>.'],
+  ['film', 3, 'Des films et des documentaires <strong>sur DVD</strong> : une autre façon de raconter une histoire ou d’expliquer le monde.'],
+];
+const famillesImage = sub('H5P.ImageHotspots 1.10', {
+  image: file('familles-cdi.jpg'),
+  backgroundImageAltText: 'Les 4 familles du CDI. Littérature : roman, théâtre, conte, poésie. Bande dessinée : BD, manga, roman graphique. Ressources documentaires : livre documentaire, magazine, dictionnaire. Jeux et films : jeu de société, film.',
+  iconType: 'icon', icon: 'plus', color: '#1d3557',
+  hotspots: TYPES.map(([t, , d]) => ({ position: { x: FAMG.hot[t][0], y: FAMG.hot[t][1], legacyPositioning: false }, alwaysFullscreen: false,
+    header: t[0].toUpperCase() + t.slice(1), content: [sub('H5P.Text 1.1', { text: `<p>${d}</p>` }, 'Text', t)] })),
+  hotspotNumberLabel: 'Document n° #num', closeButtonLabel: 'Fermer', containsAudioVideoLabel: 'Contient un son ou une vidéo',
+}, 'Image Hotspots', 'Les familles de documents');
+// Tri : fond 800 x 600 unités logiques (police lisible), étiquettes dans le bac du haut, 4 zones à plusieurs places.
+const sortFamilles = () => {
+  const p = clone(DQ);
+  const [W, H] = FAMG.size, em = (px) => px / 16, lw = 170, lh = 38;
+  p.question.settings = { size: { width: W, height: H }, background: file('tri-cdi.jpg') };
+  const order = [4, 9, 1, 11, 7, 2, 5, 10, 0, 8, 6, 3]; // mélange fixe
+  p.question.task.elements = order.map((ti, k) => ({
+    x: ((30 + (k % 4) * 190) / W) * 100, y: ((42 + Math.floor(k / 4) * 44) / H) * 100, width: em(lw), height: em(lh),
+    dropZones: FAMG.zones.map((_, j) => String(j)),
+    type: sub('H5P.AdvancedText 1.1', { text: `<p style="text-align:center">${TYPES[ti][0]}</p>` }, 'Text', TYPES[ti][0]),
+    backgroundOpacity: 100, multiple: false,
+  }));
+  p.question.task.dropZones = FAMG.zones.map((z, j) => ({
+    x: (z.x / W) * 100, y: (z.y / H) * 100, width: em(z.w), height: em(z.h),
+    correctElements: order.map((ti, k) => [ti, k]).filter(([ti]) => TYPES[ti][1] === j).map(([, k]) => String(k)),
+    showLabel: false, backgroundOpacity: 0, tipsAndFeedback: { tip: '', feedbackOnCorrect: '', feedbackOnIncorrect: '' },
+    single: false, autoAlign: true, label: `<div>${z.name}</div>`, type: { library: 'H5P.DragQuestionDropzone 0.1' },
+  }));
+  p.behaviour = { ...p.behaviour, applyPenalties: false, enableScoreExplanation: false, enableFullScreen: false, showTitle: false };
+  p.overallFeedback = [
+    { from: 0, to: 59, feedback: 'Retourne voir les 4 familles juste au-dessus, puis recommence.' },
+    { from: 60, to: 99, feedback: 'Presque ! Regarde les étiquettes en rouge : à quelle famille ressemblent-elles ?' },
+    { from: 100, to: 100, feedback: 'Parfait : tu connais toutes les familles du CDI !' },
+  ];
+  Object.assign(p, { scoreShow: 'Vérifier', submit: 'Vérifier', tryAgain: 'Recommencer', scoreBarLabel: 'Tu as :num points sur :total', grabbableSuffix: 'Posée dans la zone {num}.', dropzonePrefix: 'Zone {num} sur {total}.' });
+  return sub('H5P.DragQuestion 1.14', p, 'Drag and Drop', 'Les 4 familles');
+};
+const chFam = chapter('3. ⭐ Tout ce qu’on trouve au CDI', [
+  text(`${banner('Étape 3', 'Tout ce qu’on trouve au CDI', 7)}
+${accroche('Au CDI, il n’y a pas que des romans !')}
+${decouvre('<p>Voici les <strong>4 grandes familles</strong> de documents du CDI. Clique sur chaque <strong>+</strong> pour découvrir ce qu’est chaque type de document.</p>')}`, 'Intro'),
+  famillesImage,
+  text(avecAide('<p>Range chaque type de document dans sa famille. Si tu hésites, remonte voir les 4 familles.</p>'), 'Accompagné'),
+  sortFamilles(),
+  text(seul('<p>Voici de vrais titres que tu peux trouver au CDI. Quel type de document est-ce ?</p>'), 'Seul'),
+  dragText('Glisse le bon type de document dans chaque phrase.', [
+    '« One Piece » est en noir et blanc et se lit de droite à gauche : c’est un *manga*.',
+    '« Le Malade imaginaire », de Molière, est écrit pour être joué sur scène : c’est du *théâtre*.',
+    '« Okapi » paraît régulièrement, avec un nouveau numéro plein d’articles : c’est un *magazine*.',
+    '« Le Robert junior » donne le sens des mots, de A à Z : c’est un *dictionnaire*.',
+    '« Le Petit Chaperon rouge » commence par « Il était une fois » : c’est un *conte*.',
+    '« Tout sur les volcans » explique comment naît une éruption : c’est un *livre documentaire*.',
+  ], 'Quel type de document ?'),
+  text(retiens('<p>Au CDI, on trouve <strong>4 familles</strong> de documents :</p><ul><li>la <strong>littérature</strong> (roman, théâtre, conte, poésie) et la <strong>bande dessinée</strong> (BD, manga, roman graphique) racontent surtout des <strong>histoires inventées</strong> : c’est la <strong>fiction</strong> ;</li><li>les <strong>ressources documentaires</strong> (livre documentaire, magazine, dictionnaire) servent à <strong>s’informer sur le monde réel</strong> ;</li><li>les <strong>jeux et films</strong> permettent de se détendre et de découvrir autrement.</li></ul>'), 'Je retiens'),
+]);
+
+/* ===== Ch.4 Chemin buissonnier : le voyage d'un livre (non noté) ===== */
 const RAW = 'https://raw.githubusercontent.com/Absconses/h5p-lumi/main/partage/decouvrir-le-cdi/circuit-du-livre-v2.h5p';
 const CSS = 'https://cdn.jsdelivr.net/gh/Absconses/h5p-lumi@main/partage/embed-960.css';
 const CIRCUIT = `https://h5p-offline-player.vercel.app/embed?src=${RAW}`;
 const GRAND = `https://h5p-offline-player.vercel.app/embed?src=${encodeURIComponent(RAW)}&custom-css=${encodeURIComponent(CSS)}`;
-const ch3 = chapter('3. 🌿 Le voyage d’un livre', [
+const ch3 = chapter('4. 🌿 Le voyage d’un livre', [
   text(`<h2 style="color:#2d6a4f">🌿 Chemin buissonnier · Le voyage d’un livre</h2><p style="color:#555555"><em>⏱ le temps que tu veux · rien n’est noté</em></p>
 ${accroche('Avec les livres, on voyage sans bouger de sa chambre. Mais le livre lui-même, d’où vient-il ? Lui aussi a fait un long voyage avant d’arriver sur l’étagère.')}
 <p>Ici, pas d’exercice à réussir. <strong>Promène-toi</strong> sur la carte de la ville du livre en suivant « Le Secret du phare ». Avance avec la flèche →, arrête-toi où tu veux, reviens en arrière si ça te plaît.</p>`, 'Intro'),
@@ -121,8 +191,8 @@ ${accroche('Avec les livres, on voyage sans bouger de sa chambre. Mais le livre 
 ]);
 
 /* ===== Ch.4 Emprunter ===== */
-const ch4 = chapter('4. Emprunter un livre', [
-  text(`${banner('Étape 4', 'Emporter un livre chez soi', 4)}
+const ch4 = chapter('5. Emprunter un livre', [
+  text(`${banner('Étape 5', 'Emporter un livre chez soi', 4)}
 ${avecAide('<p>Souviens-toi de ce que nous avons fait ensemble au comptoir du CDI.</p>')}`, 'Intro'),
   dragText('<strong>Remets les étapes du prêt dans l’ordre.</strong>', [
     'Étape 1 → *Je choisis un livre dans les rayons*',
@@ -140,14 +210,14 @@ ${avecAide('<p>Souviens-toi de ce que nous avons fait ensemble au comptoir du CD
   tf('Je peux emporter un livre chez moi sans le faire enregistrer, si je le rapporte vite.', false,
     'Exact : un prêt doit toujours être enregistré, sinon le livre est considéré comme perdu.',
     'Non : sans enregistrement, personne ne sait où est le livre. On le fait toujours enregistrer.', 'Prêt enregistré'),
-  tf('Mon cousin veut lire mon livre du CDI : je peux le lui prêter, puisqu’il est enregistré à mon nom.', false,
-    'Exact : le livre est enregistré à ton nom, c’est toi qui en es responsable jusqu’au retour.',
-    'Non : c’est justement parce qu’il est à ton nom que tu en es responsable. Si ton cousin est au collège, il peut l’emprunter lui-même.', 'Prêter à son cousin'),
+  tf('Je peux emprunter un livre pour un ami.', false,
+    'Exact : on emprunte seulement à son propre nom. Ton ami peut venir l’emprunter lui-même.',
+    'Non : on emprunte seulement à son propre nom. Ton ami peut venir l’emprunter lui-même.', 'Emprunter pour un ami'),
 ]);
 
 /* ===== Ch.5 Lire un livre comme un détective ⭐ ===== */
-const ch5 = chapter('5. ⭐ Un livre, de la couverture au dos', [
-  text(`${banner('Étape 5', 'Observer un livre comme un détective', 7)}
+const ch5 = chapter('6. ⭐ Un livre, de la couverture au dos', [
+  text(`${banner('Étape 6', 'Observer un livre comme un détective', 7)}
 ${accroche('Pour choisir un livre, tu ne peux pas tous les lire en entier ! Il faut savoir où chercher les indices.')}
 ${avecAide('<p>Glisse chaque étiquette au bout de sa flèche.</p>')}`, 'Intro'),
   ...dragOnImage('parties-livre-vierge.jpg', [
@@ -166,11 +236,12 @@ ${avecAide('<p>Glisse chaque étiquette au bout de sa flèche.</p>')}`, 'Intro')
       ['cote-etagere-2.jpg', 'La pastille', 'Les pastilles', '<p><strong>1. La pastille de couleur</strong> donne le <strong>genre</strong>. Ici, elles sont toutes roses : je suis au rayon <strong>romance</strong>.</p>'],
       ['cote-etagere-3.jpg', 'Les lettres', 'Les lettres HAN', '<p><strong>2. Les 3 lettres</strong> sont le début du <strong>nom de l’auteur</strong>. Jenny <strong>Han</strong> → <strong>HAN</strong>.</p>'],
       ['cote-etagere-4.jpg', 'L’ordre', 'L’ordre alphabétique', '<p>Dans le rayon, les livres suivent l’<strong>ordre alphabétique</strong> de ces lettres : ANG, BEN, COL, DUP, <strong>HAN</strong>, KIN… Je trouve mon livre sans tout regarder.</p>'],
-    ].map(([img, label, alt, d]) => ({ image: image(img, `Étagère de romances : ${alt.toLowerCase()}`, alt), labelText: label, description: d })),
+    // Le texte est incrusté dans chaque image (spines.mjs) : les descriptions d’Agamotto débordaient sur la suite (Digiquiz).
+    ].map(([img, label, alt, d]) => ({ image: image(img, `Étagère de romances : ${alt.toLowerCase()}. ${d.replace(/<[^>]+>/g, '')}`, alt), labelText: label, description: '' })),
     behaviour: { startImage: 1, snap: true, ticks: true, labels: true, transparencyReplacementColor: '#000000', imagesDescriptionsRatio: 70 },
     a11y: { image: 'Image', imageSlider: 'Curseur des images', mute: 'Couper le son', unmute: 'Remettre le son', buttonFullscreenEnter: 'Plein écran', buttonFullscreenExit: 'Quitter le plein écran' },
   }, 'Agamotto', 'La cote pas à pas'),
-  text('<p>Pour un <strong>documentaire</strong>, c’est pareil, mais la pastille est remplacée par un <strong>nombre</strong> : le sujet du livre (étape 7).</p>', 'Cote documentaire'),
+  text('<p>Pour un <strong>documentaire</strong>, c’est pareil, mais la pastille est remplacée par un <strong>nombre</strong> : le sujet du livre (étape 8).</p>', 'Cote documentaire'),
   dragText('<strong>Où ranger chaque livre ?</strong> Tout dépend de sa nature.', [
     '« Le Secret du phare » raconte une histoire inventée : c’est un *roman*. Il est rangé par *genre*, grâce à sa *pastille*.',
     '« Tout sur les océans » explique le monde réel : c’est un *documentaire*. Il est rangé par *sujet*, grâce à son numéro *Dewey*.',
@@ -216,7 +287,7 @@ const roadmap = ([g, f]) => [
   }, 'Image Slider', `Zoom ${g}`),
 ];
 const EMO = { policier: '🕵️', fantasy: '🐉', fantastique: '👻', sf: '🚀', aventure: '🧭', romance: '💗', mythes: '🏛️', humour: '😂', societe: '🏙️', classique: '🖋️' };
-const ch6bis = chapter('6 bis. 🌿 Les cartes des genres', [
+const ch6bis = chapter('7 bis. 🌿 Les cartes des genres', [
   text(`<h2 style="color:#2d6a4f">🌿 Chemin buissonnier · Les cartes des genres</h2><p style="color:#555555"><em>⏱ le temps que tu veux · rien n’est noté</em></p>
 <p>Et si tu voyais tes lectures comme un <strong>voyage</strong> ?</p>
 <p>Chacune de ces cartes dessine un <strong>parcours de lecteur</strong> à travers un genre : des îles les plus accessibles (niveau 1, souvent des BD) jusqu’au continent des grands textes (niveau 4).</p>
@@ -226,28 +297,28 @@ const ch6bis = chapter('6 bis. 🌿 Les cartes des genres', [
 ]);
 
 /* ===== Ch.6 Les genres ⭐ ===== */
-const ch6 = chapter('6. ⭐ Trouver ses genres préférés', [
-  text(`${banner('Étape 6', 'Reconnaître les genres de romans', 10)}
+// Positions des mots-indices sur la 4e dessinée par quatrieme.py
+const Q4 = JSON.parse(fs.readFileSync(new URL('./quatrieme.json', import.meta.url), 'utf8'));
+const ch6 = chapter('7. ⭐ Trouver ses genres préférés', [
+  text(`${banner('Étape 7', 'Reconnaître les genres de romans', 10)}
 ${accroche('Tu as aimé un livre ? Le plus beau, c’est de trouver le suivant.')}
 <p>Au CDI, les romans sont classés par <strong>genre</strong>. Savoir reconnaître un genre, c’est le premier pas pour trouver <strong>les livres qui te ressemblent</strong>.</p>`, 'Intro'),
-  text(decouvre(`<p>Voici la <strong>quatrième de couverture</strong> d’un roman. Lis-la, puis enquête avec moi : <strong>devine d’abord</strong> ce que chaque indice t’apprend, puis <strong>retourne la carte</strong> pour vérifier.</p>
-<p style="padding-left:1em;border-left:3px solid #8aa;">En <strong>2150</strong>, la Terre est devenue trop chaude pour y vivre. Lina, douze ans, embarque à bord d’un immense <strong>vaisseau</strong> en route vers une nouvelle <strong>planète</strong>. Mais le <strong>robot</strong> qui pilote le navire se met à désobéir…</p>`), 'Je découvre'),
-  sub('H5P.Dialogcards 1.9', {
-    title: '', mode: 'normal', description: '<p>Devine, puis clique sur <strong>Retourner</strong>.</p>',
-    dialogs: [
-      ['Indice 1 : « En 2150 »<br>Quand se passe l’histoire ?', 'Dans le <strong>futur</strong> !'],
-      ['Indice 2 : « vaisseau », « planète »<br>Où se passe l’histoire ?', 'Dans l’<strong>espace</strong>, loin de la Terre.'],
-      ['Indice 3 : « le robot qui pilote »<br>Ce robot existe-t-il aujourd’hui ?', 'Non : c’est une <strong>technologie</strong> qui n’existe pas encore.'],
-      ['Futur + espace + technologie…<br>Alors, quel genre ?', 'De la <strong>science-fiction</strong> ! Trois indices vont dans le même sens.'],
-    ].map(([q, a]) => ({ text: `<p style="text-align:center">${q}</p>`, answer: `<p style="text-align:center">${a}</p>`, tips: {} })),
-    behaviour: { enableRetry: true, disableBackwardsNavigation: false, scaleTextNotCard: false, randomCards: false, maxProficiency: 5, quickProgression: false },
-    answer: 'Retourner', next: 'Suivante', prev: 'Précédente', retry: 'Recommencer', correctAnswer: 'J’avais trouvé', incorrectAnswer: 'Je n’avais pas trouvé',
-    round: 'Tour @round', cardsLeft: 'Cartes restantes : @number', nextRound: 'Passer au tour @round', startOver: 'Recommencer', showSummary: 'Suivant', summary: 'Bilan',
-    summaryCardsRight: 'Cartes trouvées :', summaryCardsWrong: 'Cartes manquées :', summaryCardsNotShown: 'Cartes non vues :', summaryOverallScore: 'Score', summaryCardsCompleted: 'Cartes apprises :',
-    summaryCompletedRounds: 'Tours terminés :', summaryAllDone: 'Bravo !', progressText: 'Carte @card sur @total', cardFrontLabel: 'Recto', cardBackLabel: 'Verso', tipButtonLabel: 'Indice',
-    audioNotSupported: 'Ton navigateur ne lit pas ce son',
-    confirmStartingOver: { header: 'Recommencer ?', body: 'Tu vas revenir à la première carte.', cancelLabel: 'Annuler', confirmLabel: 'Recommencer' },
-  }, 'Dialog Cards', 'Enquête sur une quatrième'),
+  text(decouvre(`<p>Voici la <strong>quatrième de couverture</strong> d’un roman (le dos du livre). Lis-la, puis enquête avec moi.</p>
+<p>Les mots <strong>surlignés en jaune</strong> sont des <strong>indices</strong>. Pour chacun, <strong>devine d’abord</strong> ce qu’il t’apprend, puis clique sur le <strong>?</strong> pour vérifier. Termine par le <strong>?</strong> du tampon « Genre ».</p>`), 'Je découvre'),
+  sub('H5P.ImageHotspots 1.10', {
+    image: file('quatrieme-kepler.jpg'),
+    backgroundImageAltText: 'Quatrième de couverture du roman « Cap sur Kepler » : En 2150, la Terre est devenue trop chaude pour y vivre. Lina, douze ans, embarque à bord d’un immense vaisseau en route vers une nouvelle planète. Mais le robot qui pilote le navire se met à désobéir…',
+    iconType: 'icon', icon: 'question', color: '#e76f51',
+    hotspots: [
+      ['date', 'Indice 1 : « En 2150 »', 'Quand se passe l’histoire ? En 2150, c’est dans plus de cent ans : l’histoire se passe dans le <strong>futur</strong>.'],
+      ['vaisseau', 'Indice 2 : « vaisseau »', 'Ici, un vaisseau ne navigue pas sur la mer : c’est un <strong>vaisseau spatial</strong>, qui voyage dans l’espace.'],
+      ['planete', 'Indice 3 : « planète »', 'Lina quitte la Terre pour une autre planète : l’histoire se passe dans l’<strong>espace</strong>.'],
+      ['robot', 'Indice 4 : « robot »', 'Un robot qui pilote un vaisseau géant et qui désobéit : c’est une <strong>technologie qui n’existe pas encore</strong>.'],
+      ['genre', 'Alors, quel genre ?', 'Futur + espace + technologie : tous les indices vont dans le même sens. C’est de la <strong>science-fiction</strong> ! Un seul indice ne suffit pas : c’est quand <strong>plusieurs indices</strong> se rejoignent qu’on peut être sûr du genre.'],
+    ].map(([k, h, t]) => ({ position: { x: Q4[k][0], y: Q4[k][1], legacyPositioning: false }, alwaysFullscreen: false, header: h,
+      content: [sub('H5P.Text 1.1', { text: `<p>${t}</p>` }, 'Text', h)] })),
+    hotspotNumberLabel: 'Indice n° #num', closeButtonLabel: 'Fermer', containsAudioVideoLabel: 'Contient un son ou une vidéo',
+  }, 'Image Hotspots', 'Enquête sur une quatrième'),
   text(seul('<p>À ton tour, sur une autre quatrième de couverture.</p>'), 'Seul'),
   markWords('Clique sur les <strong>8 mots-indices</strong> qui montrent que c’est un <strong>roman d’enquête</strong>.',
     '<p>Le jour de la fête du collège, le trophée de football *disparaît* de la vitrine. Personne n’a rien vu… sauf Malik, qui remarque un *indice* étrange : une *trace* de peinture bleue. Avec son amie Jade, il mène une *enquête*. Chaque *suspect* a un *alibi*. Qui pourra *résoudre* ce *mystère* ?</p>', 'Indices enquête',
@@ -286,8 +357,8 @@ ${accroche('Tu as aimé un livre ? Le plus beau, c’est de trouver le suivant.'
 
 /* ===== Ch.7 Dewey ⭐ ===== */
 const MUR = `https://h5p-offline-player.vercel.app/embed?src=https://raw.githubusercontent.com/Absconses/h5p-lumi/main/partage/decouvrir-le-cdi/mur-dewey.h5p`;
-const ch7 = chapter('7. ⭐ Les documentaires et la classification Dewey', [
-  text(`${banner('Étape 7', 'Explorer le monde réel avec les documentaires', 7)}
+const ch7 = chapter('8. ⭐ Les documentaires et la classification Dewey', [
+  text(`${banner('Étape 8', 'Explorer le monde réel avec les documentaires', 7)}
 ${accroche('Un livre de recettes de cuisine n’invente pas d’histoire : il explique quelque chose de réel. C’est un documentaire.')}
 <p>Les documentaires ne sont pas rangés par genre, mais par <strong>sujet</strong>, grâce à un système inventé en 1876 par l’Américain <strong>Melvil Dewey</strong>. Il a partagé tous les savoirs en <strong>10 grands domaines</strong>, numérotés de 000 à 900.</p>`, 'Intro'),
   image('dewey.jpg', 'Les 10 domaines de la classification décimale de Dewey', 'Tableau Dewey'),
@@ -319,8 +390,8 @@ ${accroche('Un livre de recettes de cuisine n’invente pas d’histoire : il ex
 ]);
 
 /* ===== Ch.8 Je vérifie ===== */
-const ch8 = chapter('8. Je vérifie avant la mission', [
-  text(`${banner('Étape 8', 'Es-tu prêt·e pour la mission ?', 3)}
+const ch8 = chapter('9. Je vérifie avant la mission', [
+  text(`${banner('Étape 9', 'Es-tu prêt·e pour la mission ?', 3)}
 <p>Pour chaque ligne, clique sur la <strong>phrase juste</strong>. Si tu te trompes, retourne voir l’étape qui correspond.</p>`, 'Intro'),
   summary('Choisis la phrase exacte.', [
     ['Le CDI se trouve au pavillon Bellevue, à côté du hall.', 'Le CDI se trouve dans la villa Rouge, près du préau.', 'Le CDI se trouve dans la villa Blanche, au premier étage.'],
@@ -350,7 +421,7 @@ const parcours = sub('H5P.DocumentationTool 1.8', {
       dtext('<p>Trouve un <strong>documentaire</strong> sur une de tes passions.</p>'),
       field('Ma passion :', 'le foot, les chats, l’espace…'),
       field('Titre du documentaire et son nombre Dewey :', '« … », 796'),
-    ], '<p>Tape ta passion dans le mur des domaines (étape 7) : il te donne le domaine, puis va au rayon qui porte ce nombre.</p>'),
+    ], '<p>Tape ta passion dans le mur des domaines (étape 8) : il te donne le domaine, puis va au rayon qui porte ce nombre.</p>'),
     sub('H5P.DocumentExportPage 1.5', {
       description: '<p>Bravo ! Clique sur <strong>Créer mon document</strong> pour voir ta fiche, puis <strong>Exporter</strong> pour le télécharger et le rendre à ton professeur.</p>',
       createDocumentLabel: 'Créer mon document', submitTextLabel: 'Envoyer', submitSuccessTextLabel: 'Ta fiche a été envoyée !',
@@ -361,7 +432,7 @@ const parcours = sub('H5P.DocumentationTool 1.8', {
   i10n: { previousLabel: 'Précédent', nextLabel: 'Suivant', closeLabel: 'Fermer' },
 }, 'Documentation Tool', 'Ma mission');
 
-const ch9 = chapter('9. ⭐ Ma mission', [
+const ch9 = chapter('10. ⭐ Ma mission', [
   text(`<h2 style="color:#1d3557">🎯 Ma mission · Un roman, un documentaire</h2><p style="color:#555555"><em>⏱ environ 10 minutes · dans les rayons</em></p>
 <p>Pars dans les rayons et reviens avec <strong>un roman qui te tente</strong> et <strong>un documentaire sur ta passion</strong>. Note-les ci-dessous, puis exporte ta fiche.</p>`, 'Intro'),
   parcours,
@@ -399,7 +470,7 @@ const onzieme = sub('H5P.Questionnaire 1.3', {
     accessibility: { requiredTextExitLabel: 'Fermer le message', progressBarText: 'Question %current sur %max' },
     requiredMessage: 'Écris ton droit avant d’envoyer.', requiredText: 'obligatoire', submitScreenTitle: 'Ton droit est écrit !', submitScreenSubtitle: 'Clique sur Envoyer.' },
 }, 'Questionnaire', 'Mon 11e droit du lecteur');
-const ch10 = chapter('10. 🌿 Les droits du lecteur', [
+const ch10 = chapter('11. 🌿 Les droits du lecteur', [
   text(`<h2 style="color:#2d6a4f">🌿 Pour finir · Les droits du lecteur</h2>
 ${accroche('Tu as trouvé ton roman, ton documentaire… Mais au fait, est-ce qu’on est obligé de tout lire, jusqu’au bout, sans sauter une page ?')}
 <p>L’écrivain <strong>Daniel Pennac</strong> a répondu en écrivant <strong>les dix droits du lecteur</strong>. ${process.env.NOMAPS ? 'Les voici.' : 'Clique sur les <strong>+</strong> pour découvrir ce que veut dire chacun.'}</p>`, 'Intro droits'),
@@ -414,6 +485,6 @@ ${accroche('Tu as trouvé ton roman, ton documentaire… Mais au fait, est-ce qu
 const book = clone(tpl);
 book.showCoverPage = true;
 book.bookCover = { coverDescription: cover, coverMedium: image('carte-mentale-cdi.jpg', 'Le CDI, un espace informationnel', 'Couverture') };
-book.chapters = [ch1, ch2, ch3, ch4, ch5, ch6, ...(process.env.NOMAPS ? [] : [ch6bis]), ch7, ch8, ch9, ch10];
+book.chapters = [ch1, ch2, chFam, ch3, ch4, ch5, ch6, ...(process.env.NOMAPS ? [] : [ch6bis]), ch7, ch8, ch9, ch10];
 fs.writeFileSync(OUT, JSON.stringify(book));
 console.log('OK', book.chapters.length, 'chapitres');
