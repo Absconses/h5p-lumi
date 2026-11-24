@@ -64,7 +64,7 @@ const cover = `<h2 style="text-align:center">🔎 Découvrir le CDI</h2>
 <p style="text-align:center">Le CDI, c’est un endroit pour se repérer… et pour découvrir <strong>ce que tu aimes lire</strong>.</p>
 <p style="text-align:center"><strong>🎯 Ta mission, à la fin de cette heure :</strong> repartir avec <strong>un roman qui te tente</strong> et <strong>un documentaire sur une de tes passions</strong>.</p>
 <p style="text-align:center">⭐ étape indispensable pour la mission (si tu es en retard, fais-la en priorité) · 🌿 chemin buissonnier</p>
-<p style="text-align:center"><em>EMI · 6e · environ 1 heure · 11 étapes</em></p>`;
+<p style="text-align:center"><em>EMI · 6e · environ 1 heure · 10 étapes</em></p>`;
 
 /* ===== Ch.1 Où est le CDI ? ===== */
 const ch1 = chapter('1. Où est le CDI ?', [
@@ -176,7 +176,7 @@ ${decouvre('<p>Voici les <strong>4 grandes familles</strong> de documents du CDI
   text(retiens('<p>Au CDI, on trouve <strong>4 familles</strong> de documents :</p><ul><li>la <strong>littérature</strong> (roman, théâtre, conte, poésie) et la <strong>bande dessinée</strong> (BD, manga, roman graphique) racontent surtout des <strong>histoires inventées</strong> : c’est la <strong>fiction</strong> ;</li><li>les <strong>ressources documentaires</strong> (livre documentaire, magazine, dictionnaire) servent à <strong>s’informer sur le monde réel</strong> ;</li><li>les <strong>jeux et films</strong> permettent de se détendre et de découvrir autrement.</li></ul>'), 'Je retiens'),
 ]);
 
-/* ===== Ch.4 Chemin buissonnier : le voyage d'un livre (non noté) ===== */
+/* ===== Le voyage d'un livre : ex-chemin buissonnier (ch3, plus dans le livre) ; le circuit sert de Je découvre à « Emprunter » ===== */
 const RAW = 'https://raw.githubusercontent.com/Absconses/h5p-lumi/main/partage/decouvrir-le-cdi/circuit-du-livre-v2.h5p';
 const CSS = 'https://cdn.jsdelivr.net/gh/Absconses/h5p-lumi@main/partage/embed-960.css';
 const CIRCUIT = `https://h5p-offline-player.vercel.app/embed?src=${RAW}`;
@@ -191,8 +191,11 @@ ${accroche('Avec les livres, on voyage sans bouger de sa chambre. Mais le livre 
 ]);
 
 /* ===== Ch.4 Emprunter ===== */
-const ch4 = chapter('5. Emprunter un livre', [
-  text(`${banner('Étape 5', 'Emporter un livre chez soi', 4)}
+const ch4 = chapter('4. Emprunter un livre', [
+  text(`${banner('Étape 4', 'Emporter un livre chez soi', 12)}
+${decouvre('<p>Avant d’arriver entre tes mains, un livre fait un long voyage. Suis « Le Secret du phare » sur la carte de la ville du livre, de l’idée de son autrice jusqu’au comptoir du CDI où un élève l’emprunte. Avance avec la flèche →.</p>')}`, 'Je découvre'),
+  sub('H5P.IFrameEmbed 1.0', { source: CIRCUIT, width: '1000', height: '650', minWidth: '280', resizeSupported: true }, 'Iframe Embedder', 'Le voyage d’un livre'),
+  text(`<p style="font-size:0.9em">Le cadre est trop petit ? <a href="${GRAND}" target="_blank" rel="noopener">Ouvrir le voyage du livre en grand</a>.</p>
 ${avecAide('<p>Souviens-toi de ce que nous avons fait ensemble au comptoir du CDI.</p>')}`, 'Intro'),
   dragText('<strong>Remets les étapes du prêt dans l’ordre.</strong>', [
     'Étape 1 → *Je choisis un livre dans les rayons*',
@@ -216,8 +219,8 @@ ${avecAide('<p>Souviens-toi de ce que nous avons fait ensemble au comptoir du CD
 ]);
 
 /* ===== Ch.5 Lire un livre comme un détective ⭐ ===== */
-const ch5 = chapter('6. ⭐ Un livre, de la couverture au dos', [
-  text(`${banner('Étape 6', 'Observer un livre comme un détective', 7)}
+const ch5 = chapter('5. ⭐ Un livre, de la couverture au dos', [
+  text(`${banner('Étape 5', 'Observer un livre comme un détective', 7)}
 ${accroche('Pour choisir un livre, tu ne peux pas tous les lire en entier ! Il faut savoir où chercher les indices.')}
 ${avecAide('<p>Glisse chaque étiquette au bout de sa flèche.</p>')}`, 'Intro'),
   ...dragOnImage('parties-livre-vierge.jpg', [
@@ -241,7 +244,7 @@ ${avecAide('<p>Glisse chaque étiquette au bout de sa flèche.</p>')}`, 'Intro')
     behaviour: { startImage: 1, snap: true, ticks: true, labels: true, transparencyReplacementColor: '#000000', imagesDescriptionsRatio: 70 },
     a11y: { image: 'Image', imageSlider: 'Curseur des images', mute: 'Couper le son', unmute: 'Remettre le son', buttonFullscreenEnter: 'Plein écran', buttonFullscreenExit: 'Quitter le plein écran' },
   }, 'Agamotto', 'La cote pas à pas'),
-  text('<p>Pour un <strong>documentaire</strong>, c’est pareil, mais la pastille est remplacée par un <strong>nombre</strong> : le sujet du livre (étape 8).</p>', 'Cote documentaire'),
+  text('<p>Pour un <strong>documentaire</strong>, c’est pareil, mais la pastille est remplacée par un <strong>nombre</strong> : le sujet du livre (étape 7).</p>', 'Cote documentaire'),
   dragText('<strong>Où ranger chaque livre ?</strong> Tout dépend de sa nature.', [
     '« Le Secret du phare » raconte une histoire inventée : c’est un *roman*. Il est rangé par *genre*, grâce à sa *pastille*.',
     '« Tout sur les océans » explique le monde réel : c’est un *documentaire*. Il est rangé par *sujet*, grâce à son numéro *Dewey*.',
@@ -287,7 +290,7 @@ const roadmap = ([g, f]) => [
   }, 'Image Slider', `Zoom ${g}`),
 ];
 const EMO = { policier: '🕵️', fantasy: '🐉', fantastique: '👻', sf: '🚀', aventure: '🧭', romance: '💗', mythes: '🏛️', humour: '😂', societe: '🏙️', classique: '🖋️' };
-const ch6bis = chapter('7 bis. 🌿 Les cartes des genres', [
+const ch6bis = chapter('6 bis. 🌿 Les cartes des genres', [
   text(`<h2 style="color:#2d6a4f">🌿 Chemin buissonnier · Les cartes des genres</h2><p style="color:#555555"><em>⏱ le temps que tu veux · rien n’est noté</em></p>
 <p>Et si tu voyais tes lectures comme un <strong>voyage</strong> ?</p>
 <p>Chacune de ces cartes dessine un <strong>parcours de lecteur</strong> à travers un genre : des îles les plus accessibles (niveau 1, souvent des BD) jusqu’au continent des grands textes (niveau 4).</p>
@@ -299,8 +302,8 @@ const ch6bis = chapter('7 bis. 🌿 Les cartes des genres', [
 /* ===== Ch.6 Les genres ⭐ ===== */
 // Positions des mots-indices sur la 4e dessinée par quatrieme.py
 const Q4 = JSON.parse(fs.readFileSync(new URL('./quatrieme.json', import.meta.url), 'utf8'));
-const ch6 = chapter('7. ⭐ Trouver ses genres préférés', [
-  text(`${banner('Étape 7', 'Reconnaître les genres de romans', 10)}
+const ch6 = chapter('6. ⭐ Trouver ses genres préférés', [
+  text(`${banner('Étape 6', 'Reconnaître les genres de romans', 10)}
 ${accroche('Tu as aimé un livre ? Le plus beau, c’est de trouver le suivant.')}
 <p>Au CDI, les romans sont classés par <strong>genre</strong>. Savoir reconnaître un genre, c’est le premier pas pour trouver <strong>les livres qui te ressemblent</strong>.</p>`, 'Intro'),
   text(decouvre(`<p>Voici la <strong>quatrième de couverture</strong> d’un roman (le dos du livre). Lis-la, puis enquête avec moi.</p>
@@ -357,8 +360,8 @@ ${accroche('Tu as aimé un livre ? Le plus beau, c’est de trouver le suivant.'
 
 /* ===== Ch.7 Dewey ⭐ ===== */
 const MUR = `https://h5p-offline-player.vercel.app/embed?src=https://raw.githubusercontent.com/Absconses/h5p-lumi/main/partage/decouvrir-le-cdi/mur-dewey.h5p`;
-const ch7 = chapter('8. ⭐ Les documentaires et la classification Dewey', [
-  text(`${banner('Étape 8', 'Explorer le monde réel avec les documentaires', 7)}
+const ch7 = chapter('7. ⭐ Les documentaires et la classification Dewey', [
+  text(`${banner('Étape 7', 'Explorer le monde réel avec les documentaires', 7)}
 ${accroche('Un livre de recettes de cuisine n’invente pas d’histoire : il explique quelque chose de réel. C’est un documentaire.')}
 <p>Les documentaires ne sont pas rangés par genre, mais par <strong>sujet</strong>, grâce à un système inventé en 1876 par l’Américain <strong>Melvil Dewey</strong>. Il a partagé tous les savoirs en <strong>10 grands domaines</strong>, numérotés de 000 à 900.</p>`, 'Intro'),
   image('dewey.jpg', 'Les 10 domaines de la classification décimale de Dewey', 'Tableau Dewey'),
@@ -390,8 +393,8 @@ ${accroche('Un livre de recettes de cuisine n’invente pas d’histoire : il ex
 ]);
 
 /* ===== Ch.8 Je vérifie ===== */
-const ch8 = chapter('9. Je vérifie avant la mission', [
-  text(`${banner('Étape 9', 'Es-tu prêt·e pour la mission ?', 3)}
+const ch8 = chapter('8. Je vérifie avant la mission', [
+  text(`${banner('Étape 8', 'Es-tu prêt·e pour la mission ?', 3)}
 <p>Pour chaque ligne, clique sur la <strong>phrase juste</strong>. Si tu te trompes, retourne voir l’étape qui correspond.</p>`, 'Intro'),
   summary('Choisis la phrase exacte.', [
     ['Le CDI se trouve au pavillon Bellevue, à côté du hall.', 'Le CDI se trouve dans la villa Rouge, près du préau.', 'Le CDI se trouve dans la villa Blanche, au premier étage.'],
@@ -421,7 +424,7 @@ const parcours = sub('H5P.DocumentationTool 1.8', {
       dtext('<p>Trouve un <strong>documentaire</strong> sur une de tes passions.</p>'),
       field('Ma passion :', 'le foot, les chats, l’espace…'),
       field('Titre du documentaire et son nombre Dewey :', '« … », 796'),
-    ], '<p>Tape ta passion dans le mur des domaines (étape 8) : il te donne le domaine, puis va au rayon qui porte ce nombre.</p>'),
+    ], '<p>Tape ta passion dans le mur des domaines (étape 7) : il te donne le domaine, puis va au rayon qui porte ce nombre.</p>'),
     sub('H5P.DocumentExportPage 1.5', {
       description: '<p>Bravo ! Clique sur <strong>Créer mon document</strong> pour voir ta fiche, puis <strong>Exporter</strong> pour le télécharger et le rendre à ton professeur.</p>',
       createDocumentLabel: 'Créer mon document', submitTextLabel: 'Envoyer', submitSuccessTextLabel: 'Ta fiche a été envoyée !',
@@ -432,7 +435,7 @@ const parcours = sub('H5P.DocumentationTool 1.8', {
   i10n: { previousLabel: 'Précédent', nextLabel: 'Suivant', closeLabel: 'Fermer' },
 }, 'Documentation Tool', 'Ma mission');
 
-const ch9 = chapter('10. ⭐ Ma mission', [
+const ch9 = chapter('9. ⭐ Ma mission', [
   text(`<h2 style="color:#1d3557">🎯 Ma mission · Un roman, un documentaire</h2><p style="color:#555555"><em>⏱ environ 10 minutes · dans les rayons</em></p>
 <p>Pars dans les rayons et reviens avec <strong>un roman qui te tente</strong> et <strong>un documentaire sur ta passion</strong>. Note-les ci-dessous, puis exporte ta fiche.</p>`, 'Intro'),
   parcours,
@@ -470,7 +473,7 @@ const onzieme = sub('H5P.Questionnaire 1.3', {
     accessibility: { requiredTextExitLabel: 'Fermer le message', progressBarText: 'Question %current sur %max' },
     requiredMessage: 'Écris ton droit avant d’envoyer.', requiredText: 'obligatoire', submitScreenTitle: 'Ton droit est écrit !', submitScreenSubtitle: 'Clique sur Envoyer.' },
 }, 'Questionnaire', 'Mon 11e droit du lecteur');
-const ch10 = chapter('11. 🌿 Les droits du lecteur', [
+const ch10 = chapter('10. 🌿 Les droits du lecteur', [
   text(`<h2 style="color:#2d6a4f">🌿 Pour finir · Les droits du lecteur</h2>
 ${accroche('Tu as trouvé ton roman, ton documentaire… Mais au fait, est-ce qu’on est obligé de tout lire, jusqu’au bout, sans sauter une page ?')}
 <p>L’écrivain <strong>Daniel Pennac</strong> a répondu en écrivant <strong>les dix droits du lecteur</strong>. ${process.env.NOMAPS ? 'Les voici.' : 'Clique sur les <strong>+</strong> pour découvrir ce que veut dire chacun.'}</p>`, 'Intro droits'),
@@ -485,6 +488,6 @@ ${accroche('Tu as trouvé ton roman, ton documentaire… Mais au fait, est-ce qu
 const book = clone(tpl);
 book.showCoverPage = true;
 book.bookCover = { coverDescription: cover, coverMedium: image('carte-mentale-cdi.jpg', 'Le CDI, un espace informationnel', 'Couverture') };
-book.chapters = [ch1, ch2, chFam, ch3, ch4, ch5, ch6, ...(process.env.NOMAPS ? [] : [ch6bis]), ch7, ch8, ch9, ch10];
+book.chapters = [ch1, ch2, chFam, ch4, ch5, ch6, ...(process.env.NOMAPS ? [] : [ch6bis]), ch7, ch8, ch9, ch10];
 fs.writeFileSync(OUT, JSON.stringify(book));
 console.log('OK', book.chapters.length, 'chapitres');
