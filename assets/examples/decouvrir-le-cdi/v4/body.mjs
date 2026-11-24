@@ -298,7 +298,7 @@ const ch6 = chapter('6. ⭐ Trouver ses genres préférés', [
 ${accroche('Tu as aimé un livre ? Le plus beau, c’est de trouver le suivant.')}
 <p>Au CDI, les romans sont classés par <strong>genre</strong>. Savoir reconnaître un genre, c’est le premier pas pour trouver <strong>les livres qui te ressemblent</strong>.</p>`, 'Intro'),
   text(decouvre(`<p>Voici la <strong>quatrième de couverture</strong> d’un roman (le dos du livre). Lis-la, puis enquête avec moi.</p>
-<p>Les mots <strong>surlignés en jaune</strong> sont des <strong>indices</strong>. Pour chacun, <strong>devine d’abord</strong> ce qu’il t’apprend, puis clique sur le <strong>?</strong> pour vérifier. Termine par le <strong>?</strong> du tampon « Genre ».</p>`), 'Je découvre'),
+<p>Les mots <strong>surlignés en jaune</strong> sont des <strong>indices</strong>. Clique sur le <strong>?</strong> à côté de chacun : je te montre ce qu’il nous apprend. Termine par le <strong>?</strong> du tampon « Genre ».</p>`), 'Je découvre'),
   sub('H5P.ImageHotspots 1.10', {
     image: file('quatrieme-kepler.jpg'),
     backgroundImageAltText: 'Quatrième de couverture du roman « Cap sur Kepler » : En 2150, la Terre est devenue trop chaude pour y vivre. Lina, douze ans, embarque à bord d’un immense vaisseau en route vers une nouvelle planète. Mais le robot qui pilote le navire se met à désobéir…',
@@ -349,15 +349,35 @@ ${accroche('Tu as aimé un livre ? Le plus beau, c’est de trouver le suivant.'
   text(retiens('<p>Pour reconnaître un genre, j’observe <strong>la pastille</strong>, <strong>l’illustration</strong>, <strong>le titre</strong>, et je lis <strong>la quatrième de couverture</strong> pour y repérer des <strong>mots-indices</strong>.</p>'), 'Je retiens'),
 ]);
 
+/* Exemples de sujets par domaine (hotspots sur dewey.jpg, 694 x 423, en % : coin haut droit de chaque carte) */
+const DEWEY_EX = [
+  [17, 26, '000 · Informatique, généralités', 'Les <strong>encyclopédies</strong> (030), les livres sur <strong>Internet et l’informatique</strong> (004) : des savoirs sur tout, ou sur l’information elle-même.'],
+  [35, 26, '100 · Philosophie et psychologie', 'Les <strong>émotions</strong> et la confiance en soi (152), les <strong>grandes questions</strong> : qu’est-ce que le bonheur, la liberté ?'],
+  [53, 26, '200 · Religion', 'Les <strong>religions du monde</strong>, et la <strong>mythologie</strong> : les dieux de l’Olympe sont en 292.'],
+  [71, 26, '300 · Sciences sociales', 'La vie en société : les <strong>droits de l’enfant</strong> (323), l’école, l’argent, la justice, les métiers.'],
+  [89, 26, '400 · Langues', 'Apprendre une langue : la <strong>grammaire du français</strong> (440), l’<strong>anglais</strong> (420), l’espagnol (460)…'],
+  [17, 64, '500 · Sciences', 'La nature et l’univers : les <strong>étoiles et planètes</strong> (520), les <strong>volcans</strong> (551), les <strong>animaux sauvages</strong> (590).'],
+  [35, 64, '600 · Sciences appliquées (techniques)', 'Les savoir-faire pratiques : le <strong>corps et la santé</strong> (610), les <strong>animaux de compagnie</strong> (636), la <strong>cuisine</strong> (641).'],
+  [53, 64, '700 · Arts, sports et loisirs', 'Le <strong>dessin</strong> et la BD expliquée (741), la <strong>musique</strong> (780), les <strong>sports</strong>, dont le foot (796).'],
+  [71, 64, '800 · Littérature', 'Des textes étudiés pour eux-mêmes : <strong>poésie</strong>, <strong>théâtre</strong>, histoire de la littérature. Au CDI, les romans ont souvent leur propre rayon (R).'],
+  [89, 64, '900 · Histoire et géographie', 'Le passé et les lieux : la <strong>Révolution française</strong> (944), les <strong>pays et voyages</strong> (910), l’Égypte ancienne (932).'],
+];
 /* ===== Ch.7 Dewey ⭐ ===== */
 const ch7 = chapter('7. ⭐ Les documentaires et la classification Dewey', [
   text(`${banner('Étape 7', 'Explorer le monde réel avec les documentaires', 7)}
 ${accroche('Un livre de recettes de cuisine n’invente pas d’histoire : il explique quelque chose de réel. C’est un documentaire.')}
 <p>Les documentaires ne sont pas rangés par genre, mais par <strong>sujet</strong>, grâce à un système inventé en 1876 par l’Américain <strong>Melvil Dewey</strong>. Il a partagé tous les savoirs en <strong>10 grands domaines</strong>, numérotés de 000 à 900.</p>`, 'Intro'),
-  text(decouvre(`<p>Voici les 10 domaines de Dewey. Cherche sur le tableau : dans quel domaine tombe un <strong>livre de recettes</strong> ?</p>`), 'Je découvre Dewey'),
-  image('dewey.jpg', 'Les 10 domaines de la classification décimale de Dewey', 'Tableau Dewey'),
-  text(`<p>Tu as trouvé ? <strong>600, les techniques</strong> : cuisiner, c’est un savoir-faire pratique. Le nombre exact est plus <strong>précis</strong> : pour la cuisine, c’est <strong>641</strong>. Plus le nombre est long, plus le sujet est précis.</p>
-<p>Cherche maintenant <strong>ta passion</strong> sur le tableau : foot, chat, volcan, dessin… Tu pourrais être surpris·e : les chats sauvages sont en 500 (sciences), mais ton chat à la maison est en 600 (animaux de compagnie) !</p>`, 'Réponse cuisine'),
+  text(decouvre(`<p>Regarde comment on range un <strong>livre de recettes</strong>. Cuisiner, c’est un savoir-faire pratique : le livre va dans le domaine <strong>600</strong>. Son nombre précis est <strong>641</strong>, la cuisine. Plus le nombre est long, plus le sujet est précis.</p>
+<p>Clique maintenant sur chaque <strong>+</strong> du tableau pour voir quels sujets se cachent dans chaque domaine.</p>`), 'Je découvre Dewey'),
+  sub('H5P.ImageHotspots 1.10', {
+    image: file('dewey.jpg'),
+    backgroundImageAltText: 'Le système décimal Dewey : 000 informatique et généralités, 100 philosophie et psychologie, 200 religion, 300 sciences sociales, 400 langues, 500 sciences, 600 sciences appliquées, 700 arts, sports et loisirs, 800 littérature, 900 histoire et géographie.',
+    iconType: 'icon', icon: 'plus', color: '#1d3557',
+    hotspots: DEWEY_EX.map(([x, y, h, t]) => ({ position: { x, y, legacyPositioning: false }, alwaysFullscreen: false,
+      header: h, content: [sub('H5P.Text 1.1', { text: `<p>${t}</p>` }, 'Text', h)] })),
+    hotspotNumberLabel: 'Domaine n° #num', closeButtonLabel: 'Fermer', containsAudioVideoLabel: 'Contient un son ou une vidéo',
+  }, 'Image Hotspots', 'Les 10 domaines Dewey'),
+  text(`<p>Tu as vu ? Les chats sauvages sont en 500 (sciences), mais ton chat à la maison est en 600 (animaux de compagnie) : c’est le <strong>sujet</strong> du livre qui compte.</p>`, 'Remarque chats'),
   text(avecAide(''), 'Accompagné'),
   dragText('<strong>Dans quel domaine Dewey ranger ces documentaires ?</strong> Aide-toi du tableau.', [
     'Les grands peintres du XXe siècle → *700 Arts et loisirs*',
