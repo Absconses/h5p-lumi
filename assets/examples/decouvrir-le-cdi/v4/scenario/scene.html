@@ -32,6 +32,19 @@
   .cover .a { font-size: 15px; margin-top: 8px; opacity: .9; }
   .cote { background: #fff; border: 4px solid #333; border-radius: 10px; padding: 12px 20px; font-family: 'DejaVu Sans Mono', monospace; font-weight: bold; font-size: 44px; color: #111; text-align: center; box-shadow: 6px 6px 0 rgba(0,0,0,.18); }
   .cote small { display: block; font-family: 'DejaVu Sans', sans-serif; font-size: 17px; font-weight: normal; color: #555; }
+  /* fiche de l'ami (dossier) */
+  .folder { position: absolute; left: 60px; top: 50px; width: 1080px; height: 575px; background: #ffc15a; border-radius: 0 22px 22px 22px; box-shadow: 0 10px 0 rgba(0,0,0,.15); }
+  .folder:before { content: 'FICHE'; position: absolute; left: 0; top: -40px; width: 230px; height: 44px; background: #ffc15a; border-radius: 16px 16px 0 0; font-weight: bold; font-size: 22px; letter-spacing: 3px; color: #7a4b00; padding: 9px 26px; }
+  .folder .photo { position: absolute; left: 50px; top: 50px; width: 330px; background: #fff; padding: 18px 18px 12px; text-align: center; box-shadow: 4px 6px 0 rgba(0,0,0,.15); transform: rotate(-2deg); }
+  .folder .photo .face { font-family: 'Noto Color Emoji'; font-size: 190px; line-height: 1.1; background: #eaf2f8; }
+  .folder .photo b { display: block; font-size: 30px; color: #1d3557; margin-top: 8px; }
+  .folder .photo span { font-size: 21px; color: #555; }
+  .folder .sit { position: absolute; left: 50px; top: 395px; width: 350px; font-size: 22px; line-height: 1.35; color: #3a2a00; }
+  .folder .sheet { position: absolute; right: 44px; top: 34px; width: 600px; height: 505px; background: #fff; padding: 28px 34px; box-shadow: 4px 6px 0 rgba(0,0,0,.15); }
+  .folder .sheet h2 { margin: 0 0 6px; font-size: 30px; color: #1d3557; border-bottom: 3px solid #1d3557; padding-bottom: 8px; }
+  .folder .sheet h3 { margin: 18px 0 6px; font-size: 20px; letter-spacing: 1px; color: #7a4b00; }
+  .folder .sheet p, .folder .sheet li { font-size: 23px; line-height: 1.35; color: #222; margin: 4px 0; }
+  .folder .sheet ul { margin: 0; padding-left: 26px; }
   .title { position: absolute; left: 0; right: 0; top: 70px; text-align: center; font-size: 58px; font-weight: bold; color: #1d3557; }
   .title small { display: block; font-size: 30px; font-weight: normal; color: #444; margin-top: 14px; }
   .trio { position: absolute; left: 0; right: 0; bottom: 60px; display: flex; justify-content: center; gap: 30px; }
@@ -58,6 +71,9 @@ if (P.who) h += who(P.who, `left:${P.whoX ?? 150}px`);
 if (P.bubble) h += `<div class="bubble ${P.tail || 'tl'}" style="left:${P.bx ?? 390}px;top:${P.by ?? 70}px;width:${P.bw ?? 640}px">${P.bubble}</div>`;
 if (P.cover) h += `<div class="prop" style="left:${P.px ?? 840}px;top:${P.py ?? 330}px"><div class="cover" style="background:${P.cover.color}"><div class="e">${P.cover.e}</div><div class="t">${P.cover.t}</div><div class="a">${P.cover.a}</div></div></div>`;
 if (P.cote) h += `<div class="prop" style="left:${P.px ?? 760}px;top:${P.py ?? 380}px"><div class="cote">${P.cote}<small>${P.coteSub || ''}</small></div></div>`;
+if (P.fiche) { const f = P.fiche; h = `<div class="folder"><div class="photo"><div class="face">${f.who.face}</div><b>${f.who.name}</b><span>${f.classe}</span></div><div class="sit"><b>Sa demande :</b><br>${f.demande}</div><div class="sheet"><h2>Ce que tu sais de ${f.who.name}</h2><h3>SES LECTURES</h3><ul>${f.lectures.map((x) => `<li>${x}</li>`).join('')}</ul><h3>CE QU’IL FAUT SAVOIR</h3><ul>${f.savoir.map((x) => `<li>${x}</li>`).join('')}</ul></div></div>`; }
+const cov = (c, x, y) => `<div class="prop" style="left:${x}px;top:${y}px"><div class="cover" style="background:${c.color}"><div class="e">${c.e}</div><div class="t">${c.t}</div><div class="a">${c.a}</div></div></div>`;
+if (P.covers) h += P.covers.map((c, i) => cov(c, 640 + i * 250, 310)).join('');
 document.getElementById('root').innerHTML = h;
 document.fonts.ready.then(() => { window.ready = true; });
 </script>

@@ -1,7 +1,10 @@
 // Branching Scenario « Conseiller un ami » : la mission finale du livre « Découvrir le CDI ».
 // usage : node scenario.mjs <content.json de sortie>      (scènes : scene.html + bs-render.mjs)
-// Trois amis à conseiller (Sam : roman d'enquête ; Lina : documentaire, Dewey ; Noé : mangas),
-// un carrefour pour passer de l'un à l'autre. Les nœuds sont nommés, puis numérotés à la fin.
+// Modèle : « Skills Practice: A Home Visit » (H5P). Pour chaque ami : sa fiche, puis une suite de
+// scènes. À chaque scène, l'élève choisit un COMPORTEMENT (libellé court). Mauvais choix : un écran
+// dit pourquoi et pose une question, puis on revient au même choix (on n'avance pas). Bon choix :
+// un écran dit pourquoi, puis scène suivante. « Revoir la scène » relance l'image (ou la vidéo).
+// Pour passer aux vidéos : remplacer I(...) par un nœud H5P.Video, sans toucher au graphe.
 import fs from 'fs';
 import { text, image, sub } from './fr.mjs';
 const [OUT] = process.argv.slice(2);
@@ -11,116 +14,145 @@ const base = (type, extra = {}) => ({
   type, showContentTitle: false, proceedButtonText: 'Continuer', forceContentFinished: 'useBehavioural',
   feedback: { title: '', subtitle: '' }, contentBehaviour: 'useBehavioural', ...extra,
 });
+const img = (file, w = 400, h = 400) => ({ path: `images/${file}`, mime: 'image/jpeg', width: w, height: h, copyright: { license: 'U' } });
 const T = (name, html, next) => { N[name] = base(text(`<p style="font-size:1.15em">${html}</p>`, name), { next }); };
 const I = (name, file, alt, next, [w, h] = [1200, 675]) => { N[name] = base(image(`images/${file}`, w, h, alt, name), { next }); };
-// alternatives : [texte, nœud suivant] ou [texte, -1, [titre, sous-titre]]
 const Q = (name, question, alts) => {
-  N[name] = base(sub('H5P.BranchingQuestion 1.0', { branchingQuestion: {
-    question: `<p>${question}</p>`,
-    alternatives: alts.map(([t, next, end]) => ({ text: t, next, feedback: end ? { title: end[0], subtitle: end[1] } : { title: '', subtitle: '' } })),
-  } }, 'Branching Question', name));
+  N[name] = base(sub('H5P.BranchingQuestion 1.0', { branchingQuestion: { question: `<p>${question}</p>`, alternatives: alts } }, 'Branching Question', name));
+};
+/* Une décision : la scène `${k}`, puis le choix `${k}?`.
+ * choix : [libellé, 'pourquoi + question'] = mauvaise piste ; [libellé, 'pourquoi', suite] = bonne piste. */
+const D = (k, scene, alt, question, choix, replay = k) => {
+  I(k, scene, alt, `${k}?`);
+  Q(`${k}?`, question, [
+    ...choix.map(([label, why, next]) => (next
+      ? { text: label, next, feedback: { title: `<p>Bonne piste (${label})</p>`, subtitle: `<p>${why}</p>`, image: img('ok.jpg') } }
+      : { text: label, next: `${k}?`, feedback: { title: `<p>Mauvaise piste (${label})</p>`, subtitle: `<p>${why}</p>`, image: img('croix.jpg') } })),
+    { text: 'Revoir la scène', next: replay, feedback: { title: '', subtitle: '' } },
+  ]);
 };
 
 /* ---------- Départ ---------- */
-I('intro', 'intro.jpg', 'Midi, au CDI. Trois amis ont besoin de tes conseils : Sam, Lina et Noé.', 'depart');
-Q('depart', 'C’est la pause de midi. Trois amis cherchent un livre au CDI. <strong>Qui veux-tu aider en premier ?</strong>', [
-  ['Sam, qui ne sait pas quoi lire', 'sam1'], ['Lina, qui prépare un exposé', 'lina1'], ['Noé, qui ne lit que des mangas', 'noe1'],
+I('intro', 'intro.jpg', 'Midi, au CDI. Trois amis ont besoin de tes conseils : Sam, Lina et Noé.', 'regles');
+T('regles', '<strong>Comment ça marche ?</strong><br><br>Tu vas aider trois amis à trouver un livre au CDI. Avant de leur parler, <strong>lis leur fiche</strong>.<br><br>À chaque scène, choisis <strong>ce que tu fais</strong>. Si ce n’est pas la bonne piste, on t’explique pourquoi et tu réessaies.', 'depart');
+Q('depart', 'Qui veux-tu aider en premier ?', [
+  { text: 'Sam, qui ne sait pas quoi lire', next: 'sam0', feedback: { title: '', subtitle: '' } },
+  { text: 'Lina, qui prépare un exposé', next: 'lina0', feedback: { title: '', subtitle: '' } },
+  { text: 'Noé, qui ne lit que des mangas', next: 'noe0', feedback: { title: '', subtitle: '' } },
 ]);
 
-/* ---------- Sam : écouter, choisir un genre, repérer la pastille, emprunter ---------- */
-I('sam1', 'sam-arrive.jpg', 'Sam, devant le rayon des romans : « Je dois emprunter un livre pour le cours de français… mais je ne sais pas du tout quoi prendre ! »', 'sam2');
-Q('sam2', 'Sam ne sait pas quoi prendre. <strong>Comment commences-tu ?</strong>', [
-  ['Je lui tends mon roman préféré : il va forcément l’adorer.', 'sam2a'],
-  ['Je lui demande ce qu’il aime, même en dehors des livres.', 'sam3'],
-  ['Je lui dis de prendre le premier livre qui lui tombe sous la main.', 'sam2b'],
-]);
-T('sam2a', 'Sam lit le résumé… et repose le livre : « Bof, les histoires de chevaux, c’est pas mon truc. »<br><br><strong>Ce que tu aimes n’est pas forcément ce qu’il aime.</strong> Pour bien conseiller, il faut d’abord écouter.', 'sam3');
-T('sam2b', 'Sam attrape un livre au hasard. Page 3, il bâille déjà.<br><br><strong>Choisir au hasard</strong>, c’est risquer de tomber sur un livre qui ne lui ressemble pas. Demande-lui plutôt ce qu’il aime.', 'sam3');
-I('sam3', 'sam-aime.jpg', 'Sam : « Ce que j’aime ? Les jeux d’enquête ! Chercher des indices et trouver le coupable avant tout le monde. »', 'sam4');
-Q('sam4', 'Sam aime chercher des indices et démasquer un coupable. <strong>Que lui proposes-tu ?</strong>', [
-  ['Un roman de fantasy : un monde inventé, avec de la magie et des dragons.', 'sam4a'],
-  ['Un dictionnaire : il y trouvera la définition exacte du mot « indice ».', 'sam4b'],
-  ['Un roman d’enquête : une histoire inventée, avec un coupable à démasquer.', 'sam5'],
-]);
-T('sam4a', 'Sam fait la grimace : « Les dragons, bof… Moi, je veux des indices ! »<br><br>La fantasy, c’est la magie. Des indices, des suspects, un coupable : c’est le genre <strong>enquête et policier</strong>.', 'sam5');
-T('sam4b', 'Sam éclate de rire : « Je cherche une histoire, pas une définition ! »<br><br>Dans un dictionnaire, on <strong>cherche</strong> un mot : on ne le lit pas comme une histoire. Sam veut un <strong>roman d’enquête</strong>.', 'sam5');
-Q('sam5', 'Vous voilà devant les romans. <strong>Comment repérer vite ceux du genre enquête ?</strong>', [
-  ['On cherche le nombre Dewey des enquêtes sur le tableau des 10 domaines.', 'sam5a'],
-  ['On cherche la pastille de couleur du genre, collée sur le dos des livres.', 'sam6'],
-  ['On lit tous les titres un par un, du premier rayon jusqu’au dernier.', 'sam5b'],
-]);
-T('sam5a', 'Le nombre Dewey sert à ranger les <strong>documentaires</strong>, par sujet.<br><br>Les <strong>romans</strong>, eux, sont rangés par genre : c’est la <strong>pastille de couleur</strong> sur le dos qui l’indique.', 'sam6');
-T('sam5b', 'Dix minutes plus tard, vous n’avez fait que deux étagères… et la sonnerie approche.<br><br>La <strong>pastille de couleur</strong> sur le dos indique le genre d’un seul coup d’œil.', 'sam6');
-I('sam6', 'sam-livre.jpg', 'Sam tient un roman, « Le Mystère du manoir », de Rose Duval : « Celui-là a l’air trop bien ! »', 'sam7');
-Q('sam7', 'Sam est pressé : « Tu peux l’emprunter pour moi ? » <strong>Que réponds-tu ?</strong>', [
-  ['Oui, je le prends à mon nom et je te le donne à la sortie du CDI.', 'sam7a'],
-  ['Mets-le dans ton sac sans rien dire, tu le rapporteras très vite.', 'sam7b'],
-  ['Non, chacun emprunte à son nom. Viens, le comptoir, c’est une minute.', 'samFin'],
-]);
-T('sam7a', 'Trois semaines plus tard, le livre est en retard… et c’est à <strong>toi</strong> qu’on le réclame, puisqu’il est à ton nom.<br><br><strong>On emprunte seulement à son propre nom.</strong>', 'sam7');
-T('sam7b', 'Sans enregistrement, personne ne sait où est le livre : il est considéré comme <strong>perdu</strong>.<br><br><strong>Un prêt doit toujours être enregistré</strong> au comptoir.', 'sam7');
-T('samFin', 'Au comptoir, le professeur documentaliste enregistre le prêt <strong>au nom de Sam</strong> et lui donne la date de retour.<br><br>Sam repart avec <em>Le Mystère du manoir</em>. <strong>Mission réussie !</strong>', 'carrefour');
+/* ---------- Sam : écouter, creuser, choisir un genre, la pastille, la quatrième, le prêt ---------- */
+I('sam0', 'fiche-sam.jpg', 'Fiche de Sam, 6e B. Il doit emprunter un livre pour le cours de français, avant vendredi. Il lit très peu et a abandonné son dernier roman au chapitre 2. Il passe ses mercredis sur les jeux vidéo, n’est venu au CDI qu’une seule fois et n’aime pas qu’on lui fasse la leçon.', 'sam1');
+D('sam1', 'sam-arrive.jpg', 'Sam, devant les romans : « Je dois emprunter un livre pour le cours de français… mais je ne sais pas du tout quoi prendre ! »',
+  'Comment commences-tu ?', [
+    ['Proposer ton livre préféré', 'Sam lit le résumé et repose le livre : « Bof, c’est pas mon truc. » Ce que tu aimes n’est pas forcément ce qu’il aime. Que te manque-t-il pour bien le conseiller ?'],
+    ['Montrer les nouveautés', 'Sam regarde le présentoir sans rien prendre. Les nouveautés attirent l’œil, mais tu ne sais toujours rien de ses goûts. Par quoi faudrait-il commencer ?'],
+    ['L’interroger sur ses goûts', 'Pour bien conseiller, il faut d’abord écouter. Tu lui demandes ce qu’il aime lire.', 'sam2'],
+  ]);
+D('sam2', 'sam-jeux.jpg', 'Sam : « Ce que j’aime lire ? Rien… Les livres, c’est pas trop mon truc. Moi, je préfère les jeux vidéo. »',
+  'Sam dit qu’il n’aime pas lire. Que fais-tu ?', [
+    ['Creuser du côté des jeux', 'Ses goûts existent déjà, en dehors des livres : c’est de là qu’il faut partir. Tu lui demandes quels jeux il préfère.', 'sam3'],
+    ['Rappeler que lire est important', 'Sam lève les yeux au ciel. Relis sa fiche : il n’aime pas qu’on lui fasse la leçon. Comment partir plutôt de ce qu’il aime déjà ?'],
+    ['Choisir un livre sur les jeux vidéo', 'C’est aller trop vite : tu ne sais pas encore ce qui lui plaît dans ses jeux. L’action ? L’histoire ? Les énigmes ? Quelle question lui poser ?'],
+  ]);
+D('sam3', 'sam-aime.jpg', 'Sam : « Mes jeux préférés ? Les jeux d’enquête ! Chercher des indices, interroger les suspects, trouver le coupable avant tout le monde. »',
+  'Quel type de livre lui ressemble ?', [
+    ['Un documentaire sur la police', 'L’idée se tient : c’est le bon sujet. Mais Sam veut vivre une histoire, comme dans ses jeux, pas lire des explications. Quel type de livre raconte une histoire inventée ?'],
+    ['Un roman d’enquête', 'Des indices, des suspects, un coupable à démasquer : c’est exactement le genre enquête et policier. Et c’est une histoire inventée, comme dans ses jeux.', 'sam4'],
+    ['Un roman de fantasy', 'La fantasy, c’est la magie et les mondes imaginaires. Relis ce que Sam vient de dire : indices, suspects, coupable. À quel genre ces mots te font-ils penser ?'],
+  ]);
+D('sam4', 'sam-rayon.jpg', 'Sam, devant les rayons de romans : « Ouh là… Il y a des centaines de romans ici ! On commence par où ? »',
+  'Comment repérer les romans d’enquête ?', [
+    ['Chercher le nombre Dewey', 'Le nombre Dewey sert à ranger les documentaires, par sujet. Ici, vous êtes devant les romans. Qu’est-ce qui indique le genre d’un roman, sur son dos ?'],
+    ['Lire tous les titres', 'Dix minutes plus tard, vous n’avez fait que deux étagères, et la sonnerie approche. Quel signe, collé sur le dos des livres, permet d’aller plus vite ?'],
+    ['Repérer la pastille du genre', 'Au CDI, les romans sont rangés par genre. La pastille de couleur, sur le dos, indique le genre d’un seul coup d’œil.', 'sam5'],
+  ]);
+D('sam5', 'sam-deux.jpg', 'Sam tient deux romans d’enquête, « Le Mystère du manoir » et « Nuit noire au collège » : « J’en ai trouvé deux avec la bonne pastille. Je prends lequel ? »',
+  'Comment l’aides-tu à choisir ?', [
+    ['Lire les deux résumés au dos', 'La quatrième de couverture résume l’histoire sans dévoiler la fin. C’est le meilleur moyen de savoir si un livre va lui plaire.', 'sam6'],
+    ['Prendre le plus court', 'Souviens-toi de sa fiche : Sam a déjà abandonné un roman au chapitre 2. Un livre court qui l’ennuie, il l’abandonnera aussi. Où lire de quoi parle chaque histoire ?'],
+    ['Prendre la plus belle couverture', 'La couverture donne une ambiance, mais elle ne raconte pas l’histoire. Quelle partie du livre résume l’histoire en quelques lignes ?'],
+  ]);
+D('sam6', 'sam-livre.jpg', 'Sam, avec « Le Mystère du manoir » : « Un vol, cinq suspects… Celui-là, je le veux ! » Puis : « Mince, ça va sonner. Tu peux l’emprunter pour moi ? »',
+  'Sam est pressé : « Tu peux l’emprunter pour moi ? »', [
+    ['L’emprunter à ton nom', 'Trois semaines plus tard, le livre est en retard… et c’est à toi qu’on le réclame, puisqu’il est à ton nom. À quel nom un prêt doit-il être enregistré ?'],
+    ['L’accompagner au comptoir', 'Chacun emprunte à son propre nom. Au comptoir, le prêt est enregistré au nom de Sam en une minute, avec la date de retour.', 'samFin'],
+    ['Le laisser filer avec le livre', 'Sans enregistrement, personne ne sait où est le livre : il est considéré comme perdu. Que faut-il toujours faire avant de sortir un livre du CDI ?'],
+  ]);
+T('samFin', 'Sam repart avec <em>Le Mystère du manoir</em>, emprunté <strong>à son nom</strong>.<br><br>Tu l’as <strong>écouté</strong>, tu es parti de <strong>ce qu’il aime</strong>, et tu as trouvé le bon rayon grâce à la <strong>pastille</strong>. Mission réussie !', 'carrefour');
 
-/* ---------- Lina : fiction ou documentaire, domaine Dewey, lire une cote ---------- */
-I('lina1', 'lina-arrive.jpg', 'Lina, devant le rayon des documentaires : « Je prépare un exposé sur les volcans. Tu sais où je peux chercher ? »', 'lina2');
-Q('lina2', 'Pour un exposé sur les volcans, <strong>quel type de document lui conseilles-tu ?</strong>', [
-  ['Un roman d’aventure : le héros escalade un volcan en pleine éruption.', 'lina2a'],
-  ['Un livre documentaire : il explique le monde réel, avec des photos.', 'lina3'],
-  ['Un recueil de poésie : il y a sûrement un poème sur les volcans.', 'lina2b'],
-]);
-T('lina2a', 'Lina hésite : « C’est une histoire inventée… Je ne peux pas mettre ça dans mon exposé. »<br><br>Pour <strong>s’informer sur le monde réel</strong>, il faut une <strong>ressource documentaire</strong>.', 'lina3');
-T('lina2b', 'Un poème joue avec les mots et les images : c’est beau, mais ça n’explique pas comment naît une éruption.<br><br>Pour un exposé, il faut une <strong>ressource documentaire</strong>.', 'lina3');
-I('lina3', 'dewey.jpg', 'Le système décimal Dewey : 000 informatique et généralités, 100 philosophie et psychologie, 200 religion, 300 sciences sociales, 400 langues, 500 sciences, 600 sciences appliquées, 700 arts, sports et loisirs, 800 littérature, 900 histoire et géographie.', 'lina4', [694, 423]);
-Q('lina4', 'Les documentaires sont rangés par sujet. <strong>Dans quel domaine chercher un livre qui explique les volcans ?</strong>', [
-  ['900, Histoire et géographie : les volcans sont sur les cartes.', 'lina4a'],
-  ['600, Sciences appliquées : un volcan, c’est de la technique.', 'lina4b'],
-  ['500, Sciences : les volcans font partie de la nature.', 'lina5'],
-]);
-T('lina4a', 'Tentant ! Mais un livre qui explique <strong>comment fonctionne un volcan</strong> étudie la nature : il est en <strong>500, Sciences</strong>.<br><br>En 900, tu trouverais plutôt un livre sur un pays et son histoire.', 'lina5');
-T('lina4b', 'En 600, on trouve les savoir-faire pratiques : la cuisine, la santé, les animaux de compagnie.<br><br>Un volcan est un phénomène de la nature : direction le <strong>500, Sciences</strong>.', 'lina5');
-I('lina5', 'lina-cote.jpg', 'Lina : « J’ai trouvé Tout sur les volcans ! Mais sur le dos, il y a écrit ça… » L’étiquette au dos du livre indique 551.21 MON.', 'lina6');
-Q('lina6', 'Sur le dos du livre : <strong>551.21 MON</strong>. Que veut dire <strong>MON</strong> ?', [
-  ['Les 3 premières lettres du nom de l’auteur.', 'linaFin'],
-  ['Les 3 premières lettres du titre du livre.', 'lina6a'],
-  ['Les 3 premières lettres du sujet : MONtagne.', 'lina6b'],
-]);
-T('lina6a', 'Le titre n’apparaît jamais dans la cote.<br><br>Les lettres renvoient toujours à <strong>l’auteur</strong> : ici, Paul <strong>MON</strong>nier.', 'linaFin');
-T('lina6b', 'Bien tenté ! Mais le sujet est déjà donné par le nombre : 551.21, les volcans.<br><br>Les lettres renvoient à <strong>l’auteur</strong> : ici, Paul <strong>MON</strong>nier.', 'linaFin');
-I('linaFin', 'lina-contente.jpg', 'Lina tient « Tout sur les volcans », de Paul Monnier : « Merci ! Avec ce livre, mon exposé va être explosif ! »', 'linaFin2');
-T('linaFin2', '<strong>551.21</strong> = le sujet (les volcans). <strong>MON</strong> = l’auteur (Paul Monnier).<br><br>Lina emprunte le livre à son nom et file préparer son exposé. <strong>Mission réussie !</strong>', 'carrefour');
+/* ---------- Lina : fiction ou documentaire, Dewey, le nombre précis, la cote, croiser deux sources ---------- */
+I('lina0', 'fiche-lina.jpg', 'Fiche de Lina, 6e A. Elle prépare un exposé de SVT sur les volcans, à rendre lundi. Grande lectrice de romans, elle connaît par cœur le rayon des romans. Elle n’est jamais allée au rayon des documentaires, veut des informations sûres et précises, et aime comprendre toute seule.', 'lina1');
+D('lina1', 'lina-arrive.jpg', 'Lina montre un roman, « L’Enfant du volcan » : « Pour mon exposé sur les volcans, j’ai trouvé ce roman. C’est bien, non ? »',
+  'Que lui réponds-tu ?', [
+    ['Approuver son choix', 'Le lundi, la professeure demande à Lina d’où viennent ses informations… Un roman raconte une histoire inventée. Quel type de document explique le monde réel ?'],
+    ['L’orienter vers un documentaire', 'Un roman raconte une histoire inventée. Pour un exposé, il faut une ressource documentaire : elle explique le monde réel.', 'lina2'],
+    ['Proposer un dictionnaire', 'Le dictionnaire donnera la définition du mot « volcan » en trois lignes : c’est trop peu pour un exposé. Quel document explique un sujet en détail, avec des photos et des schémas ?'],
+  ]);
+I('lina2', 'lina-rangement.jpg', 'Lina, devant les documentaires : « D’accord, il me faut un documentaire. Mais ici, il n’y a pas de pastilles… C’est rangé comment ? »', 'lina2b');
+D('lina2b', 'dewey.jpg', 'Le système décimal Dewey : 000 informatique et généralités, 100 philosophie et psychologie, 200 religion, 300 sciences sociales, 400 langues, 500 sciences, 600 sciences appliquées, 700 arts, sports et loisirs, 800 littérature, 900 histoire et géographie.',
+  'Tu lui montres le tableau des 10 domaines. Où chercher un livre qui explique les volcans ?', [
+    ['En 900, histoire et géographie', 'Tentant : les volcans sont sur les cartes. Mais un livre qui explique comment fonctionne un volcan étudie la nature. Quel domaine étudie la nature ?'],
+    ['En 600, sciences appliquées', 'En 600, on trouve les savoir-faire pratiques : la cuisine, la santé, les animaux de compagnie. Un volcan est un phénomène de la nature. Quel domaine l’étudie ?'],
+    ['En 500, sciences', 'Les documentaires sont rangés par sujet. Un livre qui explique comment fonctionne un volcan étudie la nature : domaine 500, les sciences.', 'lina3'],
+  ]);
+N['lina2b'].type.params.file.width = 694; N['lina2b'].type.params.file.height = 423;
+D('lina3', 'lina-500.jpg', 'Lina, devant le rayon 500, sciences : « Le rayon 500 est immense : les étoiles, les animaux, les plantes… Je ne vais jamais trouver les volcans ! »',
+  'Comment trouver les volcans dans tout le rayon 500 ?', [
+    ['Chercher une pastille de couleur', 'Les pastilles indiquent le genre des romans. Lina vient de te le dire : ici, il n’y en a pas. Que lit-on sur le dos d’un documentaire ?'],
+    ['Suivre les nombres sur les dos', 'Sur le dos, les nombres se suivent : 520 les étoiles, 550 la Terre, 551 les volcans et les séismes… Plus le nombre est long, plus le sujet est précis.', 'lina4'],
+    ['Suivre l’ordre des titres', 'Les documentaires ne sont pas rangés par titre : deux livres sur les volcans seraient séparés. Par quoi sont-ils rangés, et comment est-ce noté sur le dos ?'],
+  ]);
+D('lina4', 'lina-cote.jpg', 'Lina : « J’ai trouvé Tout sur les volcans ! Mais sur le dos, il y a écrit ça… » L’étiquette au dos du livre indique 551.21 MON.',
+  'Lina te demande ce que veut dire « MON ». Que lui expliques-tu ?', [
+    ['C’est le début du nom de l’auteur', '551.21, c’est le sujet : les volcans. MON, ce sont les 3 premières lettres du nom de l’auteur : Paul Monnier.', 'lina5'],
+    ['C’est le début du titre du livre', 'Le titre est « Tout sur les volcans » : il commencerait par TOU. Le titre n’apparaît jamais dans la cote. À qui renvoient ces 3 lettres ?'],
+    ['C’est le début du sujet', 'Le sujet est déjà donné par le nombre : 551.21, les volcans. Les lettres donnent une autre information. Laquelle ?'],
+  ]);
+D('lina5', 'lina-magazine.jpg', 'Lina montre un magazine, « Le Mag des curieux » : « Regarde : ce magazine a tout un dossier sur les volcans. Je peux m’en servir aussi ? »',
+  'Lina a trouvé un magazine en plus du livre. Que lui conseilles-tu ?', [
+    ['Écarter le magazine', 'Un magazine est aussi une ressource documentaire : ses articles parlent du monde réel, et souvent de l’actualité. Pourquoi se priver d’une deuxième source ?'],
+    ['Garder seulement le magazine', 'Le dossier du magazine est court : il ne suffira pas pour tout un exposé. Et le livre qu’elle vient de trouver ? Que gagne-t-on à utiliser les deux ?'],
+    ['Utiliser les deux ensemble', 'Le livre documentaire explique en détail, le magazine apporte un dossier récent : ce sont deux ressources documentaires qui se complètent.', 'linaFin'],
+  ]);
+I('linaFin', 'lina-contente.jpg', 'Lina tient « Tout sur les volcans », de Paul Monnier : « Merci ! Avec tout ça, mon exposé va être explosif ! »', 'linaFin2');
+T('linaFin2', 'Lina emprunte son livre <strong>à son nom</strong> et file préparer son exposé.<br><br>Tu l’as orientée vers une <strong>ressource documentaire</strong>, tu as trouvé le bon <strong>domaine</strong>, puis le bon <strong>nombre</strong>. Mission réussie !', 'carrefour');
 
-/* ---------- Noé : toutes les lectures comptent, la famille BD, un pas plus loin ---------- */
-I('noe1', 'noe-arrive.jpg', 'Noé : « La prof veut qu’on emprunte un livre… Mais moi, je ne lis que des mangas. »', 'noe2');
-Q('noe2', 'Noé ne lit que des mangas. <strong>Que lui réponds-tu ?</strong>', [
-  ['Les mangas, ça ne compte pas : il faut prendre un vrai roman.', 'noe2a'],
-  ['Les mangas, c’est de la lecture ! Le CDI en a tout un rayon, viens.', 'noe3'],
-  ['Prends le livre le plus fin du CDI, tu auras vite terminé.', 'noe2b'],
-]);
-T('noe2a', 'Noé se renfrogne. Pourtant, <strong>toutes les lectures comptent</strong> : c’est même l’un des droits du lecteur, « le droit de lire n’importe quoi ».<br><br>C’est en lisant ce qu’on aime qu’on prend goût à lire.', 'noe3');
-T('noe2b', 'Noé prend un livre tout fin… et s’ennuie dès la première page.<br><br>Un livre court n’est pas forcément un livre qui plaît. Mieux vaut <strong>partir de ce qu’il aime déjà</strong> : les mangas.', 'noe3');
-I('noe3', 'noe-manga.jpg', 'Noé, devant le rayon BD et mangas : « J’ai adoré One Piece ! Les pirates, les trésors, les bateaux… Mais j’ai déjà lu tous ceux du CDI. »', 'noe4');
-Q('noe4', 'Au CDI, <strong>dans quelle famille de documents range-t-on les mangas ?</strong>', [
-  ['La bande dessinée, avec la BD et le roman graphique.', 'noe5'],
-  ['Les ressources documentaires, avec les magazines.', 'noe4a'],
-  ['La littérature, avec le théâtre et la poésie.', 'noe4b'],
-]);
-T('noe4a', 'Les ressources documentaires servent à s’informer sur le monde réel.<br><br>Un manga raconte une histoire en images : il fait partie de la famille <strong>bande dessinée</strong>, avec la BD et le roman graphique.', 'noe5');
-T('noe4b', 'La littérature raconte des histoires avec des mots seulement.<br><br>Un manga raconte en images, dans des cases : il fait partie de la famille <strong>bande dessinée</strong>.', 'noe5');
-Q('noe5', 'Noé a déjà lu tous les <em>One Piece</em> du CDI. <strong>Que lui proposes-tu pour la suite ?</strong>', [
-  ['Un dictionnaire : il y apprendra plein de mots nouveaux.', 'noe5a'],
-  ['Un autre manga d’aventure : il reste dans ce qu’il aime lire.', 'noe5b'],
-  ['Un roman d’aventure avec des pirates : un pas plus loin.', 'noe5c'],
-]);
-T('noe5a', 'Noé soupire. Dans un dictionnaire, on cherche un mot : ce n’est pas une histoire de pirates !<br><br><strong>Pars plutôt de ce qu’il aime.</strong>', 'noe5');
-T('noe5b', 'Bonne idée : Noé lit, et il aime ça. Il note un nouveau manga pour plus tard.<br><br>Et tu lui glisses une piste, <strong>un pas plus loin</strong> : un roman d’aventure avec des pirates…', 'noe6');
-T('noe5c', 'Bien vu : tu pars de <strong>ce qu’il aime</strong> (les pirates) pour l’emmener <strong>un pas plus loin</strong>.<br><br>C’est exactement ce que montrent les cartes des genres exposées au CDI.', 'noe6');
-I('noe6', 'noe-content.jpg', 'Noé tient « L’Île au trésor », de R. L. Stevenson : « Des pirates et un trésor ? Je prends ! »', 'noeFin');
-T('noeFin', 'Noé emprunte <em>L’Île au trésor</em>, à son nom.<br><br>Et s’il ne l’aime pas ? Il a le droit de ne pas le finir et d’en choisir un autre. <strong>Mission réussie !</strong>', 'carrefour');
+/* ---------- Noé : toutes les lectures comptent, écouter, un pas plus loin, le droit d'arrêter ---------- */
+I('noe0', 'fiche-noe.jpg', 'Fiche de Noé, 6e C. Sa professeure demande à chaque élève d’emprunter un livre. Il ne lit que des mangas et a lu tous les One Piece du CDI. Il pense que « les mangas, ça ne compte pas », a peur des gros livres sans images et adore les histoires de pirates.', 'noe1');
+D('noe1', 'noe-arrive.jpg', 'Noé : « La prof veut qu’on emprunte un livre… Mais moi, je ne lis que des mangas. Et les mangas, ça ne compte pas. »',
+  'Que réponds-tu à Noé ?', [
+    ['L’emmener au rayon des mangas', 'Les mangas font partie de la famille bande dessinée, et le CDI en a tout un rayon. Toutes les lectures comptent : c’est même l’un des droits du lecteur.', 'noe2'],
+    ['Lui conseiller un vrai roman', 'Noé baisse la tête : tu viens de confirmer que ses lectures « ne comptent pas ». Est-ce vrai ? Dans quelle famille de documents le CDI range-t-il les mangas ?'],
+    ['Chercher le livre le plus fin', 'Noé prend un livre tout fin et s’ennuie dès la première page. Un livre court n’est pas forcément un livre qui plaît. De quelles lectures pourrais-tu partir ?'],
+  ]);
+D('noe2', 'noe-manga.jpg', 'Noé, devant le rayon BD et mangas : « Tu es sûr que j’ai le droit ? Bon… Le problème, c’est que j’ai déjà lu tous les One Piece du CDI. »',
+  'Noé a déjà tout lu. Que fais-tu ?', [
+    ['Lui dire de relire One Piece', 'Relire est un droit du lecteur ! Mais ce n’est pas ce que Noé te demande : il cherche du nouveau. Comment savoir ce qui lui plairait autant ?'],
+    ['Proposer un grand classique célèbre', 'Souviens-toi de sa fiche : Noé a peur des gros livres sans images. Le saut est trop grand. Que faut-il savoir avant de lui proposer autre chose ?'],
+    ['Demander ce qu’il aime dans One Piece', 'Pour trouver un livre qui lui plaira autant, il faut savoir ce qu’il aime dans celui-là : les personnages ? l’humour ? l’aventure ?', 'noe3'],
+  ]);
+D('noe3', 'noe-aime.jpg', 'Noé : « Ce que j’aime dans One Piece ? Les pirates, les trésors, et l’équipage qui reste soudé dans l’aventure ! »',
+  'Que lui proposes-tu ?', [
+    ['Un documentaire sur les bateaux', 'Le sujet est proche, mais Noé aime qu’on lui raconte une aventure, pas qu’on lui explique comment flotte un navire. Quel genre de roman raconte des voyages et des dangers ?'],
+    ['Un roman d’aventure de pirates', 'Tu pars de ce qu’il aime (les pirates, l’aventure) pour l’emmener un pas plus loin : c’est ce que montrent les cartes des genres exposées au CDI.', 'noe4'],
+    ['Un roman de science-fiction', 'La science-fiction, c’est le futur et la technologie. Relis ce que Noé vient de dire : pirates, trésors, équipage. Quel genre y ressemble le plus ?'],
+  ]);
+D('noe4', 'noe-doute.jpg', 'Noé tient « L’Île au trésor » : « Un roman, sans images ? Et si je n’aime pas… je serai obligé de le finir ? »',
+  'Noé hésite. Que lui dis-tu ?', [
+    ['Promettre qu’il va adorer', 'Tu n’en sais rien : personne ne peut promettre qu’un livre plaira. Et s’il s’ennuie, il ne te croira plus. Que peut faire un lecteur quand un livre ne lui plaît pas ?'],
+    ['Dire qu’on finit toujours un livre', 'Noé repose le livre aussitôt : tu viens de lui faire encore plus peur. Est-on vraiment obligé de finir ? Souviens-toi des droits du lecteur.'],
+    ['Rappeler qu’il peut arrêter', '« Le droit de ne pas finir un livre » est un droit du lecteur. S’il n’aime pas, Noé le rapporte et en choisit un autre.', 'noeFin'],
+  ]);
+I('noeFin', 'noe-content.jpg', 'Noé, avec « L’Île au trésor », de R. L. Stevenson : « Alors je tente ! Des pirates et un trésor, ça me va. »', 'noeFin2');
+T('noeFin2', 'Noé emprunte <em>L’Île au trésor</em>, <strong>à son nom</strong>.<br><br>Tu lui as montré que <strong>ses lectures comptent</strong>, tu es parti de <strong>ce qu’il aime</strong>, et tu l’as rassuré. Mission réussie !', 'carrefour');
 
 /* ---------- Carrefour ---------- */
-Q('carrefour', 'Bravo ! <strong>Qui veux-tu aider maintenant ?</strong>', [
-  ['Sam, qui ne sait pas quoi lire', 'sam1'], ['Lina, qui prépare un exposé', 'lina1'], ['Noé, qui ne lit que des mangas', 'noe1'],
-  ['J’ai aidé tout le monde : je retourne en cours.', -1, ['Conseiller du CDI !', 'Pour bien conseiller : écouter ce que l’autre aime, choisir le bon type de document, repérer le rayon grâce à la cote. À toi de jouer, en vrai !']],
+Q('carrefour', 'Qui veux-tu aider maintenant ?', [
+  { text: 'Sam, qui ne sait pas quoi lire', next: 'sam0', feedback: { title: '', subtitle: '' } },
+  { text: 'Lina, qui prépare un exposé', next: 'lina0', feedback: { title: '', subtitle: '' } },
+  { text: 'Noé, qui ne lit que des mangas', next: 'noe0', feedback: { title: '', subtitle: '' } },
+  { text: 'J’ai aidé tout le monde', next: -1, feedback: { title: '<p>Conseiller du CDI !</p>', subtitle: '<p>Pour bien conseiller : écouter, partir de ce que l’autre aime, choisir le bon type de document, trouver le rayon grâce à la cote. À toi de jouer, en vrai !</p>', image: img('ok.jpg') } },
 ]);
 
 /* ---------- Numérotation et contrôle du graphe ---------- */
@@ -143,15 +175,16 @@ if (reached.size !== content.length) throw new Error(`nœuds jamais atteints : $
 
 fs.writeFileSync(OUT, JSON.stringify({ branchingScenario: {
   title: 'Conseiller un ami',
-  startScreen: { startScreenTitle: '<p>Mission : conseiller un ami</p>', startScreenSubtitle: '<p>Trois amis cherchent un livre au CDI. Écoute-les, aide-les à se décider, et trouve le bon rayon.</p>' },
+  startScreen: { startScreenTitle: '<p>Mission : conseiller un ami</p>', startScreenSubtitle: '<p>Jeu de simulation au CDI</p>',
+    startScreenImage: img('intro.jpg', 1200, 675), startScreenAltText: 'Sam, Lina et Noé au CDI' },
   endScreens: [{ endScreenTitle: '<p>Mission accomplie</p>', endScreenSubtitle: '<p>Recommence pour explorer d’autres chemins.</p>', contentId: -1, endScreenScore: 0 }],
   content,
   scoringOptionGroup: { scoringOption: 'no-score', includeInteractionsScores: false },
   behaviour: { enableBackwardsNavigation: true, forceContentFinished: false, randomizeBranchingQuestions: false },
   l10n: {
-    startScreenButtonText: 'Commencer', endScreenButtonText: 'Recommencer', backButtonText: 'Revenir en arrière',
+    startScreenButtonText: 'Commencer le jeu', endScreenButtonText: 'Recommencer', backButtonText: 'Revenir en arrière',
     disableProceedButtonText: 'Termine d’abord cette étape', replayButtonText: 'Revoir la vidéo', scoreText: 'Ton score :',
     fullscreenAria: 'Plein écran',
   },
 } }));
-console.log('nœuds', content.length);
+console.log('nœuds', content.length, 'décisions', names.filter((n) => n.endsWith('?')).length);
