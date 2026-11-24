@@ -437,7 +437,7 @@ const ch8 = chapter('8. Je vérifie avant la mission', [
 ]);
 
 /* ===== Ch.9 La mission ⭐ : Branching Scenario « Conseiller un ami » en cadre (sources : scenario/) ===== */
-const RAW_MISSION = 'https://raw.githubusercontent.com/Absconses/h5p-lumi/main/partage/decouvrir-le-cdi/conseiller-un-ami.h5p';
+const RAW_MISSION = 'https://raw.githubusercontent.com/Absconses/h5p-lumi/main/partage/decouvrir-le-cdi/conseiller-un-ami-v2.h5p';
 const MISSION = `https://h5p-offline-player.vercel.app/embed?src=${RAW_MISSION}`;
 const MISSION_GRAND = `https://h5p-offline-player.vercel.app/embed?src=${encodeURIComponent(RAW_MISSION)}&custom-css=${encodeURIComponent(CSS)}`;
 const ch9 = chapter('9. ⭐ Ma mission', [

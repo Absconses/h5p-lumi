@@ -1,7 +1,10 @@
-// Rend les scènes du scénario « Conseiller un ami » : node bs-render.mjs <scene.html> <dossier_sortie>
+// Rend les scènes du scénario « Conseiller un ami » : node bs-render.mjs <scene.html> <dossier_sortie> [<dossier_fonds> [scène,scène…]]
+// <dossier_fonds> : illustrations Canva sans texte (fond-<scène>.jpg). Si le fond existe, il remplace le décor
+// dessiné ; bulles, couvertures et cotes restent superposées en HTML (texte modifiable).
 import { chromium } from 'playwright-core';
 import path from 'path';
-const [HTML, OUT] = process.argv.slice(2);
+import fs from 'fs';
+const [HTML, OUT, BG, ONLY] = process.argv.slice(2);
 const SAM = { face: '👦', color: '#e76f51', name: 'Sam' };
 const LINA = { face: '👧', color: '#2a9d8f', name: 'Lina' };
 const NOE = { face: '🧒', color: '#457b9d', name: 'Noé' };
@@ -47,6 +50,10 @@ const SCENES = {
 const b = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium' });
 const pg = await b.newPage({ viewport: { width: 1200, height: 675 } });
 for (const [name, p] of Object.entries(SCENES)) {
+  if (ONLY && !ONLY.split(',').includes(name)) continue;
+  const fond = BG && path.resolve(BG, `fond-${name}.jpg`);
+  if (fond && fs.existsSync(fond)) { p.bg = `file://${fond}`; if (p.who) p.tag = [40, 600, p.who.name]; }
+  if (p.fiche && BG && fs.existsSync(path.resolve(BG, `portrait-${p.fiche.who.name}.jpg`))) p.fiche.pic = `file://${path.resolve(BG, `portrait-${p.fiche.who.name}.jpg`)}`;
   await pg.goto('about:blank');
   await pg.goto(`file://${path.resolve(HTML)}#${encodeURIComponent(JSON.stringify(p))}`);
   await pg.waitForFunction(() => window.ready);

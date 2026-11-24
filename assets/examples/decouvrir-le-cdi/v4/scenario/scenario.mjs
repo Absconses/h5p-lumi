@@ -4,7 +4,8 @@
 // scènes. À chaque scène, l'élève choisit un COMPORTEMENT (libellé court). Mauvais choix : un écran
 // dit pourquoi et pose une question, puis on revient au même choix (on n'avance pas). Bon choix :
 // un écran dit pourquoi, puis scène suivante. « Revoir la scène » relance l'image (ou la vidéo).
-// Pour passer aux vidéos : remplacer I(...) par un nœud H5P.Video, sans toucher au graphe.
+// Vidéos : VIDEOS=1 node scenario.mjs … remplace chaque scène où un ami parle par un nœud H5P.Video
+// (videos/<scène>.mp4, affiche images/<scène>.jpg, préparés par video-build.mjs), sans toucher au graphe.
 import fs from 'fs';
 import { text, image, sub } from './fr.mjs';
 const [OUT] = process.argv.slice(2);
@@ -17,13 +18,25 @@ const base = (type, extra = {}) => ({
 const img = (file, w = 400, h = 400) => ({ path: `images/${file}`, mime: 'image/jpeg', width: w, height: h, copyright: { license: 'U' } });
 const T = (name, html, next) => { N[name] = base(text(`<p style="font-size:1.15em">${html}</p>`, name), { next }); };
 const I = (name, file, alt, next, [w, h] = [1200, 675]) => { N[name] = base(image(`images/${file}`, w, h, alt, name), { next }); };
+const VIDEOS = !!process.env.VIDEOS;
+const V = (name, file, alt, next) => {
+  const k = file.replace(/\.jpg$/, '');
+  N[name] = base(sub('H5P.Video 1.6', {
+    sources: [{ path: `videos/${k}.mp4`, mime: 'video/mp4', copyright: { license: 'U' } }],
+    visuals: { poster: img(file, 1280, 720), fit: false, controls: true },
+    playback: { autoplay: true, loop: false },
+    l10n: { name: 'Vidéo', loading: 'Chargement de la vidéo…', noPlayers: 'Aucun lecteur ne peut lire cette vidéo.', noSources: 'La vidéo est introuvable.', aborted: 'La lecture a été interrompue.', networkFailure: 'Erreur de réseau.', cannotDecode: 'Impossible de décoder la vidéo.', formatNotSupported: 'Format de vidéo non pris en charge.', mediaEncrypted: 'Vidéo chiffrée.', unknownError: 'Erreur inconnue.', invalidYtId: 'Identifiant YouTube invalide.', unknownYtId: 'Vidéo YouTube introuvable.', restrictedYt: 'Le propriétaire de cette vidéo n’autorise pas son intégration.' },
+    a11y: [],
+  }, 'Video', alt.slice(0, 80)), { next });
+};
+const S = (name, file, alt, next) => (VIDEOS ? V : I)(name, file, alt, next); // scène où un ami parle
 const Q = (name, question, alts) => {
   N[name] = base(sub('H5P.BranchingQuestion 1.0', { branchingQuestion: { question: `<p>${question}</p>`, alternatives: alts } }, 'Branching Question', name));
 };
 /* Une décision : la scène `${k}`, puis le choix `${k}?`.
  * choix : [libellé, 'pourquoi + question'] = mauvaise piste ; [libellé, 'pourquoi', suite] = bonne piste. */
 const D = (k, scene, alt, question, choix, replay = k) => {
-  I(k, scene, alt, `${k}?`);
+  (scene === 'dewey.jpg' ? I : S)(k, scene, alt, `${k}?`);
   Q(`${k}?`, question, [
     ...choix.map(([label, why, next]) => (next
       ? { text: label, next, feedback: { title: `<p>Bonne piste (${label})</p>`, subtitle: `<p>${why}</p>`, image: img('ok.jpg') } }
@@ -89,7 +102,7 @@ D('lina1', 'lina-arrive.jpg', 'Lina montre un roman, « L’Enfant du volcan » 
     ['L’orienter vers un documentaire', 'Un roman raconte une histoire inventée. Pour un exposé, il faut une ressource documentaire : elle explique le monde réel.', 'lina2'],
     ['Proposer un dictionnaire', 'Le dictionnaire donnera la définition du mot « volcan » en trois lignes : c’est trop peu pour un exposé. Quel document explique un sujet en détail, avec des photos et des schémas ?'],
   ]);
-I('lina2', 'lina-rangement.jpg', 'Lina, devant les documentaires : « D’accord, il me faut un documentaire. Mais ici, il n’y a pas de pastilles… C’est rangé comment ? »', 'lina2b');
+S('lina2', 'lina-rangement.jpg', 'Lina, devant les documentaires : « D’accord, il me faut un documentaire. Mais ici, il n’y a pas de pastilles… C’est rangé comment ? »', 'lina2b');
 D('lina2b', 'dewey.jpg', 'Le système décimal Dewey : 000 informatique et généralités, 100 philosophie et psychologie, 200 religion, 300 sciences sociales, 400 langues, 500 sciences, 600 sciences appliquées, 700 arts, sports et loisirs, 800 littérature, 900 histoire et géographie.',
   'Tu lui montres le tableau des 10 domaines. Où chercher un livre qui explique les volcans ?', [
     ['En 900, histoire et géographie', 'Tentant : les volcans sont sur les cartes. Mais un livre qui explique comment fonctionne un volcan étudie la nature. Quel domaine étudie la nature ?'],
@@ -115,7 +128,7 @@ D('lina5', 'lina-magazine.jpg', 'Lina montre un magazine, « Le Mag des curieux 
     ['Garder seulement le magazine', 'Le dossier du magazine est court : il ne suffira pas pour tout un exposé. Et le livre qu’elle vient de trouver ? Que gagne-t-on à utiliser les deux ?'],
     ['Utiliser les deux ensemble', 'Le livre documentaire explique en détail, le magazine apporte un dossier récent : ce sont deux ressources documentaires qui se complètent.', 'linaFin'],
   ]);
-I('linaFin', 'lina-contente.jpg', 'Lina tient « Tout sur les volcans », de Paul Monnier : « Merci ! Avec tout ça, mon exposé va être explosif ! »', 'linaFin2');
+S('linaFin', 'lina-contente.jpg', 'Lina tient « Tout sur les volcans », de Paul Monnier : « Merci ! Avec tout ça, mon exposé va être explosif ! »', 'linaFin2');
 T('linaFin2', 'Lina emprunte son livre <strong>à son nom</strong> et file préparer son exposé.<br><br>Tu l’as orientée vers une <strong>ressource documentaire</strong>, tu as trouvé le bon <strong>domaine</strong>, puis le bon <strong>nombre</strong>. Mission réussie !', 'carrefour');
 
 /* ---------- Noé : toutes les lectures comptent, écouter, un pas plus loin, le droit d'arrêter ---------- */
@@ -144,7 +157,7 @@ D('noe4', 'noe-doute.jpg', 'Noé tient « L’Île au trésor » : « Un roman, 
     ['Dire qu’on finit toujours un livre', 'Noé repose le livre aussitôt : tu viens de lui faire encore plus peur. Est-on vraiment obligé de finir ? Souviens-toi des droits du lecteur.'],
     ['Rappeler qu’il peut arrêter', '« Le droit de ne pas finir un livre » est un droit du lecteur. S’il n’aime pas, Noé le rapporte et en choisit un autre.', 'noeFin'],
   ]);
-I('noeFin', 'noe-content.jpg', 'Noé, avec « L’Île au trésor », de R. L. Stevenson : « Alors je tente ! Des pirates et un trésor, ça me va. »', 'noeFin2');
+S('noeFin', 'noe-content.jpg', 'Noé, avec « L’Île au trésor », de R. L. Stevenson : « Alors je tente ! Des pirates et un trésor, ça me va. »', 'noeFin2');
 T('noeFin2', 'Noé emprunte <em>L’Île au trésor</em>, <strong>à son nom</strong>.<br><br>Tu lui as montré que <strong>ses lectures comptent</strong>, tu es parti de <strong>ce qu’il aime</strong>, et tu l’as rassuré. Mission réussie !', 'carrefour');
 
 /* ---------- Carrefour ---------- */
