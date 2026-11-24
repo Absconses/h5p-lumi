@@ -37,6 +37,7 @@
   .folder:before { content: 'FICHE'; position: absolute; left: 0; top: -40px; width: 230px; height: 44px; background: #ffc15a; border-radius: 16px 16px 0 0; font-weight: bold; font-size: 22px; letter-spacing: 3px; color: #7a4b00; padding: 9px 26px; }
   .folder .photo { position: absolute; left: 50px; top: 50px; width: 330px; background: #fff; padding: 18px 18px 12px; text-align: center; box-shadow: 4px 6px 0 rgba(0,0,0,.15); transform: rotate(-2deg); }
   .folder .photo .face { font-family: 'Noto Color Emoji'; font-size: 190px; line-height: 1.1; background: #eaf2f8; }
+  .folder .photo .pic { width: 294px; height: 210px; background-size: cover; background-position: center; }
   .folder .photo b { display: block; font-size: 30px; color: #1d3557; margin-top: 8px; }
   .folder .photo span { font-size: 21px; color: #555; }
   .folder .sit { position: absolute; left: 50px; top: 395px; width: 350px; font-size: 22px; line-height: 1.35; color: #3a2a00; }
@@ -49,6 +50,9 @@
   .title small { display: block; font-size: 30px; font-weight: normal; color: #444; margin-top: 14px; }
   .trio { position: absolute; left: 0; right: 0; bottom: 60px; display: flex; justify-content: center; gap: 30px; }
   .trio .who { position: static; width: 240px; }
+  /* fond illustré (Canva) : remplace mur, sol, étagères et personnage dessinés */
+  .bg { position: absolute; inset: 0; width: 1200px; height: 675px; object-fit: cover; }
+  .tag { position: absolute; background: #fff; border-radius: 14px; padding: 4px 16px; font-weight: bold; font-size: 24px; color: #1d3557; border: 3px solid #1d3557; }
 </style></head>
 <body>
 <div class="wall"></div><div class="floor"></div>
@@ -64,6 +68,10 @@ const shelf = (side, label, color) => {
 };
 const who = (w, style = '') => `<div class="who" style="${style}"><div class="face">${w.face}</div><div class="body" style="background:${w.color}"></div><div class="name">${w.name}</div></div>`;
 let h = '';
+if (P.fiche) P.bg = null;
+if (P.bg) { h += `<img class="bg" src="${P.bg}">`; P.shelves = false; delete P.who; }
+if (P.bg && P.signR) h += `<div class="sign" style="left:24px;top:18px;background:${P.colR || '#1d3557'};box-shadow:0 4px 0 rgba(0,0,0,.2)">${P.signR}</div>`;
+if (P.bg && P.tag) h += `<div class="tag" style="left:${P.tag[0]}px;top:${P.tag[1]}px">${P.tag[2]}</div>`;
 if (P.shelves !== false) h += shelf('l', P.signL, P.colL || '#1d3557') + shelf('r', P.signR, P.colR || '#1d3557');
 if (P.title) h += `<div class="title">${P.title}<small>${P.sub || ''}</small></div>`;
 if (P.trio) h += `<div class="trio">${P.trio.map((w) => who(w)).join('')}</div>`;
@@ -71,10 +79,10 @@ if (P.who) h += who(P.who, `left:${P.whoX ?? 150}px`);
 if (P.bubble) h += `<div class="bubble ${P.tail || 'tl'}" style="left:${P.bx ?? 390}px;top:${P.by ?? 70}px;width:${P.bw ?? 640}px">${P.bubble}</div>`;
 if (P.cover) h += `<div class="prop" style="left:${P.px ?? 840}px;top:${P.py ?? 330}px"><div class="cover" style="background:${P.cover.color}"><div class="e">${P.cover.e}</div><div class="t">${P.cover.t}</div><div class="a">${P.cover.a}</div></div></div>`;
 if (P.cote) h += `<div class="prop" style="left:${P.px ?? 760}px;top:${P.py ?? 380}px"><div class="cote">${P.cote}<small>${P.coteSub || ''}</small></div></div>`;
-if (P.fiche) { const f = P.fiche; h = `<div class="folder"><div class="photo"><div class="face">${f.who.face}</div><b>${f.who.name}</b><span>${f.classe}</span></div><div class="sit"><b>Sa demande :</b><br>${f.demande}</div><div class="sheet"><h2>Ce que tu sais de ${f.who.name}</h2><h3>SES LECTURES</h3><ul>${f.lectures.map((x) => `<li>${x}</li>`).join('')}</ul><h3>CE QU’IL FAUT SAVOIR</h3><ul>${f.savoir.map((x) => `<li>${x}</li>`).join('')}</ul></div></div>`; }
+if (P.fiche) { const f = P.fiche; h = `<div class="folder"><div class="photo">${f.pic ? `<div class="pic" style="background-image:url(${f.pic})"></div>` : `<div class="face">${f.who.face}</div>`}<b>${f.who.name}</b><span>${f.classe}</span></div><div class="sit"><b>Sa demande :</b><br>${f.demande}</div><div class="sheet"><h2>Ce que tu sais de ${f.who.name}</h2><h3>SES LECTURES</h3><ul>${f.lectures.map((x) => `<li>${x}</li>`).join('')}</ul><h3>CE QU’IL FAUT SAVOIR</h3><ul>${f.savoir.map((x) => `<li>${x}</li>`).join('')}</ul></div></div>`; }
 const cov = (c, x, y) => `<div class="prop" style="left:${x}px;top:${y}px"><div class="cover" style="background:${c.color}"><div class="e">${c.e}</div><div class="t">${c.t}</div><div class="a">${c.a}</div></div></div>`;
 if (P.covers) h += P.covers.map((c, i) => cov(c, 640 + i * 250, 310)).join('');
 document.getElementById('root').innerHTML = h;
-document.fonts.ready.then(() => { window.ready = true; });
+Promise.all([document.fonts.ready, ...(P.fiche && P.fiche.pic ? [new Promise((r) => { const i = new Image(); i.onload = i.onerror = r; i.src = P.fiche.pic; })] : []), ...[...document.images].map((i) => i.decode().catch(() => {}))]).then(() => { window.ready = true; });
 </script>
 </body></html>

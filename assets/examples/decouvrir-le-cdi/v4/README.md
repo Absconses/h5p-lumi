@@ -24,3 +24,17 @@ python3 ../../../../scripts/audit-reponses.py out/decouvrir-le-cdi-v4.h5p   # 0 
 
 - `pack.py` ignore `H5P.DragQuestionDropzone 0.1` : c'est un nom de zone interne à DragQuestion, pas une bibliothèque. La déclarer ferait échouer l'installation sur Nuage.
 - Image Slider : `imageSlides` est une liste à un seul champ, donc chaque élément **est** l'objet `H5P.ImageSlide`. Envelopper chaque élément dans `{ imageSlide: … }` fait planter le diaporama (« reading 'addClass' »).
+
+## Mission « Conseiller un ami » avec vidéos
+
+Les 17 scènes où un ami parle sont des clips de 6 s générés dans Google Flow (style papier découpé), un par scène.
+
+```bash
+node scenario/video-build.mjs <dossier_clips> <map.json> out/      # sous-titre incrusté, 720p léger, affiche → out/videos, out/images
+node scenario/bs-render.mjs scenario/scene.html out/images <dossier_portraits> fiche-sam,fiche-lina,fiche-noe   # fiches avec portrait-<Nom>.jpg
+VIDEOS=1 node scenario/scenario.mjs <paquet>/content/content.json  # les scènes deviennent des nœuds H5P.Video 1.6
+```
+
+- La réplique complète est incrustée en bas de chaque clip : Flow coupe parfois la fin de la phrase, et les postes du CDI n'ont pas toujours le son.
+- Le paquet publié change de nom à chaque version (`conseiller-un-ami-v2.h5p`) : le lecteur hors ligne garde un paquet en cache par URL.
+- Chromium sans codecs (Playwright) ne lit pas le H.264 : `play-tout.mjs` vérifie le graphe et le chargement, pas la lecture.
