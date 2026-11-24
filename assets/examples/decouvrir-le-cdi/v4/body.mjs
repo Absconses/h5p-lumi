@@ -61,10 +61,30 @@ const dragOnImage = (imgName, labels, title, intro) => {
 
 /* ================= COUVERTURE ================= */
 const cover = `<h2 style="text-align:center">🔎 Découvrir le CDI</h2>
-<p style="text-align:center">Le CDI, c’est un endroit pour se repérer… et pour découvrir <strong>ce que tu aimes lire</strong>.</p>
-<p style="text-align:center"><strong>🎯 Ta mission, à la fin de cette heure :</strong> repartir avec <strong>un roman qui te tente</strong> et <strong>un documentaire sur une de tes passions</strong>.</p>
-<p style="text-align:center">⭐ étape indispensable pour la mission (si tu es en retard, fais-la en priorité) · 🌿 chemin buissonnier</p>
+<p style="text-align:center">Le CDI, c’est un endroit pour se repérer… et pour trouver <strong>le bon livre</strong>, pour toi comme pour les autres.</p>
+<p style="text-align:center"><strong>🎯 Ta mission, à la fin de cette heure :</strong> aider un ami à <strong>choisir un livre</strong> et à <strong>le trouver dans les rayons</strong>.</p>
 <p style="text-align:center"><em>EMI · 6e · environ 1 heure · 10 étapes</em></p>`;
+
+/* ===== Page d'accueil : ce qui t'attend ===== */
+const ch0 = chapter('🎯 Ce qui t’attend', [
+  text(`<h2 style="color:#1d3557">🎯 Ce qui t’attend</h2>
+${box(`<p style="font-size:1.1em"><strong>Ta mission :</strong> un ami ne sait pas quoi lire. À la fin de l’heure, tu sauras <strong>l’aider à se décider</strong>, puis <strong>trouver le livre dans les rayons</strong> du CDI.</p>`, '#fff6dd')}
+<h3>Pour y arriver, 4 temps</h3>
+<ol>
+<li><strong>🧭 Je me repère</strong> (étapes 1 à 4) : où est le CDI, à quoi il sert, tout ce qu’on y trouve, comment emprunter.</li>
+<li><strong>🔍 J’apprends à chercher</strong> (étapes 5 à 7) : lire la cote d’un livre, reconnaître un genre de roman, trouver un documentaire.</li>
+<li><strong>✅ Je vérifie</strong> (étape 8) : un petit test pour savoir si tu es prêt·e.</li>
+<li><strong>🎯 Ma mission</strong> (étape 9) : tu conseilles ton ami et tu trouves son livre.</li>
+</ol>
+<h3>Dans chaque étape</h3>
+<ul>
+<li>🔍 <strong>Je découvre</strong> : je regarde et je clique, rien à répondre.</li>
+<li>🤝 <strong>Je m’entraîne</strong> : j’essaie, avec de l’aide si besoin.</li>
+<li>✋ <strong>Je fais seul·e</strong> : je montre que j’ai compris.</li>
+<li>📌 <strong>Je retiens</strong> : l’essentiel à garder en tête.</li>
+</ul>
+<p>⭐ = étape indispensable pour la mission (si tu es en retard, fais-la en priorité) · 🌿 = chemin buissonnier, pour le plaisir.</p>`, 'Ce qui t’attend'),
+]);
 
 /* ===== Ch.1 Où est le CDI ? ===== */
 const ch1 = chapter('1. Où est le CDI ?', [
@@ -421,22 +441,33 @@ const field = (task, ph, rows = '1') => sub('H5P.TextInputField 1.2', { taskDesc
 const dtext = (html) => sub('H5P.Text 1.1', { text: html }, 'Text', 'Texte');
 const page = (title, elements, helpText) => sub('H5P.StandardPage 1.5', { elementList: elements, helpTextLabel: 'Besoin d’aide ?', ...(helpText ? { helpText } : {}) }, 'Standard page', title);
 const parcours = sub('H5P.DocumentationTool 1.8', {
-  taskDescription: 'Ma mission : un roman, un documentaire',
+  taskDescription: 'Ma mission : conseiller un ami',
   pagesList: [
-    page('1. Mon roman', [
-      dtext('<p>Dans les rayons, trouve un roman d’un <strong>genre que tu aimes</strong> (ou qui te tente).</p>'),
-      field('Prénom, nom et classe :', 'Léa Martin, 6e B'),
-      field('Titre et auteur du roman :', '« … », de …'),
-      field('Sa cote :', 'pastille + 3 lettres'),
-      field('Et après ? Le prochain livre que j’ai envie de lire dans ce genre :', 'le livre suivant sur la carte, le même auteur…'),
-    ], '<p>La cote est collée en bas du dos : la pastille de couleur et les 3 premières lettres du nom de l’auteur.</p>'),
-    page('2. Mon documentaire', [
-      dtext('<p>Trouve un <strong>documentaire</strong> sur une de tes passions.</p>'),
-      field('Ma passion :', 'le foot, les chats, l’espace…'),
-      field('Titre du documentaire et son nombre Dewey :', '« … », 796'),
-    ], '<p>Cherche ta passion sur le tableau des domaines Dewey (étape 7) : il te donne le domaine, puis va au rayon qui porte ce nombre.</p>'),
+    page('1. J’écoute mon ami', [
+      dtext('<p>Choisis un ami : ton voisin, ta voisine, ou un ami à qui tu penses. Pose-lui des questions sur ce qu’il aime.</p>'),
+      field('Mon prénom, mon nom et ma classe :', 'Léa Martin, 6e B'),
+      field('Le prénom de mon ami :', 'Tom'),
+      field('Ce qu’il aime (un livre, un film, un jeu, une passion…) :', 'les enquêtes, les chats, le foot…', '3'),
+      field('Il a envie d’une histoire inventée (roman) ou de découvrir le monde réel (documentaire) ?', 'un roman / un documentaire'),
+    ], '<p>Pose des questions simples : « Quel livre ou quel film tu as adoré ? », « Qu’est-ce qui te passionne ? », « Tu préfères qu’on te raconte une histoire ou apprendre des choses vraies ? »</p>'),
+    page('2. Je l’aide à se décider', [
+      dtext('<p>À partir de ses réponses, propose-lui un <strong>genre</strong> de roman ou un <strong>domaine Dewey</strong>.</p>'),
+      field('Le genre ou le domaine que je lui propose :', 'enquête et policier / 500 Sciences…'),
+      field('Pourquoi ce choix lui correspond :', 'parce qu’il aime…', '2'),
+    ], '<p>Pour un roman, relis les indices des genres (étape 6). Pour un documentaire, cherche sa passion sur le tableau des 10 domaines (étape 7).</p>'),
+    page('3. Je trouve le livre', [
+      dtext('<p>Va dans les rayons et trouve <strong>un livre précis</strong> pour ton ami.</p>'),
+      field('Titre et auteur :', '« … », de …'),
+      field('Sa cote :', 'pastille + 3 lettres, ou nombre Dewey + 3 lettres'),
+      field('Un deuxième livre, au cas où le premier ne lui plairait pas :', '« … », de …'),
+    ], '<p>La cote est collée en bas du dos du livre (étape 5). Pour un roman : la pastille de couleur et les 3 premières lettres du nom de l’auteur. Pour un documentaire : le nombre Dewey et les 3 lettres.</p>'),
+    page('4. Mon conseil', [
+      dtext('<p>Écris ton conseil, comme sur un marque-page que tu glisserais dans le livre.</p>'),
+      field('Mon conseil :', '« Je te conseille … parce que tu aimes … »', '3'),
+      dtext('<p><em>Ton ami viendra l’emprunter lui-même, à son nom (étape 4) !</em></p>'),
+    ]),
     sub('H5P.DocumentExportPage 1.5', {
-      description: '<p>Bravo ! Clique sur <strong>Créer mon document</strong> pour voir ta fiche, puis <strong>Exporter</strong> pour le télécharger et le rendre à ton professeur.</p>',
+      description: '<p>Bravo ! Clique sur <strong>Créer mon document</strong> pour voir ta fiche, puis <strong>Exporter</strong> pour la télécharger et la rendre à ton professeur.</p>',
       createDocumentLabel: 'Créer mon document', submitTextLabel: 'Envoyer', submitSuccessTextLabel: 'Ta fiche a été envoyée !',
       selectAllTextLabel: 'Tout sélectionner', exportTextLabel: 'Exporter', helpTextLabel: 'Besoin d’aide ?',
       requiresInputErrorMessage: 'Des champs sont encore vides sur ces pages : @pages',
@@ -446,8 +477,8 @@ const parcours = sub('H5P.DocumentationTool 1.8', {
 }, 'Documentation Tool', 'Ma mission');
 
 const ch9 = chapter('9. ⭐ Ma mission', [
-  text(`<h2 style="color:#1d3557">🎯 Ma mission · Un roman, un documentaire</h2><p style="color:#555555"><em>⏱ environ 10 minutes · dans les rayons</em></p>
-<p>Pars dans les rayons et reviens avec <strong>un roman qui te tente</strong> et <strong>un documentaire sur ta passion</strong>. Note-les ci-dessous, puis exporte ta fiche.</p>`, 'Intro'),
+  text(`<h2 style="color:#1d3557">🎯 Ma mission · Conseiller un ami</h2><p style="color:#555555"><em>⏱ environ 15 minutes · dans les rayons</em></p>
+<p>Un ami ne sait pas quoi lire. <strong>Écoute-le</strong>, <strong>aide-le à se décider</strong>, puis <strong>trouve son livre</strong> dans les rayons. Remplis ta fiche page par page, puis exporte-la.</p>`, 'Intro'),
   parcours,
 ]);
 
@@ -515,6 +546,6 @@ ${process.env.NOMAPS ? '' : `<p>Chacune de ces cartes dessine un <strong>parcour
 const book = clone(tpl);
 book.showCoverPage = true;
 book.bookCover = { coverDescription: cover, coverMedium: image('carte-mentale-cdi.jpg', 'Le CDI, un espace informationnel', 'Couverture') };
-book.chapters = [ch1, ch2, chFam, ch4, ch5, ch6, ch7, ch8, ch9, ch10, chBookflix];
+book.chapters = [ch0, ch1, ch2, chFam, ch4, ch5, ch6, ch7, ch8, ch9, ch10, chBookflix];
 fs.writeFileSync(OUT, JSON.stringify(book));
 console.log('OK', book.chapters.length, 'chapitres');
