@@ -290,15 +290,6 @@ const roadmap = ([g, f]) => [
   }, 'Image Slider', `Zoom ${g}`),
 ];
 const EMO = { policier: '🕵️', fantasy: '🐉', fantastique: '👻', sf: '🚀', aventure: '🧭', romance: '💗', mythes: '🏛️', humour: '😂', societe: '🏙️', classique: '🖋️' };
-const ch6bis = chapter('6 bis. 🌿 Les cartes des genres', [
-  text(`<h2 style="color:#2d6a4f">🌿 Chemin buissonnier · Les cartes des genres</h2><p style="color:#555555"><em>⏱ le temps que tu veux · rien n’est noté</em></p>
-<p>Et si tu voyais tes lectures comme un <strong>voyage</strong> ?</p>
-<p>Chacune de ces cartes dessine un <strong>parcours de lecteur</strong> à travers un genre : des îles les plus accessibles (niveau 1, souvent des BD) jusqu’au continent des grands textes (niveau 4).</p>
-<p><strong>Choisis une ou deux cartes de genres que tu aimes</strong>, et clique sur l’île où tu te situes. Il n’y a <strong>pas de mauvaise réponse</strong> : le niveau 1 n’est pas « pour les petits », c’est un point de départ. Si l’envie t’en prend, la carte te montre où aller ensuite.</p>
-<p>Sous chaque carte, les flèches font un <strong>zoom</strong> pour lire les titres. Et ces cartes t’attendent aussi <strong>en vrai, sur la table d’exposition du CDI</strong>.</p>`, 'Intro cartes'),
-  ...MAPS.flatMap(([g, f]) => [text(`<h3>${EMO[f]} ${g[0].toUpperCase() + g.slice(1)}</h3>`, `Titre ${g}`), ...roadmap([g, f])]),
-]);
-
 /* ===== Ch.6 Les genres ⭐ ===== */
 // Positions des mots-indices sur la 4e dessinée par quatrieme.py
 const Q4 = JSON.parse(fs.readFileSync(new URL('./quatrieme.json', import.meta.url), 'utf8'));
@@ -307,7 +298,7 @@ const ch6 = chapter('6. ⭐ Trouver ses genres préférés', [
 ${accroche('Tu as aimé un livre ? Le plus beau, c’est de trouver le suivant.')}
 <p>Au CDI, les romans sont classés par <strong>genre</strong>. Savoir reconnaître un genre, c’est le premier pas pour trouver <strong>les livres qui te ressemblent</strong>.</p>`, 'Intro'),
   text(decouvre(`<p>Voici la <strong>quatrième de couverture</strong> d’un roman (le dos du livre). Lis-la, puis enquête avec moi.</p>
-<p>Les mots <strong>surlignés en jaune</strong> sont des <strong>indices</strong>. Pour chacun, <strong>devine d’abord</strong> ce qu’il t’apprend, puis clique sur le <strong>?</strong> pour vérifier. Termine par le <strong>?</strong> du tampon « Genre ».</p>`), 'Je découvre'),
+<p>Les mots <strong>surlignés en jaune</strong> sont des <strong>indices</strong>. Clique sur le <strong>?</strong> à côté de chacun : je te montre ce qu’il nous apprend. Termine par le <strong>?</strong> du tampon « Genre ».</p>`), 'Je découvre'),
   sub('H5P.ImageHotspots 1.10', {
     image: file('quatrieme-kepler.jpg'),
     backgroundImageAltText: 'Quatrième de couverture du roman « Cap sur Kepler » : En 2150, la Terre est devenue trop chaude pour y vivre. Lina, douze ans, embarque à bord d’un immense vaisseau en route vers une nouvelle planète. Mais le robot qui pilote le navire se met à désobéir…',
@@ -358,18 +349,35 @@ ${accroche('Tu as aimé un livre ? Le plus beau, c’est de trouver le suivant.'
   text(retiens('<p>Pour reconnaître un genre, j’observe <strong>la pastille</strong>, <strong>l’illustration</strong>, <strong>le titre</strong>, et je lis <strong>la quatrième de couverture</strong> pour y repérer des <strong>mots-indices</strong>.</p>'), 'Je retiens'),
 ]);
 
+/* Exemples de sujets par domaine (hotspots sur dewey.jpg, 694 x 423, en % : coin haut droit de chaque carte) */
+const DEWEY_EX = [
+  [17, 26, '000 · Informatique, généralités', 'Les <strong>encyclopédies</strong> (030), les livres sur <strong>Internet et l’informatique</strong> (004) : des savoirs sur tout, ou sur l’information elle-même.'],
+  [35, 26, '100 · Philosophie et psychologie', 'Les <strong>émotions</strong> et la confiance en soi (152), les <strong>grandes questions</strong> : qu’est-ce que le bonheur, la liberté ?'],
+  [53, 26, '200 · Religion', 'Les <strong>religions du monde</strong>, et la <strong>mythologie</strong> : les dieux de l’Olympe sont en 292.'],
+  [71, 26, '300 · Sciences sociales', 'La vie en société : les <strong>droits de l’enfant</strong> (323), l’école, l’argent, la justice, les métiers.'],
+  [89, 26, '400 · Langues', 'Apprendre une langue : la <strong>grammaire du français</strong> (440), l’<strong>anglais</strong> (420), l’espagnol (460)…'],
+  [17, 64, '500 · Sciences', 'La nature et l’univers : les <strong>étoiles et planètes</strong> (520), les <strong>volcans</strong> (551), les <strong>animaux sauvages</strong> (590).'],
+  [35, 64, '600 · Sciences appliquées (techniques)', 'Les savoir-faire pratiques : le <strong>corps et la santé</strong> (610), les <strong>animaux de compagnie</strong> (636), la <strong>cuisine</strong> (641).'],
+  [53, 64, '700 · Arts, sports et loisirs', 'Le <strong>dessin</strong> et la BD expliquée (741), la <strong>musique</strong> (780), les <strong>sports</strong>, dont le foot (796).'],
+  [71, 64, '800 · Littérature', 'Des textes étudiés pour eux-mêmes : <strong>poésie</strong>, <strong>théâtre</strong>, histoire de la littérature. Au CDI, les romans ont souvent leur propre rayon (R).'],
+  [89, 64, '900 · Histoire et géographie', 'Le passé et les lieux : la <strong>Révolution française</strong> (944), les <strong>pays et voyages</strong> (910), l’Égypte ancienne (932).'],
+];
 /* ===== Ch.7 Dewey ⭐ ===== */
-const MUR = `https://h5p-offline-player.vercel.app/embed?src=https://raw.githubusercontent.com/Absconses/h5p-lumi/main/partage/decouvrir-le-cdi/mur-dewey.h5p`;
 const ch7 = chapter('7. ⭐ Les documentaires et la classification Dewey', [
   text(`${banner('Étape 7', 'Explorer le monde réel avec les documentaires', 7)}
 ${accroche('Un livre de recettes de cuisine n’invente pas d’histoire : il explique quelque chose de réel. C’est un documentaire.')}
 <p>Les documentaires ne sont pas rangés par genre, mais par <strong>sujet</strong>, grâce à un système inventé en 1876 par l’Américain <strong>Melvil Dewey</strong>. Il a partagé tous les savoirs en <strong>10 grands domaines</strong>, numérotés de 000 à 900.</p>`, 'Intro'),
-  image('dewey.jpg', 'Les 10 domaines de la classification décimale de Dewey', 'Tableau Dewey'),
-  text(decouvre(`<p>Le tableau ci-dessus résume les 10 domaines. Pour aller plus vite, voici le <strong>mur des domaines</strong> : tape <strong>cuisine</strong> dans la case de recherche : dans quel domaine tombe un livre de recettes ?</p>`), 'Je découvre Dewey'),
-  sub('H5P.IFrameEmbed 1.0', { source: MUR, width: '1000', height: '1500', minWidth: '280', resizeSupported: true }, 'Iframe Embedder', 'Le mur des domaines Dewey'),
-  text(`<p style="font-size:0.9em">Le mur ne s’affiche pas ? <a href="${MUR}" target="_blank" rel="noopener">Ouvrir le mur des domaines en grand</a>.</p>
-<p>Tu as trouvé ? <strong>600, les techniques</strong> : cuisiner, c’est un savoir-faire pratique. Le nombre exact est plus <strong>précis</strong> : pour la cuisine, c’est <strong>641</strong>. Plus le nombre est long, plus le sujet est précis.</p>
-<p>Essaie maintenant avec <strong>ta passion</strong> : foot, chat, volcan, dessin… Tu pourrais être surpris·e : les chats sauvages sont en 500 (sciences), mais ton chat à la maison est en 600 (animaux de compagnie) !</p>`, 'Réponse cuisine'),
+  text(decouvre(`<p>Regarde comment on range un <strong>livre de recettes</strong>. Cuisiner, c’est un savoir-faire pratique : le livre va dans le domaine <strong>600</strong>. Son nombre précis est <strong>641</strong>, la cuisine. Plus le nombre est long, plus le sujet est précis.</p>
+<p>Clique maintenant sur chaque <strong>+</strong> du tableau pour voir quels sujets se cachent dans chaque domaine.</p>`), 'Je découvre Dewey'),
+  sub('H5P.ImageHotspots 1.10', {
+    image: file('dewey.jpg'),
+    backgroundImageAltText: 'Le système décimal Dewey : 000 informatique et généralités, 100 philosophie et psychologie, 200 religion, 300 sciences sociales, 400 langues, 500 sciences, 600 sciences appliquées, 700 arts, sports et loisirs, 800 littérature, 900 histoire et géographie.',
+    iconType: 'icon', icon: 'plus', color: '#1d3557',
+    hotspots: DEWEY_EX.map(([x, y, h, t]) => ({ position: { x, y, legacyPositioning: false }, alwaysFullscreen: false,
+      header: h, content: [sub('H5P.Text 1.1', { text: `<p>${t}</p>` }, 'Text', h)] })),
+    hotspotNumberLabel: 'Domaine n° #num', closeButtonLabel: 'Fermer', containsAudioVideoLabel: 'Contient un son ou une vidéo',
+  }, 'Image Hotspots', 'Les 10 domaines Dewey'),
+  text(`<p>Tu as vu ? Les chats sauvages sont en 500 (sciences), mais ton chat à la maison est en 600 (animaux de compagnie) : c’est le <strong>sujet</strong> du livre qui compte.</p>`, 'Remarque chats'),
   text(avecAide(''), 'Accompagné'),
   dragText('<strong>Dans quel domaine Dewey ranger ces documentaires ?</strong> Aide-toi du tableau.', [
     'Les grands peintres du XXe siècle → *700 Arts et loisirs*',
@@ -382,7 +390,7 @@ ${accroche('Un livre de recettes de cuisine n’invente pas d’histoire : il ex
     'Les grandes questions, qu’est-ce que le bonheur ? → *100 Philosophie et psychologie*',
     'La Révolution française → *900 Histoire et géographie*',
   ], 'Classer en Dewey'),
-  text(pouce('Tu hésites ? Remonte voir le tableau, ou tape le sujet dans le mur des domaines.'), 'Coup de pouce Dewey'),
+  text(pouce('Tu hésites ? Remonte voir le tableau des 10 domaines.'), 'Coup de pouce Dewey'),
   text(seul(''), 'Seul'),
   mc('Sur le dos d’un documentaire sur les volcans, tu lis : <strong>551.21 MON</strong>. Que veut dire <strong>MON</strong> ?', [
     ['Les trois premières lettres du nom de l’auteur', true, 'Oui : comme pour les romans. L’auteur s’appelle peut-être Monnier ou Montel.'],
@@ -424,7 +432,7 @@ const parcours = sub('H5P.DocumentationTool 1.8', {
       dtext('<p>Trouve un <strong>documentaire</strong> sur une de tes passions.</p>'),
       field('Ma passion :', 'le foot, les chats, l’espace…'),
       field('Titre du documentaire et son nombre Dewey :', '« … », 796'),
-    ], '<p>Tape ta passion dans le mur des domaines (étape 7) : il te donne le domaine, puis va au rayon qui porte ce nombre.</p>'),
+    ], '<p>Cherche ta passion sur le tableau des domaines Dewey (étape 7) : il te donne le domaine, puis va au rayon qui porte ce nombre.</p>'),
     sub('H5P.DocumentExportPage 1.5', {
       description: '<p>Bravo ! Clique sur <strong>Créer mon document</strong> pour voir ta fiche, puis <strong>Exporter</strong> pour le télécharger et le rendre à ton professeur.</p>',
       createDocumentLabel: 'Créer mon document', submitTextLabel: 'Envoyer', submitSuccessTextLabel: 'Ta fiche a été envoyée !',
@@ -474,7 +482,7 @@ const onzieme = sub('H5P.Questionnaire 1.3', {
     requiredMessage: 'Écris ton droit avant d’envoyer.', requiredText: 'obligatoire', submitScreenTitle: 'Ton droit est écrit !', submitScreenSubtitle: 'Clique sur Envoyer.' },
 }, 'Questionnaire', 'Mon 11e droit du lecteur');
 const ch10 = chapter('10. 🌿 Les droits du lecteur', [
-  text(`<h2 style="color:#2d6a4f">🌿 Pour finir · Les droits du lecteur</h2>
+  text(`<h2 style="color:#2d6a4f">🌿 Les droits du lecteur</h2>
 ${accroche('Tu as trouvé ton roman, ton documentaire… Mais au fait, est-ce qu’on est obligé de tout lire, jusqu’au bout, sans sauter une page ?')}
 <p>L’écrivain <strong>Daniel Pennac</strong> a répondu en écrivant <strong>les dix droits du lecteur</strong>. ${process.env.NOMAPS ? 'Les voici.' : 'Clique sur les <strong>+</strong> pour découvrir ce que veut dire chacun.'}</p>`, 'Intro droits'),
   ...(process.env.NOMAPS
@@ -484,10 +492,27 @@ ${accroche('Tu as trouvé ton roman, ton documentaire… Mais au fait, est-ce qu
   onzieme,
 ]);
 
+/* ===== Outro : avant-goût de la séance Bookflix (ex-« 6 bis », cartes des genres) ===== */
+const BOOKFLIX = 'https://0920902f.esidoc.fr/site/bookflix-3';
+const BIBLIBOT = 'https://biblibot-omega.vercel.app/';
+const lien = (href, t) => `<a href="${href}" target="_blank" rel="noopener">${t}</a>`;
+const chBookflix = chapter('11. 🍿 La prochaine fois : Bookflix', [
+  text(`<h2 style="color:#2d6a4f">🍿 Et la prochaine fois ? Bookflix !</h2><p style="color:#555555"><em>⏱ le temps que tu veux · rien n’est noté</em></p>
+${accroche('Tu sais maintenant trouver un livre au CDI. La prochaine fois, on va choisir son prochain livre… comme on choisit une série.')}
+<p>Lors d’une prochaine séance, tu découvriras le <strong>Bookflix</strong> du CDI et <strong>Biblibot</strong>, un robot qui t’aide à trouver un livre. Pour t’y préparer, commence par te demander : <strong>quels genres me tentent ?</strong></p>
+${process.env.NOMAPS ? '' : `<p>Chacune de ces cartes dessine un <strong>parcours de lecteur</strong> à travers un genre : des îles les plus accessibles (niveau 1, souvent des BD) jusqu’au continent des grands textes (niveau 4). <strong>Choisis une ou deux cartes de genres que tu aimes</strong>, et clique sur l’île où tu te situes. Il n’y a <strong>pas de mauvaise réponse</strong> : le niveau 1 n’est pas « pour les petits », c’est un point de départ.</p>
+<p>Sous chaque carte, les flèches font un <strong>zoom</strong> pour lire les titres. Ces cartes t’attendent aussi <strong>en vrai, sur la table d’exposition du CDI</strong>.</p>`}`, 'Intro Bookflix'),
+  ...(process.env.NOMAPS ? [] : MAPS.flatMap(([g, f]) => [text(`<h3>${EMO[f]} ${g[0].toUpperCase() + g.slice(1)}</h3>`, `Titre ${g}`), ...roadmap([g, f])])),
+  text(box(`<p><strong>🔭 Un petit coup d’œil avant la séance</strong></p>
+<ul><li>${lien(BOOKFLIX, '🍿 Ouvrir le Bookflix du CDI')} : promène-toi parmi les sélections et note un titre qui te fait envie.</li>
+<li>${lien(BIBLIBOT, '🤖 Discuter avec Biblibot')} : dis-lui un genre que tu aimes${process.env.NOMAPS ? '' : ' (celui de ta carte, par exemple)'} et regarde ce qu’il te conseille.</li></ul>
+<p>Garde ton titre en tête : on en reparle à la prochaine séance !</p>`, '#fdf0e6'), 'Avant-goût'),
+]);
+
 /* ================= LIVRE ================= */
 const book = clone(tpl);
 book.showCoverPage = true;
 book.bookCover = { coverDescription: cover, coverMedium: image('carte-mentale-cdi.jpg', 'Le CDI, un espace informationnel', 'Couverture') };
-book.chapters = [ch1, ch2, chFam, ch4, ch5, ch6, ...(process.env.NOMAPS ? [] : [ch6bis]), ch7, ch8, ch9, ch10];
+book.chapters = [ch1, ch2, chFam, ch4, ch5, ch6, ch7, ch8, ch9, ch10, chBookflix];
 fs.writeFileSync(OUT, JSON.stringify(book));
 console.log('OK', book.chapters.length, 'chapitres');
