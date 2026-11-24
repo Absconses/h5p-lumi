@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body { width: 1200px; height: 675px; overflow: hidden; font-family: 'DejaVu Sans', sans-serif; position: relative; background: #f3e9d6; }
+  /* mur et sol */
+  .wall { position: absolute; inset: 0 0 150px 0; background: linear-gradient(#fbf4e4, #f1e4c8); }
+  .floor { position: absolute; left: 0; right: 0; bottom: 0; height: 150px; background: repeating-linear-gradient(90deg, #c99a63 0 118px, #bd8c55 118px 120px); border-top: 6px solid #a8773f; }
+  /* étagères */
+  .shelf { position: absolute; top: 60px; height: 470px; width: 330px; background: #8a5a2b; border: 10px solid #6f4520; border-radius: 6px; display: flex; flex-direction: column; justify-content: space-evenly; padding: 6px; }
+  .shelf.l { left: 30px; } .shelf.r { right: 30px; }
+  .row { height: 96px; background: #5d3a1a; display: flex; align-items: flex-end; gap: 3px; padding: 0 6px; border-bottom: 8px solid #6f4520; }
+  .b { width: 22px; border-radius: 3px 3px 0 0; position: relative; }
+  .b i { position: absolute; left: 4px; right: 4px; bottom: 10px; height: 12px; border-radius: 6px; background: #fff; opacity: .92; }
+  .sign { position: absolute; top: 14px; padding: 6px 18px; border-radius: 8px; color: #fff; font-weight: bold; font-size: 22px; letter-spacing: 1px; }
+  .sign.l { left: 60px; } .sign.r { right: 60px; }
+  /* personnage */
+  .who { position: absolute; bottom: 70px; text-align: center; width: 300px; }
+  .who .face { font-family: 'Noto Color Emoji'; font-size: 170px; line-height: 1; }
+  .who .body { width: 190px; height: 120px; margin: -14px auto 0; border-radius: 80px 80px 18px 18px; }
+  .who .name { display: inline-block; margin-top: -40px; position: relative; top: -44px; background: #fff; border-radius: 14px; padding: 4px 16px; font-weight: bold; font-size: 24px; color: #1d3557; border: 3px solid #1d3557; }
+  /* bulle */
+  .bubble { position: absolute; background: #fff; border: 4px solid #1d3557; border-radius: 28px; padding: 22px 28px; font-size: 31px; line-height: 1.32; color: #1d2433; box-shadow: 0 6px 0 rgba(0,0,0,.12); }
+  .bubble:after { content: ''; position: absolute; bottom: -34px; width: 0; height: 0; border: 17px solid transparent; border-top-color: #1d3557; }
+  .bubble.tl:after { left: 70px; } .bubble.tr:after { right: 70px; }
+  /* accessoire : livre ou étiquette */
+  .prop { position: absolute; }
+  .cover { width: 190px; height: 260px; border-radius: 6px 12px 12px 6px; box-shadow: 8px 8px 0 rgba(0,0,0,.18); color: #fff; padding: 18px 14px; text-align: center; border-left: 12px solid rgba(0,0,0,.25); }
+  .cover .e { font-family: 'Noto Color Emoji'; font-size: 78px; line-height: 1.2; }
+  .cover .t { font-weight: bold; font-size: 23px; line-height: 1.2; }
+  .cover .a { font-size: 15px; margin-top: 8px; opacity: .9; }
+  .cote { background: #fff; border: 4px solid #333; border-radius: 10px; padding: 12px 20px; font-family: 'DejaVu Sans Mono', monospace; font-weight: bold; font-size: 44px; color: #111; text-align: center; box-shadow: 6px 6px 0 rgba(0,0,0,.18); }
+  .cote small { display: block; font-family: 'DejaVu Sans', sans-serif; font-size: 17px; font-weight: normal; color: #555; }
+  .title { position: absolute; left: 0; right: 0; top: 70px; text-align: center; font-size: 58px; font-weight: bold; color: #1d3557; }
+  .title small { display: block; font-size: 30px; font-weight: normal; color: #444; margin-top: 14px; }
+  .trio { position: absolute; left: 0; right: 0; bottom: 60px; display: flex; justify-content: center; gap: 30px; }
+  .trio .who { position: static; width: 240px; }
+</style></head>
+<body>
+<div class="wall"></div><div class="floor"></div>
+<div id="root"></div>
+<script>
+const P = JSON.parse(decodeURIComponent(location.hash.slice(1)));
+const PAL = ['#e76f51','#2a9d8f','#e9c46a','#457b9d','#9d4edd','#f4a261','#1d3557','#c9184a','#52b788','#577590'];
+let seed = P.seed || 7; const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+const shelf = (side, label, color) => {
+  let rows = '';
+  for (let r = 0; r < 4; r++) { let bs = ''; for (let i = 0; i < 12; i++) { const h = 58 + Math.round(rnd() * 34); bs += `<div class="b" style="height:${h}px;background:${PAL[Math.floor(rnd() * PAL.length)]}"><i></i></div>`; } rows += `<div class="row">${bs}</div>`; }
+  return `<div class="shelf ${side}">${rows}</div>` + (label ? `<div class="sign ${side}" style="background:${color}">${label}</div>` : '');
+};
+const who = (w, style = '') => `<div class="who" style="${style}"><div class="face">${w.face}</div><div class="body" style="background:${w.color}"></div><div class="name">${w.name}</div></div>`;
+let h = '';
+if (P.shelves !== false) h += shelf('l', P.signL, P.colL || '#1d3557') + shelf('r', P.signR, P.colR || '#1d3557');
+if (P.title) h += `<div class="title">${P.title}<small>${P.sub || ''}</small></div>`;
+if (P.trio) h += `<div class="trio">${P.trio.map((w) => who(w)).join('')}</div>`;
+if (P.who) h += who(P.who, `left:${P.whoX ?? 150}px`);
+if (P.bubble) h += `<div class="bubble ${P.tail || 'tl'}" style="left:${P.bx ?? 390}px;top:${P.by ?? 70}px;width:${P.bw ?? 640}px">${P.bubble}</div>`;
+if (P.cover) h += `<div class="prop" style="left:${P.px ?? 840}px;top:${P.py ?? 330}px"><div class="cover" style="background:${P.cover.color}"><div class="e">${P.cover.e}</div><div class="t">${P.cover.t}</div><div class="a">${P.cover.a}</div></div></div>`;
+if (P.cote) h += `<div class="prop" style="left:${P.px ?? 760}px;top:${P.py ?? 380}px"><div class="cote">${P.cote}<small>${P.coteSub || ''}</small></div></div>`;
+document.getElementById('root').innerHTML = h;
+document.fonts.ready.then(() => { window.ready = true; });
+</script>
+</body></html>

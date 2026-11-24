@@ -74,7 +74,7 @@ ${box(`<p style="font-size:1.1em"><strong>Ta mission :</strong> un ami ne sait p
 <li><strong>🧭 Je me repère</strong> (étapes 1 à 4) : où est le CDI, à quoi il sert, tout ce qu’on y trouve, comment emprunter.</li>
 <li><strong>🔍 J’apprends à chercher</strong> (étapes 5 à 7) : lire la cote d’un livre, reconnaître un genre de roman, trouver un documentaire.</li>
 <li><strong>✅ Je vérifie</strong> (étape 8) : un petit test pour savoir si tu es prêt·e.</li>
-<li><strong>🎯 Ma mission</strong> (étape 9) : tu conseilles ton ami et tu trouves son livre.</li>
+<li><strong>🎯 Ma mission</strong> (étape 9) : tu conseilles trois amis dans une histoire dont tu es le héros, puis ton voisin, en vrai.</li>
 </ol>
 <h3>Dans chaque étape</h3>
 <ul>
@@ -436,50 +436,16 @@ const ch8 = chapter('8. Je vérifie avant la mission', [
   ], 'Bilan'),
 ]);
 
-/* ===== Ch.9 La mission ⭐ (Documentation Tool, export du document) ===== */
-const field = (task, ph, rows = '1') => sub('H5P.TextInputField 1.2', { taskDescription: task, placeholderText: ph, inputFieldSize: rows, requiredField: false, remainingChars: 'Caractères restants : @chars' }, 'Text Input Field', 'Champ');
-const dtext = (html) => sub('H5P.Text 1.1', { text: html }, 'Text', 'Texte');
-const page = (title, elements, helpText) => sub('H5P.StandardPage 1.5', { elementList: elements, helpTextLabel: 'Besoin d’aide ?', ...(helpText ? { helpText } : {}) }, 'Standard page', title);
-const parcours = sub('H5P.DocumentationTool 1.8', {
-  taskDescription: 'Ma mission : conseiller un ami',
-  pagesList: [
-    page('1. J’écoute mon ami', [
-      dtext('<p>Choisis un ami : ton voisin, ta voisine, ou un ami à qui tu penses. Pose-lui des questions sur ce qu’il aime.</p>'),
-      field('Mon prénom, mon nom et ma classe :', 'Léa Martin, 6e B'),
-      field('Le prénom de mon ami :', 'Tom'),
-      field('Ce qu’il aime (un livre, un film, un jeu, une passion…) :', 'les enquêtes, les chats, le foot…', '3'),
-      field('Il a envie d’une histoire inventée (roman) ou de découvrir le monde réel (documentaire) ?', 'un roman / un documentaire'),
-    ], '<p>Pose des questions simples : « Quel livre ou quel film tu as adoré ? », « Qu’est-ce qui te passionne ? », « Tu préfères qu’on te raconte une histoire ou apprendre des choses vraies ? »</p>'),
-    page('2. Je l’aide à se décider', [
-      dtext('<p>À partir de ses réponses, propose-lui un <strong>genre</strong> de roman ou un <strong>domaine Dewey</strong>.</p>'),
-      field('Le genre ou le domaine que je lui propose :', 'enquête et policier / 500 Sciences…'),
-      field('Pourquoi ce choix lui correspond :', 'parce qu’il aime…', '2'),
-    ], '<p>Pour un roman, relis les indices des genres (étape 6). Pour un documentaire, cherche sa passion sur le tableau des 10 domaines (étape 7).</p>'),
-    page('3. Je trouve le livre', [
-      dtext('<p>Va dans les rayons et trouve <strong>un livre précis</strong> pour ton ami.</p>'),
-      field('Titre et auteur :', '« … », de …'),
-      field('Sa cote :', 'pastille + 3 lettres, ou nombre Dewey + 3 lettres'),
-      field('Un deuxième livre, au cas où le premier ne lui plairait pas :', '« … », de …'),
-    ], '<p>La cote est collée en bas du dos du livre (étape 5). Pour un roman : la pastille de couleur et les 3 premières lettres du nom de l’auteur. Pour un documentaire : le nombre Dewey et les 3 lettres.</p>'),
-    page('4. Mon conseil', [
-      dtext('<p>Écris ton conseil, comme sur un marque-page que tu glisserais dans le livre.</p>'),
-      field('Mon conseil :', '« Je te conseille … parce que tu aimes … »', '3'),
-      dtext('<p><em>Ton ami viendra l’emprunter lui-même, à son nom (étape 4) !</em></p>'),
-    ]),
-    sub('H5P.DocumentExportPage 1.5', {
-      description: '<p>Bravo ! Clique sur <strong>Créer mon document</strong> pour voir ta fiche, puis <strong>Exporter</strong> pour la télécharger et la rendre à ton professeur.</p>',
-      createDocumentLabel: 'Créer mon document', submitTextLabel: 'Envoyer', submitSuccessTextLabel: 'Ta fiche a été envoyée !',
-      selectAllTextLabel: 'Tout sélectionner', exportTextLabel: 'Exporter', helpTextLabel: 'Besoin d’aide ?',
-      requiresInputErrorMessage: 'Des champs sont encore vides sur ces pages : @pages',
-    }, 'Document export page', 'Exporter'),
-  ],
-  i10n: { previousLabel: 'Précédent', nextLabel: 'Suivant', closeLabel: 'Fermer' },
-}, 'Documentation Tool', 'Ma mission');
-
+/* ===== Ch.9 La mission ⭐ : Branching Scenario « Conseiller un ami » en cadre (sources : scenario/) ===== */
+const RAW_MISSION = 'https://raw.githubusercontent.com/Absconses/h5p-lumi/main/partage/decouvrir-le-cdi/conseiller-un-ami.h5p';
+const MISSION = `https://h5p-offline-player.vercel.app/embed?src=${RAW_MISSION}`;
+const MISSION_GRAND = `https://h5p-offline-player.vercel.app/embed?src=${encodeURIComponent(RAW_MISSION)}&custom-css=${encodeURIComponent(CSS)}`;
 const ch9 = chapter('9. ⭐ Ma mission', [
-  text(`<h2 style="color:#1d3557">🎯 Ma mission · Conseiller un ami</h2><p style="color:#555555"><em>⏱ environ 15 minutes · dans les rayons</em></p>
-<p>Un ami ne sait pas quoi lire. <strong>Écoute-le</strong>, <strong>aide-le à se décider</strong>, puis <strong>trouve son livre</strong> dans les rayons. Remplis ta fiche page par page, puis exporte-la.</p>`, 'Intro'),
-  parcours,
+  text(`<h2 style="color:#1d3557">🎯 Ma mission · Conseiller un ami</h2><p style="color:#555555"><em>⏱ environ 10 minutes</em></p>
+<p>Sam, Lina et Noé cherchent un livre au CDI. <strong>Écoute-les</strong>, <strong>aide-les à se décider</strong> et <strong>trouve le bon rayon</strong>. Clique sur « Commencer » : chacun de tes choix a une conséquence.</p>`, 'Intro'),
+  sub('H5P.IFrameEmbed 1.0', { source: MISSION, width: '1000', height: '720', minWidth: '280', resizeSupported: true }, 'Iframe Embedder', 'Mission : conseiller un ami'),
+  text(`<p style="font-size:0.9em">Le cadre est trop petit ? <a href="${MISSION_GRAND}" target="_blank" rel="noopener">Ouvrir la mission en grand</a>.</p>
+${box('<p><strong>🚶 Et maintenant, en vrai !</strong></p><p>Demande à ton voisin ou à ta voisine <strong>ce qu’il aime</strong>, puis trouve-lui <strong>un livre dans les rayons</strong>. S’il lui plaît, il l’emprunte… à son nom !</p>', '#e8f6ee')}`, 'En vrai'),
 ]);
 
 /* ===== Ch.10 Outro : les droits du lecteur (Pennac, ill. Quentin Blake) ===== */
