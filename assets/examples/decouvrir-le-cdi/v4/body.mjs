@@ -377,7 +377,9 @@ ${accroche('Un livre de recettes de cuisine n’invente pas d’histoire : il ex
       header: h, content: [sub('H5P.Text 1.1', { text: `<p>${t}</p>` }, 'Text', h)] })),
     hotspotNumberLabel: 'Domaine n° #num', closeButtonLabel: 'Fermer', containsAudioVideoLabel: 'Contient un son ou une vidéo',
   }, 'Image Hotspots', 'Les 10 domaines Dewey'),
-  text(`<p>Tu as vu ? Les chats sauvages sont en 500 (sciences), mais ton chat à la maison est en 600 (animaux de compagnie) : c’est le <strong>sujet</strong> du livre qui compte.</p>`, 'Remarque chats'),
+  text(`<p><strong>Attention : un même mot peut aller dans deux domaines.</strong> Ce qui compte, ce n’est pas le mot du titre, c’est <strong>ce que le livre t’apprend</strong>.</p>
+<ul><li>🐆 <strong>Les chats</strong>. Un livre qui explique comment vivent les <strong>chats sauvages</strong> (le lion, le guépard, leur corps, leur façon de chasser) étudie la nature : il est en <strong>500, Sciences</strong> (599). Un livre qui t’explique comment <strong>t’occuper de ton chat</strong> (le nourrir, le soigner, l’éduquer) donne un savoir-faire pratique : il est en <strong>600, Sciences appliquées</strong> (636).</li>
+<li>🇬🇧 <strong>L’anglais</strong>. Un livre pour <strong>apprendre la langue anglaise</strong> (vocabulaire, grammaire) est en <strong>400, Langues</strong> (420). Un livre sur <strong>le pays</strong>, l’Angleterre (son histoire, ses villes, ses paysages), est en <strong>900, Histoire et géographie</strong> (942 pour son histoire).</li></ul>`, 'Un mot, deux domaines'),
   text(avecAide(''), 'Accompagné'),
   dragText('<strong>Dans quel domaine Dewey ranger ces documentaires ?</strong> Aide-toi du tableau.', [
     'Les grands peintres du XXe siècle → *700 Arts et loisirs*',
