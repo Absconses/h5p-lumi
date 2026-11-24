@@ -290,15 +290,6 @@ const roadmap = ([g, f]) => [
   }, 'Image Slider', `Zoom ${g}`),
 ];
 const EMO = { policier: '🕵️', fantasy: '🐉', fantastique: '👻', sf: '🚀', aventure: '🧭', romance: '💗', mythes: '🏛️', humour: '😂', societe: '🏙️', classique: '🖋️' };
-const ch6bis = chapter('6 bis. 🌿 Les cartes des genres', [
-  text(`<h2 style="color:#2d6a4f">🌿 Chemin buissonnier · Les cartes des genres</h2><p style="color:#555555"><em>⏱ le temps que tu veux · rien n’est noté</em></p>
-<p>Et si tu voyais tes lectures comme un <strong>voyage</strong> ?</p>
-<p>Chacune de ces cartes dessine un <strong>parcours de lecteur</strong> à travers un genre : des îles les plus accessibles (niveau 1, souvent des BD) jusqu’au continent des grands textes (niveau 4).</p>
-<p><strong>Choisis une ou deux cartes de genres que tu aimes</strong>, et clique sur l’île où tu te situes. Il n’y a <strong>pas de mauvaise réponse</strong> : le niveau 1 n’est pas « pour les petits », c’est un point de départ. Si l’envie t’en prend, la carte te montre où aller ensuite.</p>
-<p>Sous chaque carte, les flèches font un <strong>zoom</strong> pour lire les titres. Et ces cartes t’attendent aussi <strong>en vrai, sur la table d’exposition du CDI</strong>.</p>`, 'Intro cartes'),
-  ...MAPS.flatMap(([g, f]) => [text(`<h3>${EMO[f]} ${g[0].toUpperCase() + g.slice(1)}</h3>`, `Titre ${g}`), ...roadmap([g, f])]),
-]);
-
 /* ===== Ch.6 Les genres ⭐ ===== */
 // Positions des mots-indices sur la 4e dessinée par quatrieme.py
 const Q4 = JSON.parse(fs.readFileSync(new URL('./quatrieme.json', import.meta.url), 'utf8'));
@@ -474,7 +465,7 @@ const onzieme = sub('H5P.Questionnaire 1.3', {
     requiredMessage: 'Écris ton droit avant d’envoyer.', requiredText: 'obligatoire', submitScreenTitle: 'Ton droit est écrit !', submitScreenSubtitle: 'Clique sur Envoyer.' },
 }, 'Questionnaire', 'Mon 11e droit du lecteur');
 const ch10 = chapter('10. 🌿 Les droits du lecteur', [
-  text(`<h2 style="color:#2d6a4f">🌿 Pour finir · Les droits du lecteur</h2>
+  text(`<h2 style="color:#2d6a4f">🌿 Les droits du lecteur</h2>
 ${accroche('Tu as trouvé ton roman, ton documentaire… Mais au fait, est-ce qu’on est obligé de tout lire, jusqu’au bout, sans sauter une page ?')}
 <p>L’écrivain <strong>Daniel Pennac</strong> a répondu en écrivant <strong>les dix droits du lecteur</strong>. ${process.env.NOMAPS ? 'Les voici.' : 'Clique sur les <strong>+</strong> pour découvrir ce que veut dire chacun.'}</p>`, 'Intro droits'),
   ...(process.env.NOMAPS
@@ -484,10 +475,27 @@ ${accroche('Tu as trouvé ton roman, ton documentaire… Mais au fait, est-ce qu
   onzieme,
 ]);
 
+/* ===== Outro : avant-goût de la séance Bookflix (ex-« 6 bis », cartes des genres) ===== */
+const BOOKFLIX = 'https://0920902f.esidoc.fr/site/bookflix-3';
+const BIBLIBOT = 'https://biblibot-omega.vercel.app/';
+const lien = (href, t) => `<a href="${href}" target="_blank" rel="noopener">${t}</a>`;
+const chBookflix = chapter('11. 🍿 La prochaine fois : Bookflix', [
+  text(`<h2 style="color:#2d6a4f">🍿 Et la prochaine fois ? Bookflix !</h2><p style="color:#555555"><em>⏱ le temps que tu veux · rien n’est noté</em></p>
+${accroche('Tu sais maintenant trouver un livre au CDI. La prochaine fois, on va choisir son prochain livre… comme on choisit une série.')}
+<p>Lors d’une prochaine séance, tu découvriras le <strong>Bookflix</strong> du CDI et <strong>Biblibot</strong>, un robot qui t’aide à trouver un livre. Pour t’y préparer, commence par te demander : <strong>quels genres me tentent ?</strong></p>
+${process.env.NOMAPS ? '' : `<p>Chacune de ces cartes dessine un <strong>parcours de lecteur</strong> à travers un genre : des îles les plus accessibles (niveau 1, souvent des BD) jusqu’au continent des grands textes (niveau 4). <strong>Choisis une ou deux cartes de genres que tu aimes</strong>, et clique sur l’île où tu te situes. Il n’y a <strong>pas de mauvaise réponse</strong> : le niveau 1 n’est pas « pour les petits », c’est un point de départ.</p>
+<p>Sous chaque carte, les flèches font un <strong>zoom</strong> pour lire les titres. Ces cartes t’attendent aussi <strong>en vrai, sur la table d’exposition du CDI</strong>.</p>`}`, 'Intro Bookflix'),
+  ...(process.env.NOMAPS ? [] : MAPS.flatMap(([g, f]) => [text(`<h3>${EMO[f]} ${g[0].toUpperCase() + g.slice(1)}</h3>`, `Titre ${g}`), ...roadmap([g, f])])),
+  text(box(`<p><strong>🔭 Un petit coup d’œil avant la séance</strong></p>
+<ul><li>${lien(BOOKFLIX, '🍿 Ouvrir le Bookflix du CDI')} : promène-toi parmi les sélections et note un titre qui te fait envie.</li>
+<li>${lien(BIBLIBOT, '🤖 Discuter avec Biblibot')} : dis-lui un genre que tu aimes${process.env.NOMAPS ? '' : ' (celui de ta carte, par exemple)'} et regarde ce qu’il te conseille.</li></ul>
+<p>Garde ton titre en tête : on en reparle à la prochaine séance !</p>`, '#fdf0e6'), 'Avant-goût'),
+]);
+
 /* ================= LIVRE ================= */
 const book = clone(tpl);
 book.showCoverPage = true;
 book.bookCover = { coverDescription: cover, coverMedium: image('carte-mentale-cdi.jpg', 'Le CDI, un espace informationnel', 'Couverture') };
-book.chapters = [ch1, ch2, chFam, ch4, ch5, ch6, ...(process.env.NOMAPS ? [] : [ch6bis]), ch7, ch8, ch9, ch10];
+book.chapters = [ch1, ch2, chFam, ch4, ch5, ch6, ch7, ch8, ch9, ch10, chBookflix];
 fs.writeFileSync(OUT, JSON.stringify(book));
 console.log('OK', book.chapters.length, 'chapitres');
