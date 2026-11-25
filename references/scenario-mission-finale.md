@@ -109,11 +109,19 @@ Penser `proceedButtonText` explicite (« J'ai écrit mon conseil »). Tester cha
 
 ## Énigme bloquante (cadenas à code)
 
-Le scénario ne lit pas les scores : impossible de bifurquer selon la réussite d'une activité. Contournement
-« escape game » : le **code n'apparaît que dans le retour à 100 %** (`overallFeedback` `from:100`) d'une
-activité notée placée dans une CP, **sans bouton « Voir la solution »**. Puis trois questions-roues à 10 chiffres :
-un mauvais chiffre bascule sur une piste « fausse » sans le dire, et l'échec n'est annoncé qu'au bout
-(1000 combinaisons, on ne devine pas chiffre par chiffre). Échec → retour à l'activité. Le code doit être
-**invisible ailleurs** (pas déductible du document fourni), sinon l'activité devient facultative.
-Démo : `partage/decouvrir-le-cdi/cadenas-de-la-reserve-demo.h5p`, source `scenario/demos/cadenas.mjs`
-(la démo d'écriture : `scenario/demos/ecriture-sam.mjs`). Sélecteurs de test : les étiquettes Drag Text sont `.ui-draggable`.
+Le scénario ne lit pas les scores : impossible de bifurquer selon la réussite d'une activité. Deux voies :
+
+1. **Le code EST la réponse** (version retenue, plus élégante) : une énigme sans correction (Dewey : un
+   documentaire sur les volcans → 5, un récit de Pompéi → 9, des poèmes sur le feu → 8 ; code 5-9-8).
+   Le cadenas est le **seul moment de vérification**. Trois questions-roues à 10 chiffres : un mauvais
+   chiffre bascule sur une piste « fausse » sans le dire, l'échec n'est annoncé qu'au bout (« Clac. »,
+   sans dire lequel), retour aux indices. 1000 combinaisons : on ne devine pas chiffre par chiffre.
+   Démo : `partage/decouvrir-le-cdi/cadenas-de-la-reserve-demo-v2.h5p`, source `scenario/demos/cadenas.mjs`.
+2. Code révélé dans le retour à 100 % (`overallFeedback from:100`) d'une activité notée, sans « Voir la
+   solution » : marche, mais moins élégant (première version de la démo).
+
+Vrai exercice bloquant sans cadenas : seule l'**Interactive Video** sait exiger le score maximal avant de
+laisser continuer (option des interactions « exiger le score complet »). Non testé dans un scénario ;
+il faut une vidéo (un clip court suffit).
+Démo d'écriture : `scenario/demos/ecriture-sam.mjs`. Sélecteurs de test : étiquettes Drag Text `.ui-draggable`.
+Pierre est **professeur documentaliste** (un homme) : ne jamais écrire « la documentaliste » dans ses modules.
