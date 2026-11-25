@@ -94,6 +94,7 @@ correspondante (structure exacte + exemple) :
 | **Onglets** : une page par onglet (texte, médias, exercices notés), consultables dans n'importe quel ordre | `H5P.Tabs` | `references/tabs.md` |
 | **Visite virtuelle 360** : photos 360° reliées, points d'intérêt (texte, image, quiz) | `H5P.ThreeImage` | `references/virtual-tour.md` |
 | **Quiz sur carte** : « Où se trouve… ? », clic sur une carte (villes notées à la distance, pays) | `H5P.GeoQuiz` | `references/geoquiz.md` |
+| **Mission finale en scénario à embranchements** : un personnage a besoin de l'élève, choix de comportements, scènes en vidéo générée | `H5P.BranchingScenario` | `references/scenario-mission-finale.md` |
 | **Tout autre type** (Dictation, Branching Scenario…) | variable | `references/extending-new-types.md` |
 
 Le catalogue Lumi est vaste : **n'importe quel type** se traite via la méthode décrite dans
@@ -200,6 +201,7 @@ sources **réelles et libres**.
 - `references/geoquiz.md` — Geography Quiz (quiz sur carte) : lib d'origine cassée dans Lumi (carte à 0 px), utiliser `gabarit-geoquiz.h5p` patché ; fabriques `assets/lib/geoquiz.mjs`.
 - `references/iframe-modules.md` — intégrer un type refusé par la Column via Iframe Embedder : ratio (pas de taille), `minWidth` 280, aucun score remonté, source offline player par défaut ; `scripts/Get-LumiRun.py` récupère un module Nuage publié, `scripts/Slim-H5PImages.py` allège les images.
 - `references/partage-offline-player.md` — diffuser un `.h5p` par un simple lien (h5p-offline-player + GitHub) : quand le proposer plutôt que Nuage, limites (aucun résultat prof, 25/100 Mo, bouton « Open with its own scripts » pour les types hors catalogue).
+- `references/scenario-mission-finale.md` — mission finale en Branching Scenario : quand la proposer, modèle « mauvais choix bloqué », style visuel assumé, prompts Google Flow et pipeline vidéo, pièges.
 - `references/extending-new-types.md` — méthode universelle pour tout autre type.
 - `references/lumi-packaging.md` — format `.h5p`, gabarits, import dans Lumi.
 - `assets/lib/impress-factories.mjs` — fabriques Node pour Impressive Presentation (`station`, `textView`, `depth`, `layouts`, `overview`, `validate`).
