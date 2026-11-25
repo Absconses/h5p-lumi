@@ -1,6 +1,8 @@
 # Audit des « tells » de longueur : la bonne réponse est-elle nettement la plus longue ?
 # Couvre MultiChoice (QCM, y compris dans Question Set, Column, Book, Course Presentation…),
-# Single Choice Set et Summary (la première réponse de chaque série est la bonne).
+# Single Choice Set, Summary (la première réponse de chaque série est la bonne) et Branching Scenario
+# (modèle « mauvais choix bloqué » : une alternative qui ramène à la même question est une mauvaise piste,
+# les autres sont bonnes ; « Revoir… » et les carrefours sans mauvaise piste sont ignorés).
 # usage : python3 scripts/audit-reponses.py paquet.h5p content.json …   (FULL=1 : textes entiers)
 # Ligne « LONGUE » = la bonne réponse est la plus longue ET dépasse de plus de 25 % la moyenne des
 # fausses. Objectif avant livraison : 0 ligne LONGUE (sauf séries d'étiquettes courtes réutilisées
@@ -21,6 +23,14 @@ def walk(o, where):
         if lib.startswith('H5P.Summary'):
             for c in p.get('summaries', []):
                 rows.append((where, 'SUM', '', [(txt(x), i == 0) for i, x in enumerate(c.get('summary', []))]))
+        bs = o.get('branchingScenario')
+        if isinstance(bs, dict):
+            for i, n in enumerate(bs.get('content', [])):
+                q = (n.get('type') or {}).get('params', {}).get('branchingQuestion')
+                if not q: continue
+                alts = [a for a in q.get('alternatives', []) if not txt(a.get('text')).startswith('Revoir')]
+                a = [(txt(x.get('text')), x.get('nextContentId') != i) for x in alts]
+                if any(not c for _, c in a): rows.append((where, 'BS', txt(q.get('question'))[:60], a))
         for k, v in o.items(): walk(v, where)
     elif isinstance(o, list):
         for v in o: walk(v, where)
