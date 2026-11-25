@@ -85,3 +85,24 @@ Il n'y a pas de connecteur Flow : on écrit les prompts, Pierre génère les cli
   aucun score ne remonte. Le scénario seul sur Nuage reste en `no-score` (modèle sans échec).
 - Images générées : Gamma coûte 70 crédits par image et son CDN est bloqué depuis le cloud ;
   Canva `generate-image` avec `imageReferences` a échoué plusieurs fois (sans référence, ça marche).
+
+## Sortir du « QCM déguisé » : activités dans le scénario
+
+Pierre (2026-11-25) : un scénario où l'élève ne fait que cliquer une proposition est un QCM déguisé.
+Le chemin ne dépend **que** des clics sur les `BranchingQuestion`, mais une étape peut être une
+**Course Presentation 1.25** ou une **Interactive Video 1.26**, qui portent des activités :
+
+- Étapes directes (BS 1.8) : AdvancedText, Image, Video, ImageHotspots, CoursePresentation, InteractiveVideo.
+- Dans la CP : ExportableTextArea (écrire), AudioRecorder (parler), MarkTheWords, DragText, Blanks,
+  DragQuestion, MultiChoice, SingleChoiceSet, TrueFalse, Summary, MultiMediaChoice, Dialogcards, Audio, Video, Table, Link.
+- Dans l'IV : FreeTextQuestion, Questionnaire (écrire), MarkTheWords, DragText, Blanks, DragQuestion,
+  MultiChoice, SingleChoiceSet, TrueFalse, Summary, MultiMediaChoice, GoToQuestion (Crossroads : saut dans la vidéo), IVHotspot.
+- Impossible : Essay, Crossword, FindTheWords, SortParagraphs, ImageSequencing, Memory, Documentation Tool, Book, GameMap, Iframe Embedder.
+
+Patron validé par Pierre (« très convaincant ») : **écris d'abord, compare ensuite**. Une CP (diapo 1 : Mark the
+Words sur le document à exploiter ; diapo 2 : zone de texte « Mon conseil à … »), puis une question
+« Lequel de ces trois conseils ressemble le plus au tien ? » : mauvais conseil → retour à la CP pour réécrire ;
+« Le mien ne ressemble à aucun » → grille de 3 critères puis suite. Démo :
+`partage/decouvrir-le-cdi/conseiller-un-ami-demo-ecriture.h5p` (scène de Sam, deux livres).
+Limites : la CP repart de zéro quand on y revient (texte effacé) ; le texte n'est ni corrigé ni enregistré.
+Penser `proceedButtonText` explicite (« J'ai écrit mon conseil »). Tester chaque activité seule avant de l'intégrer.
