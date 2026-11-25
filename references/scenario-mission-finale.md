@@ -106,3 +106,14 @@ Words sur le document à exploiter ; diapo 2 : zone de texte « Mon conseil à �
 `partage/decouvrir-le-cdi/conseiller-un-ami-demo-ecriture.h5p` (scène de Sam, deux livres).
 Limites : la CP repart de zéro quand on y revient (texte effacé) ; le texte n'est ni corrigé ni enregistré.
 Penser `proceedButtonText` explicite (« J'ai écrit mon conseil »). Tester chaque activité seule avant de l'intégrer.
+
+## Énigme bloquante (cadenas à code)
+
+Le scénario ne lit pas les scores : impossible de bifurquer selon la réussite d'une activité. Contournement
+« escape game » : le **code n'apparaît que dans le retour à 100 %** (`overallFeedback` `from:100`) d'une
+activité notée placée dans une CP, **sans bouton « Voir la solution »**. Puis trois questions-roues à 10 chiffres :
+un mauvais chiffre bascule sur une piste « fausse » sans le dire, et l'échec n'est annoncé qu'au bout
+(1000 combinaisons, on ne devine pas chiffre par chiffre). Échec → retour à l'activité. Le code doit être
+**invisible ailleurs** (pas déductible du document fourni), sinon l'activité devient facultative.
+Démo : `partage/decouvrir-le-cdi/cadenas-de-la-reserve-demo.h5p`, source `scenario/demos/cadenas.mjs`
+(la démo d'écriture : `scenario/demos/ecriture-sam.mjs`). Sélecteurs de test : les étiquettes Drag Text sont `.ui-draggable`.
