@@ -120,8 +120,13 @@ Le scénario ne lit pas les scores : impossible de bifurquer selon la réussite 
 2. Code révélé dans le retour à 100 % (`overallFeedback from:100`) d'une activité notée, sans « Voir la
    solution » : marche, mais moins élégant (première version de la démo).
 
-Vrai exercice bloquant sans cadenas : seule l'**Interactive Video** sait exiger le score maximal avant de
-laisser continuer (option des interactions « exiger le score complet »). Non testé dans un scénario ;
-il faut une vidéo (un clip court suffit).
+Vrai exercice bloquant sans cadenas (testé 2026-11-25) : un nœud **Interactive Video 1.26** dans le scénario,
+avec une interaction `displayType:'poster'`, `pause:true` et `adaptivity:{ requireCompletion:true,
+wrong:{ seekTo:0, allowOptOut:false, message, seekLabel:'Revoir la scène' }, correct:{ allowOptOut:false } }`,
+`override.preventSkippingMode:'both'`, et le nœud en `forceContentFinished:'enabled'` : la vidéo reste figée
+(même en cliquant Lecture) tant que le score n'est pas complet, et le « Continuer » du scénario reste grisé
+jusqu'à la fin de la vidéo. Base des paramètres IV : celle du livre vitrine EMI (IV 1.27 relabellisée 1.26).
+Pas de bouton « Voir la solution » dans l'activité. Livrer mp4 + webm. Erreur console bénigne en fin de vidéo
+(« this.pause is not a function »). Démo : `partage/decouvrir-le-cdi/video-bloquante-demo.h5p`, source `scenario/demos/video-bloquante.mjs`.
 Démo d'écriture : `scenario/demos/ecriture-sam.mjs`. Sélecteurs de test : étiquettes Drag Text `.ui-draggable`.
 Pierre est **professeur documentaliste** (un homme) : ne jamais écrire « la documentaliste » dans ses modules.
