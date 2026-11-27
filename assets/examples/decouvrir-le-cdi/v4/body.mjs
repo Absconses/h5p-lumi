@@ -59,22 +59,26 @@ const dragOnImage = (imgName, labels, title, intro) => {
   return intro ? [text(`<p>${intro}</p>`, `${title} (consigne)`), q] : [q];
 };
 
+// V5=1 : parcours court (v5). Circuit du livre en image, un seul ami, test en vrai avec le professeur, bonus après le test, sans les droits du lecteur.
+const V5 = !!process.env.V5;
+
 /* ================= COUVERTURE ================= */
 const cover = `<h2 style="text-align:center">🔎 Découvrir le CDI</h2>
 <p style="text-align:center">Le CDI, c’est un endroit pour se repérer… et pour trouver <strong>le bon livre</strong>, pour toi comme pour les autres.</p>
-<p style="text-align:center"><strong>🎯 Ta mission, à la fin de cette heure :</strong> aider un ami à <strong>choisir un livre</strong> et à <strong>le trouver dans les rayons</strong>.</p>
-<p style="text-align:center"><em>EMI · 6e · environ 1 heure · 10 étapes</em></p>`;
+<p style="text-align:center"><strong>🎯 Ta mission, à la fin de cette heure :</strong> aider un ami à <strong>choisir un livre</strong> et à <strong>le trouver dans les rayons</strong>.</p>${V5 ? '\n<p style="text-align:center"><strong>🏁 Et pour finir :</strong> un test en vrai, dans les rayons, avec ton professeur documentaliste.</p>' : ''}
+<p style="text-align:center"><em>EMI · 6e · environ 1 heure · ${V5 ? '9 étapes, puis le test en vrai' : '10 étapes'}</em></p>`;
 
 /* ===== Page d'accueil : ce qui t'attend ===== */
 const ch0 = chapter('🎯 Ce qui t’attend', [
   text(`<h2 style="color:#1d3557">🎯 Ce qui t’attend</h2>
 ${box(`<p style="font-size:1.1em"><strong>Ta mission :</strong> un ami ne sait pas quoi lire. À la fin de l’heure, tu sauras <strong>l’aider à se décider</strong>, puis <strong>trouver le livre dans les rayons</strong> du CDI.</p>`, '#fff6dd')}
-<h3>Pour y arriver, 4 temps</h3>
+<h3>Pour y arriver, ${V5 ? 5 : 4} temps</h3>
 <ol>
 <li><strong>🧭 Je me repère</strong> (étapes 1 à 4) : où est le CDI, à quoi il sert, tout ce qu’on y trouve, comment emprunter.</li>
 <li><strong>🔍 J’apprends à chercher</strong> (étapes 5 à 7) : lire la cote d’un livre, reconnaître un genre de roman, trouver un documentaire.</li>
 <li><strong>✅ Je vérifie</strong> (étape 8) : un petit test pour savoir si tu es prêt·e.</li>
-<li><strong>🎯 Ma mission</strong> (étape 9) : tu conseilles trois amis dans une histoire dont tu es le héros, puis ton voisin, en vrai.</li>
+${V5 ? `<li><strong>🎯 Ma mission</strong> (étape 9) : tu conseilles un ami dans une histoire dont tu es le héros.</li>
+<li><strong>🏁 Le test en vrai</strong> (étape 10) : tu vas chercher deux livres dans les rayons et tu les apportes à ton professeur documentaliste.</li>` : `<li><strong>🎯 Ma mission</strong> (étape 9) : tu conseilles trois amis dans une histoire dont tu es le héros, puis ton voisin, en vrai.</li>`}
 </ol>
 <h3>Dans chaque étape</h3>
 <ul>
@@ -83,7 +87,7 @@ ${box(`<p style="font-size:1.1em"><strong>Ta mission :</strong> un ami ne sait p
 <li>✋ <strong>Je fais seul·e</strong> : je montre que j’ai compris.</li>
 <li>📌 <strong>Je retiens</strong> : l’essentiel à garder en tête.</li>
 </ul>
-<p>⭐ = étape indispensable pour la mission (si tu es en retard, fais-la en priorité) · 🌿 = chemin buissonnier, pour le plaisir.</p>`, 'Ce qui t’attend'),
+<p>⭐ = étape indispensable pour la mission (si tu es en retard, fais-la en priorité) · 🌿 = chemin buissonnier, pour le plaisir${V5 ? ', après le test' : ''}.</p>`, 'Ce qui t’attend'),
 ]);
 
 /* ===== Ch.1 Où est le CDI ? ===== */
@@ -212,11 +216,19 @@ ${accroche('Avec les livres, on voyage sans bouger de sa chambre. Mais le livre 
 
 /* ===== Ch.4 Emprunter ===== */
 const ch4 = chapter('4. Emprunter un livre', [
-  text(`${banner('Étape 4', 'Emporter un livre chez soi', 12)}
-${decouvre('<p>Avant d’arriver entre tes mains, un livre fait un long voyage. Suis « Le Secret du phare » sur la carte de la ville du livre, de l’idée de son autrice jusqu’au comptoir du CDI où un élève l’emprunte. Avance avec la flèche →.</p>')}`, 'Je découvre'),
-  sub('H5P.IFrameEmbed 1.0', { source: CIRCUIT, width: '1000', height: '650', minWidth: '280', resizeSupported: true }, 'Iframe Embedder', 'Le voyage d’un livre'),
-  text(`<p style="font-size:0.9em">Le cadre est trop petit ? <a href="${GRAND}" target="_blank" rel="noopener">Ouvrir le voyage du livre en grand</a>.</p>
+  ...(V5 ? [
+    text(`${banner('Étape 4', 'Emporter un livre chez soi', 6)}
+${decouvre('<p>Avant d’arriver entre tes mains, un livre fait un long voyage. Regarde la carte de la ville du livre et suis les traits de couleur : on le <strong>crée</strong> (violet), on le <strong>fabrique</strong> (orange), on le <strong>vend</strong> (bleu), puis il arrive <strong>au CDI</strong> (vert), où tu peux l’emprunter.</p>')}`, 'Je découvre'),
+    image('circuit-vue-ensemble.jpg', 'Carte de la ville du livre : de chez l’autrice à la maison d’édition, l’imprimerie, l’entrepôt, la librairie, puis le CDI du collège et la boîte à livres', 'Le voyage d’un livre, vue d’ensemble'),
+    text(`<p>🌿 Tu pourras suivre ce voyage <strong>en version animée</strong>, étape par étape, quand tu auras fini le test (dernière partie du livre).</p>
 ${avecAide('<p>Souviens-toi de ce que nous avons fait ensemble au comptoir du CDI.</p>')}`, 'Intro'),
+  ] : [
+    text(`${banner('Étape 4', 'Emporter un livre chez soi', 12)}
+${decouvre('<p>Avant d’arriver entre tes mains, un livre fait un long voyage. Suis « Le Secret du phare » sur la carte de la ville du livre, de l’idée de son autrice jusqu’au comptoir du CDI où un élève l’emprunte. Avance avec la flèche →.</p>')}`, 'Je découvre'),
+    sub('H5P.IFrameEmbed 1.0', { source: CIRCUIT, width: '1000', height: '650', minWidth: '280', resizeSupported: true }, 'Iframe Embedder', 'Le voyage d’un livre'),
+    text(`<p style="font-size:0.9em">Le cadre est trop petit ? <a href="${GRAND}" target="_blank" rel="noopener">Ouvrir le voyage du livre en grand</a>.</p>
+${avecAide('<p>Souviens-toi de ce que nous avons fait ensemble au comptoir du CDI.</p>')}`, 'Intro'),
+  ]),
   dragText('<strong>Remets les étapes du prêt dans l’ordre.</strong>', [
     'Étape 1 → *Je choisis un livre dans les rayons*',
     'Étape 2 → *Je vais voir le professeur documentaliste avec le livre*',
@@ -441,11 +453,37 @@ const RAW_MISSION = 'https://raw.githubusercontent.com/Absconses/h5p-lumi/main/p
 const MISSION = `https://h5p-offline-player.vercel.app/embed?src=${RAW_MISSION}`;
 const MISSION_GRAND = `https://h5p-offline-player.vercel.app/embed?src=${encodeURIComponent(RAW_MISSION)}&custom-css=${encodeURIComponent(CSS)}`;
 const ch9 = chapter('9. ⭐ Ma mission', [
-  text(`<h2 style="color:#1d3557">🎯 Ma mission · Conseiller un ami</h2><p style="color:#555555"><em>⏱ environ 10 minutes</em></p>
-<p>Sam, Lina et Noé cherchent un livre au CDI. <strong>Écoute-les</strong>, <strong>aide-les à se décider</strong> et <strong>trouve le bon rayon</strong>. Clique sur « Commencer » : chacun de tes choix a une conséquence.</p>`, 'Intro'),
+  text(`<h2 style="color:#1d3557">🎯 Ma mission · Conseiller un ami</h2><p style="color:#555555"><em>⏱ environ ${V5 ? 5 : 10} minutes</em></p>
+${V5 ? '<p>Sam, Lina et Noé cherchent un livre au CDI. <strong>Choisis un seul ami</strong> : <strong>écoute-le</strong>, <strong>aide-le à se décider</strong> et <strong>trouve le bon rayon</strong>. Clique sur « Commencer » : chacun de tes choix a une conséquence.</p>' : '<p>Sam, Lina et Noé cherchent un livre au CDI. <strong>Écoute-les</strong>, <strong>aide-les à se décider</strong> et <strong>trouve le bon rayon</strong>. Clique sur « Commencer » : chacun de tes choix a une conséquence.</p>'}`, 'Intro'),
   sub('H5P.IFrameEmbed 1.0', { source: MISSION, width: '1000', height: '720', minWidth: '280', resizeSupported: true }, 'Iframe Embedder', 'Mission : conseiller un ami'),
   text(`<p style="font-size:0.9em">Le cadre est trop petit ? <a href="${MISSION_GRAND}" target="_blank" rel="noopener">Ouvrir la mission en grand</a>.</p>
-${box('<p><strong>🚶 Et maintenant, en vrai !</strong></p><p>Demande à ton voisin ou à ta voisine <strong>ce qu’il aime</strong>, puis trouve-lui <strong>un livre dans les rayons</strong>. S’il lui plaît, il l’emprunte… à son nom !</p>', '#e8f6ee')}`, 'En vrai'),
+${V5 ? box('<p><strong>Ton ami a trouvé son livre ?</strong> Arrête-toi là et passe à l’étape 10 : le test en vrai. Les deux autres amis t’attendront après le test.</p>', '#e8f6ee') : box('<p><strong>🚶 Et maintenant, en vrai !</strong></p><p>Demande à ton voisin ou à ta voisine <strong>ce qu’il aime</strong>, puis trouve-lui <strong>un livre dans les rayons</strong>. S’il lui plaît, il l’emprunte… à son nom !</p>', '#e8f6ee')}`, 'En vrai'),
+]);
+
+/* ===== V5 : le test en vrai, puis les bonus ===== */
+const chTest = chapter('10. 🏁 Le test en vrai', [
+  text(`<h2 style="color:#1d3557">🏁 Étape 10 · Le test en vrai</h2><p style="color:#555555"><em>⏱ environ 10 minutes · dans les rayons, sans l’ordinateur</em></p>
+${box('<p style="font-size:1.1em">Tu as fini le module : va voir <strong>ton professeur documentaliste</strong>. Il te donne <strong>deux défis</strong>.</p>', '#fff6dd')}
+<h3>📕 Défi 1 : avec la cote</h3>
+<p>Il te donne <strong>la cote</strong> d’un livre. Tu vas le chercher dans les rayons et tu le rapportes.</p>
+<h3>📗 Défi 2 : sans la cote</h3>
+<p>Il te donne seulement <strong>un sujet</strong> ou <strong>une envie de lecture</strong>. À toi de trouver le bon rayon et de choisir un livre.</p>
+<h3>Quand tu as tes deux livres</h3>
+<ol>
+<li>Tu les apportes à ton professeur documentaliste.</li>
+<li>Tu lui expliques <strong>comment tu les as trouvés</strong> : quel rayon, quelle pastille ou quel nombre.</li>
+<li>Tu ranges chaque livre à sa place, ou tu l’empruntes s’il te plaît.</li>
+</ol>
+<p>🌿 Ensuite, reviens ici et tourne la page : des bonus t’attendent.</p>`, 'Le test en vrai'),
+]);
+const chBonus = chapter('🌿 Après le test', [
+  text(`<h2 style="color:#2d6a4f">🌿 Après le test</h2><p style="color:#555555"><em>⏱ le temps qu’il te reste · rien n’est noté</em></p>
+<h3>🚚 Le voyage d’un livre, en version animée</h3>
+<p>Suis « Le Secret du phare », de l’idée de son autrice jusqu’au comptoir du CDI. Avance avec la flèche →.</p>`, 'Intro bonus'),
+  sub('H5P.IFrameEmbed 1.0', { source: CIRCUIT, width: '1000', height: '650', minWidth: '280', resizeSupported: true }, 'Iframe Embedder', 'Le voyage d’un livre'),
+  text(`<p style="font-size:0.9em">Le cadre est trop petit ? <a href="${GRAND}" target="_blank" rel="noopener">Ouvrir le voyage du livre en grand</a>.</p>
+<h3>🎯 Deux amis attendent encore tes conseils</h3>
+<p>Retourne à l’étape 9, ou <a href="${MISSION_GRAND}" target="_blank" rel="noopener">ouvre la mission en grand</a>, et aide les deux amis que tu n’as pas encore conseillés.</p>`, 'Bonus amis'),
 ]);
 
 /* ===== Ch.10 Outro : les droits du lecteur (Pennac, ill. Quentin Blake) ===== */
@@ -495,7 +533,7 @@ ${accroche('Tu as trouvé ton roman, ton documentaire… Mais au fait, est-ce qu
 const BOOKFLIX = 'https://0920902f.esidoc.fr/site/bookflix-3';
 const BIBLIBOT = 'https://biblibot-omega.vercel.app/';
 const lien = (href, t) => `<a href="${href}" target="_blank" rel="noopener">${t}</a>`;
-const chBookflix = chapter('11. 🍿 La prochaine fois : Bookflix', [
+const chBookflix = chapter(V5 ? '🍿 La prochaine fois : Bookflix' : '11. 🍿 La prochaine fois : Bookflix', [
   text(`<h2 style="color:#2d6a4f">🍿 Et la prochaine fois ? Bookflix !</h2><p style="color:#555555"><em>⏱ le temps que tu veux · rien n’est noté</em></p>
 ${accroche('Tu sais maintenant trouver un livre au CDI. La prochaine fois, on va choisir son prochain livre… comme on choisit une série.')}
 <p>Lors d’une prochaine séance, tu découvriras le <strong>Bookflix</strong> du CDI et <strong>Biblibot</strong>, un robot qui t’aide à trouver un livre. Pour t’y préparer, commence par te demander : <strong>quels genres me tentent ?</strong></p>
@@ -512,6 +550,6 @@ ${process.env.NOMAPS ? '' : `<p>Chacune de ces cartes dessine un <strong>parcour
 const book = clone(tpl);
 book.showCoverPage = true;
 book.bookCover = { coverDescription: cover, coverMedium: image('carte-mentale-cdi.jpg', 'Le CDI, un espace informationnel', 'Couverture') };
-book.chapters = [ch0, ch1, ch2, chFam, ch4, ch5, ch6, ch7, ch8, ch9, ch10, chBookflix];
+book.chapters = V5 ? [ch0, ch1, ch2, chFam, ch4, ch5, ch6, ch7, ch8, ch9, chTest, chBonus, chBookflix] : [ch0, ch1, ch2, chFam, ch4, ch5, ch6, ch7, ch8, ch9, ch10, chBookflix];
 fs.writeFileSync(OUT, JSON.stringify(book));
 console.log('OK', book.chapters.length, 'chapitres');
