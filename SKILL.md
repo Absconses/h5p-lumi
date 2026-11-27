@@ -95,6 +95,7 @@ correspondante (structure exacte + exemple) :
 | **Visite virtuelle 360** : photos 360° reliées, points d'intérêt (texte, image, quiz) | `H5P.ThreeImage` | `references/virtual-tour.md` |
 | **Quiz sur carte** : « Où se trouve… ? », clic sur une carte (villes notées à la distance, pays) | `H5P.GeoQuiz` | `references/geoquiz.md` |
 | **Mission finale en scénario à embranchements** : un personnage a besoin de l'élève, choix de comportements, scènes en vidéo générée | `H5P.BranchingScenario` | `references/scenario-mission-finale.md` |
+| **Parcours différencié** (apprentissage échelonné) : diagnostic, raccourcis pour ceux qui réussissent, détours d'aide et remédiation ciblée pour les autres | `H5P.BranchingScenario` | `references/scenario-mission-finale.md` (§ Parcours différencié) |
 | **Tout autre type** (Dictation, Branching Scenario…) | variable | `references/extending-new-types.md` |
 
 Le catalogue Lumi est vaste : **n'importe quel type** se traite via la méthode décrite dans
