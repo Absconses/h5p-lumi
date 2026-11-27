@@ -130,3 +130,24 @@ Pas de bouton « Voir la solution » dans l'activité. Livrer mp4 + webm. Erreur
 (« this.pause is not a function »). Démo : `partage/decouvrir-le-cdi/video-bloquante-demo.h5p`, source `scenario/demos/video-bloquante.mjs`.
 Démo d'écriture : `scenario/demos/ecriture-sam.mjs`. Sélecteurs de test : étiquettes Drag Text `.ui-draggable`.
 Pierre est **professeur documentaliste** (un homme) : ne jamais écrire « la documentaliste » dans ses modules.
+
+## Parcours différencié (apprentissage échelonné)
+
+Autre usage du type, hors mission finale : un scénario qui **aide les élèves en difficulté sans ralentir les
+autres**. Exemple complet : `assets/examples/polar-differencie/` (« L’affaire des livres sans pastille »,
+reconnaître un polar, 6e/5e), paquet `partage/polar/polar-differencie.h5p`.
+
+Le scénario ne lit pas les scores : **ce sont les réponses qui choisissent le chemin**.
+1. **Diagnostic sans correction immédiate** : deux questions de suite (le genre, puis ce qui le prouve).
+   Deux bonnes réponses → raccourci **proposé** (l’élève peut quand même voir la méthode). Sinon → détour.
+   Deux questions au lieu d’une : on ne tombe pas dans le raccourci par chance (1 sur 9).
+2. **Détour = enseignement explicite** : Je découvre (Image Hotspots, l’élève clique, rien à répondre),
+   Je retiens, Je suis accompagné (Course Presentation avec Drag Text et coups de pouce), puis une question
+   à retour immédiat.
+3. **« Je fais seul » avec remédiation ciblée** : chaque mauvaise réponse est une erreur type d’élève et mène
+   à **sa** remédiation (texte court, contre-exemple), puis à un **cas jumeau** qui tend le même piège
+   (modèle « mauvais choix bloqué »). Bonne réponse du premier coup → on avance directement.
+4. **Fin commune** : « écris d’abord, compare ensuite », Je retiens, puis un **défi bonus facultatif** pour
+   ceux qui ont du temps (le scénario n’ayant pas de mémoire, on le propose à tous).
+`audit-reponses.py` ne reconnaît pas les bonnes réponses des questions qui renvoient vers une remédiation :
+contrôler leurs longueurs à la main.
